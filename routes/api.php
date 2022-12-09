@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\TeacherController;
+
 
 
 
@@ -44,6 +46,12 @@ Route::middleware('auth:sanctum')->controller(SectionController::class)->group(f
 Route::middleware('auth:sanctum')->controller(StudentController::class)->group(function(){
     Route::get('student/get', 'getAllStudentAccount');
     Route::post('student/create', 'createStudentAccount');
-    Route::patch('student/{idNumber}/update', 'updateStudent');
+    Route::patch('student/{idNumber}/update', 'update');
+});
+
+Route::middleware('auth:sanctum')->controller(TeacherController::class)->group(function(){
+    Route::get('teacher/get', 'getAllTeachers');
+    Route::post('teacher/create', 'createTeacher');
+    Route::patch('teacher/{teacherId}/update', 'updateTeacher');
 });
 

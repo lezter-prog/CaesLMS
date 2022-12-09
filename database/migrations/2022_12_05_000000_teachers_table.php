@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('sy_teachers', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('handled_s_code');
-            $table->string('handled_g_code');
-            $table->integer('sy');
+            $table->string('handled_s_code')->nullable();
+            $table->string('handled_g_code')->nullable();
+            $table->string('sy');
             $table->string('status');
             $table->string('addedBy');
             $table->timestamps();

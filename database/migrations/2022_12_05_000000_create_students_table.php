@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('middle_name');
             $table->string('last_name');
-            $table->string('email');
-            $table->string('s_code');
+            $table->string('email')->nullable();
+            $table->string('s_code')->nullable();
             $table->string('g_code');
             $table->string('sy');
             $table->string('added_by');
