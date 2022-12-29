@@ -8,7 +8,8 @@ import './bootstrap';
 // import './bootstrapbunddle'
 import './fontawesome';
 import './particles';
-import './datatable';
+import './select2'
+// import './datatable';
 import { createApp } from 'vue';
 
 /**
@@ -25,8 +26,16 @@ app.component('admin-home', AdminHome);
 import AdminTeacher from './components/AdminTeacher.vue';
 app.component('admin-teacher-js', AdminTeacher);
 
-import AdminSections from './components/AdminSections.vue';
-app.component('admin-sections-js', AdminSections);
+particlesJS.load('particle-js', '/json/particles-config.json', function() {
+    console.log('callback - particles.js config loaded');
+});
+
+// import AdminSections from './components/AdminSections.vue';
+// app.component('admin-sections-js', AdminSections);
+
+// import dttable from './components/Datatable.vue';
+// app.component('datatable', dttable);
+
 
 
 /**

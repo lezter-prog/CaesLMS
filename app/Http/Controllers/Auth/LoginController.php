@@ -7,6 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class LoginController extends Controller
 {
@@ -29,7 +34,7 @@ class LoginController extends Controller
      * @var string
      */
     
-    protected $redirectTo =RouteServiceProvider::Home;
+    protected $redirectTo =RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -42,12 +47,34 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function username()
+    {
+        return 'username';
+    }
+
+    public function authenticated(Request $request, $user){
+
+        $id = Auth::id();
+        Log::info("Id: ".$id);
+        $token="";
+        // $personalToken = DB::table("personal_access_tokens")->where('tokenable_id',$id)->first();
+        Log::info("Session: ".session('token'));
+        if(session('token')==""){
+            $user = User::where('id',$id)->first();
+            $token=$user->createToken("API TOKEN")->plainTextToken;
+            session(['token' =>  $token]);
+        }
+        
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+        
+
+    }
+
     public function createToken(Request $request){
         $user = User::where('id',$request->id)->first();
         return [
             "token"=> $user->createToken("API TOKEN")->plainTextToken
         ];
-        
-        
     }
 }

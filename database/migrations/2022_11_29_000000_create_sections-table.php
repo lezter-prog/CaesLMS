@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('s_code')->unique();
             $table->string('s_desc');
             $table->string('g_code');
-            $table->integer('sy');
-            $table->string('adviser');
+            $table->string('sy');
+            $table->integer('teacher_id');
             $table->string('status');
             $table->timestamps();
         });

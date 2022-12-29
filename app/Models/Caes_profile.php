@@ -10,7 +10,7 @@ class caes_profile extends Model
     use HasFactory;
 
     protected $fillable = [
-        'school_name', 
+        'school_name',
         'school_year',
         'school_address',
         'school_type'

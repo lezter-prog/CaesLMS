@@ -88,5 +88,65 @@
       </div>
     </div>
   </div>
-<admin-home></admin-home>
+<script>
+
+  var token ={{ Js::from(session('token')) }};
+  console.log(token);
+
+$(document).ready(function(){
+  $("body").tooltip({ selector: '[data-bs-toggle=tooltip]' });
+    $("#editLogoBtn").on('click',function(e){
+       console.log($('#uploadLogoModal'));
+        //    bootstrap.modal();
+        $('#uploadLogoModal').modal("show");
+    });
+    $("#editProfileBtn").on('click',function(e){
+       console.log($('#uploadLogoModal'));
+        //    bootstrap.modal();
+        $('#updateProfileModal').modal("show");
+        $('#schoolName').val();
+        $('#schoolAddress').val();
+        $('#schoolYear').val();
+    });
+    $("#uploadLogo").submit( function(e){    
+        e.preventDefault();
+        // var form = this.form;
+        var formData = new FormData();
+        var imagefile = document.querySelector('#formFile');
+        formData.append("file", imagefile.files[0]);
+        axios({
+            method: "post",
+            url: "/api/profile/upload",
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+        }).then(function (response) {
+                //handle success
+                console.log(response);
+                location.reload();
+        }).catch(function (response) {
+                //handle error
+                console.log(response);
+        });
+        
+    })
+    
+})
+
+
+
+    particlesJS.load('particle-js', '../json/particles-config.json', function() {
+        console.log('callback - particles.js config loaded');
+    });
+
+    
+
+   
+    function tooltip(element){
+        return new bootstrap.Tooltip(element, {
+                boundary: document.body // or document.querySelector('#boundary')
+            });
+    }
+
+    
+</script>
 @endsection

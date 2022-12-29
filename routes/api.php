@@ -7,6 +7,8 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SubjectController;
+
 
 
 
@@ -38,7 +40,8 @@ Route::middleware('auth:sanctum')->controller(ProfileController::class)->group(f
 });
 
 Route::middleware('auth:sanctum')->controller(SectionController::class)->group(function(){
-    Route::get('section/{gradeCode}/get', 'getSections');
+    Route::get('section/get', 'getSections');
+    Route::get('section/subjects/get', 'getSubjectSection');
     Route::post('section/create', 'createSection');
     Route::patch('section/{sectionCode}/update', 'updateSection');
 });
@@ -46,12 +49,20 @@ Route::middleware('auth:sanctum')->controller(SectionController::class)->group(f
 Route::middleware('auth:sanctum')->controller(StudentController::class)->group(function(){
     Route::get('student/get', 'getAllStudentAccount');
     Route::post('student/create', 'createStudentAccount');
-    Route::patch('student/{idNumber}/update', 'update');
+    Route::patch('student/{idNumber}/update', 'updateStudent');
 });
 
 Route::middleware('auth:sanctum')->controller(TeacherController::class)->group(function(){
     Route::get('teacher/get', 'getAllTeachers');
+    Route::get('teacher/get/select2', 'getAllTeachers2');
     Route::post('teacher/create', 'createTeacher');
     Route::patch('teacher/{teacherId}/update', 'updateTeacher');
+});
+
+Route::middleware('auth:sanctum')->controller(SubjectController::class)->group(function(){
+    Route::get('subjects/get/all', 'getAllSubjects');
+    Route::get('subjects/get', 'getSubjectByGradeCode');
+    Route::post('subject/create', 'createSubject');
+    Route::patch('subject/{sucbjectCode}/update', 'updateSubject');
 });
 

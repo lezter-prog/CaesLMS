@@ -3,6 +3,7 @@ window._ = _;
 
 // import $ from 'jquery/dist/jquery';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap';
+import Swal from 'sweetalert2';
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -17,6 +18,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 // window.$=$;
 window.bootstrap = bootstrap;
+window.swal =Swal;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

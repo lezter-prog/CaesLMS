@@ -5,8 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 use App\Models\User;
+use App\Models\HashTable;
+
 
 class SyTeachers extends Model
 {
@@ -15,8 +19,6 @@ class SyTeachers extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'handeled_s_code',
-        'handeled_g_code',
         'status',
         'sy',
         'addedBy'
@@ -30,9 +32,15 @@ class SyTeachers extends Model
     public function getAllTeachers(){
         $role ="R2";
         return DB::table('users')
-        ->leftJoin('sy_teachers', 'users.id', '=', 'sy_teachers.id')
-        ->where('role', $role)
+        ->join('sy_teachers', 'users.id', '=', 'sy_teachers.user_id')
+        ->where('users.role', $role)
         ->get();
+    }
+
+    public function getAllTeachers2($request){
+
+        return static::where('name','like','%'.$request->search.'%')->get();
+
     }
 
     public function createTeacher($request){
@@ -43,6 +51,11 @@ class SyTeachers extends Model
             'username'=> $request->username,
             'password'=> $request->password,
             'role'=> $request->role
+        ]);
+
+        $hashtable = HashTable::create([
+            'hash_id'=>$user->id,
+            'value'=> $request->decrypted_pass
         ]);
 
         $teacher = static::create([
@@ -65,7 +78,24 @@ class SyTeachers extends Model
     }
     
     public function updateTeacher($request,$teacherId){
-        return static::where('user_id',$teacherId)->update($request->all());
+        $email =$request->email;
+        if($email!=null){
+            DB::beginTransaction();
+            $user = User::where("id",$teacherId)->update(['email'=>$email]);
+        }
+        unset($request->email);
+        $teacher= static::where('user_id',$teacherId)->update(
+            [
+                "name"=>$request->name,
+                "handled_g_code"=>$request->handled_g_code,
+                "handled_s_code"=>$request->handled_s_code,
+            ]
+        );
+        if($email!=null){
+            DB::commit();
+        }
+        return $teacher;
+
     }
 
     public function updatePassword($oldPassword, $newPassword,$idNumber){

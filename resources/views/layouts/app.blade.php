@@ -19,6 +19,10 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <link href="{{ URL::asset('css/app.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/DataTables/datatables.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/select2-4.0.13/dist/css/select2.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/select2/select2-bootstrap-5-theme.min.css'); }} " rel="stylesheet">
+
+
 
 </head>
 <body>
@@ -29,7 +33,7 @@
                 <div class="list-group list-group-flush mx-3 mt-4">
                    
                     @if ( Auth::user()->role == "R2")
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/teacher/home" class="{{$teacherDashboard}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                            <span class ="me-3"><i class="fas fa-tachometer-alt fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Teacher dashboard</span>
                         </a>
@@ -83,10 +87,18 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Sections</span>
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/admin/subjects" class="{{ $adminSubjects }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-id-card fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Subjects</span>
+                        </a>
+                        <a href="/admin/students" class="{{ $adminStudent }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Students</span>
                         </a>
+                        {{-- <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Subjects / Grade</span>
+                        </a> --}}
                         <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Announcement</span>
@@ -183,5 +195,6 @@
     </div>
     @yield('script')
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>
 </body>
 </html>

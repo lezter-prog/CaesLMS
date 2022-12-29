@@ -32,7 +32,7 @@ class SyStudents extends Model
     public function getAllStudentAccount(){
         $role ="R1";
         return DB::table('users')
-        ->leftJoin('sy_students', 'users.id', '=', 'sy_students.id_number')
+        ->join('sy_students', 'users.id', '=', 'sy_students.id_number')
         ->where('role', $role)
         ->get();
     }
@@ -53,6 +53,7 @@ class SyStudents extends Model
             'middle_name' => $request->middle_name,
             'last_name' => $request->last_name,
             'email' => '',
+            's_code'=> $request->s_code,
             'g_code'=> $request->g_code,
             'sy'=> $request->sy,
             'added_by' => 'admin'

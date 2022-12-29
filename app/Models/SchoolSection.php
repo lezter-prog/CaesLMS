@@ -10,11 +10,12 @@ class SchoolSection extends Model
     use HasFactory;
 
     protected $fillable = [
-        'section_code',
-        'section_desc',
-        'grade_code',
-        'school_year',
-        'adviser'
+        's_code',
+        's_desc',
+        'g_code',
+        'sy',
+        'status',
+        'teacher_id'
     ];
 
     public function getAll()
@@ -23,7 +24,15 @@ class SchoolSection extends Model
     }
 
     public function getByGradeCode($grade_code){
-        return static::where('grade_code',$grade_code)->get();
+        return static::where('g_code',$grade_code)->get();
+    }
+
+    public function getBySectionCode($sectionCode){
+        return static::where('s_code',$sectionCode)->first();
+    }
+    
+    public function getByTeacher($teacher_id){
+        return static::where('teacher_id',$teacher_id)->get();
     }
 
     public function updateSection($request,$sectionCode){

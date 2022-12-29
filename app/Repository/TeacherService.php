@@ -3,6 +3,7 @@ namespace App\Repository;
 
 use App\Models\SyTeachers;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
@@ -23,10 +24,27 @@ class TeacherService
         return $teachers;
     }
 
+    public function getAllTeachers2($request)
+    {
+        $result =[];
+        $teachers= $this->teacher->getAllTeachers2($request);
+
+        foreach($teachers as $teacher){
+            
+            array_push($result, (object)[
+                'id' => $teacher->user_id,
+                'text' => $teacher->name,
+        ]);
+        }
+        return $result;
+    }
+
     public function createTeacher($request)
     {
-        $request->password =Crypt::encryptString(Str::random(8));
-        $request->decrypted_pass =Crypt::decryptString($request->password);
+        $pwd =Str::random(8);
+        $request->username =str_replace(' ', '.', Str::lower($request->name));
+        $request->password =Hash::make($pwd);
+        $request->decrypted_pass =$pwd;
         $request->status ="ACTIVE";
         $request->role ="R2";
         return $this->teacher->createTeacher($request);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repository\TeacherService;
+use Illuminate\Support\Facades\Log;
 
 class TeacherController extends Controller
 {
@@ -36,6 +37,15 @@ class TeacherController extends Controller
         return [
             "data" =>   $teachers
         ];
+    }
+    public function getAllTeachers2(Request $request){
+        $teachers = $this->service->getAllTeachers2($request);
+        // Log::info("teachers:".implode($teachers));
+        $results= [
+            "results" =>   $teachers
+        ];
+        
+        return response()->json($results,200)->header('Content-Type', 'application/json');
     }
 
     public function createTeacher(Request $request){

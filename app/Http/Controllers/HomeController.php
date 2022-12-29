@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\SchoolSection;
+
+
 
 
 class HomeController extends Controller
@@ -34,17 +40,28 @@ class HomeController extends Controller
     }
     public function teacherIndex()
     {
-        return view('teacher/home');
+        $sec = new SchoolSection();
+        $id =  Auth::id();
+
+        $sections = $sec->getByTeacher($id);
+        return view('teacher/home')
+        ->with('teacherDashboard',"active")
+        ->with('sections',$sections);
     }
     public function adminIndex()
-    {
+    {   
+        
         $profile =DB::table('caes_profile')->get();
         
-        return view('admin/home')
-        ->with('adminHome', "active")
-        ->with('adminTeacher', "")
-        ->with('adminSections', "")
-        // ->with('adminTeacher', "active")
-        ->with("profile",$profile[0]);
+        if(count($profile)){
+            return view('admin/home')
+            ->with('adminHome', "active")
+            ->with('adminTeacher', "")
+            ->with('adminSections', "")
+            ->with('adminStudent', "")
+            ->with('adminSubjects', "")
+            ->with("profile",$profile[0]);
+        }
+       
     }
 }

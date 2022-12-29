@@ -1,5 +1,5 @@
 import _ from 'lodash';
 window._ = _;
 
-import 'datatables.net/js/jquery.dataTables';
-import 'datatables.net';
+import DataTables from 'datatables.net-vue3';
+window.DataTables =DataTables;

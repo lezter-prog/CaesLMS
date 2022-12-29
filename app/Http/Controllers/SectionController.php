@@ -30,12 +30,20 @@ class SectionController extends Controller
         ];
     }
 
-    public function getSections(Request $request, $gradeCode){
-        $sections = $this->sectionService->getSectionByGradeCode($gradeCode);
+    public function getSections(Request $request){
+        $sections = $this->sectionService->getSectionByGradeCode($request->gradeCode);
         
         return [
             "data" =>   $sections
         ];
+    }
+
+    public function getSubjectSection(Request $request, $sectionCode){
+
+        return [
+            "data"=>null
+        ];
+
     }
 
     public function createSection(Request $request){

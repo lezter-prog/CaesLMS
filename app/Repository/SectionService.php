@@ -20,14 +20,28 @@ class SectionService
         return $this->section->getByGradeCode($gradeCode);
     }
 
+    public function getSectionBySectionCode($sectionCode){
+        return $this->section->getBySectionCode($sectionCode);
+    }
+
     public function createSection($section)
     {
+        $num=1;
+        $sec =$this->section::latest()->first();
+        if($sec!=null){
+            $lastsecCode = $sec->s_code;
+            $num= preg_replace('/[^0-9]/', '', $lastsecCode)+1;
+        }
+       
+        $newCode ="S".$num;
+
         return $this->section::create([
-            'section_code' => $section->section_code,
-            'section_desc' => $section->section_desc,
-            'grade_code' => $section->grade_code,
-            'school_year' => $section->school_year,
-            'adviser'=>""
+            's_code' => $newCode,
+            's_desc' => $section->section_desc,
+            'g_code' => $section->grade_code,
+            'sy' => $section->school_year,
+            'teacher_id'=>$section->teacher_id,
+            'status'=>'ACTIVE'
         ]);
     }
 

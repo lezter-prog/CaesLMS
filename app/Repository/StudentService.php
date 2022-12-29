@@ -37,7 +37,7 @@ class StudentService
         return $this->section->updateSection($request,$sectionCode);
     }
 
-    private function updateStudent($request,$idNumber){
+    public function updateStudent($request,$idNumber){
         return $this->student->updateStudent($request,$idNumber);
     }
 }
