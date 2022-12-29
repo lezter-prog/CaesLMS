@@ -196,5 +196,13 @@
     @yield('script')
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
     <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/particles.js'); }}"></script>
+
+    <script>
+
+        particlesJS.load('particle-js', '/json/particles-config.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+    </script>
 </body>
 </html>
