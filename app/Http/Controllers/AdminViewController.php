@@ -34,6 +34,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "active")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
 
@@ -44,6 +45,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminAnnouncement', "")
         ->with('adminSections', "active");
     }
 
@@ -58,6 +60,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
         ->with('adminStudent', "active")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
 
@@ -72,7 +75,21 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "active")
         ->with('adminStudent', "")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
+
+    public function manage_announcement()
+    {
+       
+        
+        return view('admin/manage-announcement')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminAnnouncement', "active");
+        }
     
 }
