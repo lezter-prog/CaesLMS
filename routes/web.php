@@ -32,7 +32,11 @@ Route::get('/admin/teacher', [App\Http\Controllers\AdminViewController::class, '
 Route::get('/admin/sections', [App\Http\Controllers\AdminViewController::class, 'manage_sections'])->name('admin/sections');
 Route::get('/admin/students', [App\Http\Controllers\AdminViewController::class, 'manage_students'])->name('admin/students');
 Route::get('/admin/subjects', [App\Http\Controllers\AdminViewController::class, 'manage_subjects'])->name('admin/subjects');
+<<<<<<< HEAD
 Route::get('/admin/quarter', [App\Http\Controllers\AdminViewController::class, 'manage_quarter'])->name('admin/quarter');
+=======
+Route::get('/admin/announcement', [App\Http\Controllers\AdminViewController::class, 'manage_announcement'])->name('admin/announcement');
+>>>>>>> c9ca3c305e8672f42b04e574c37006e0075aa054
 
 
 

@@ -99,7 +99,7 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Subjects / Grade</span>
                         </a> --}}
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/admin/announcement" class="{{ $adminAnnouncement }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Announcement</span>
                         </a>

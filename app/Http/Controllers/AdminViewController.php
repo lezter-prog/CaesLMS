@@ -36,6 +36,7 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
 
@@ -47,6 +48,7 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "")
         ->with('adminSections', "active");
     }
 
@@ -62,6 +64,7 @@ class AdminViewController extends Controller
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
         ->with('adminStudent', "active")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
 
@@ -77,6 +80,7 @@ class AdminViewController extends Controller
         ->with('adminSubjects', "active")
         ->with('adminQuarter', "")
         ->with('adminStudent', "")
+        ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
     public function manage_quarter()
@@ -92,5 +96,18 @@ class AdminViewController extends Controller
         
     
     }
+
+    public function manage_announcement()
+    {
+       
+        
+        return view('admin/manage-announcement')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminAnnouncement', "active");
+        }
     
 }
