@@ -8,7 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
-
+use App\Http\Controllers\UtilDB;
 
 
 
@@ -65,4 +65,11 @@ Route::middleware('auth:sanctum')->controller(SubjectController::class)->group(f
     Route::post('subject/create', 'createSubject');
     Route::patch('subject/{sucbjectCode}/update', 'updateSubject');
 });
+
+
+Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
+    Route::get('quarters/get/all', 'getAllQuarters');
+    Route::patch('quarter/update/{quarterCode}','updateQuarter');
+});
+
 

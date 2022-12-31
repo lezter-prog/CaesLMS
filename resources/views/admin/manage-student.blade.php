@@ -5,7 +5,8 @@
   <h1 class="h2">Students</h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-2">
-      <button type="button" id ="addStudentBtn" class="btn btn-sm btn-outline-primary">Add</button>
+      <button type="button" id ="importBtn" class="btn btn-sm btn-outline-primary">Import</button>
+      <button type="button" id="addStudentBtn" class="btn btn-sm btn-outline-primary">add</button>
       <button type="button" id="updateStudentBtn" class="btn btn-sm btn-outline-primary">Edit</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
@@ -90,6 +91,31 @@
   </div>
 </div>
 
+  <div class="modal fade" id="importStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Import Students</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="importStudentForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <div class="input-group">
+              <input type="file" class="form-control" id="importStudents" name="studentsFile" aria-describedby="importStudentsBtn" aria-label="Upload">
+              <button class="btn btn-outline-secondary" type="button" id="importStudentsBtn">Import</button>
+            </div>
+          </div>
+         
+        </div>
+        <div class="modal-footer">
+          {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button> --}}
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -201,6 +227,10 @@ $(document).ready(function(){
         }  
 
       });
+
+    $("#importBtn").click(()=>{
+      $("#importStudentModal").modal("show");
+    });
 
 // Open Add Modal
     $("#addStudentBtn").click(()=>{

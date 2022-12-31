@@ -32,6 +32,7 @@ Route::get('/admin/teacher', [App\Http\Controllers\AdminViewController::class, '
 Route::get('/admin/sections', [App\Http\Controllers\AdminViewController::class, 'manage_sections'])->name('admin/sections');
 Route::get('/admin/students', [App\Http\Controllers\AdminViewController::class, 'manage_students'])->name('admin/students');
 Route::get('/admin/subjects', [App\Http\Controllers\AdminViewController::class, 'manage_subjects'])->name('admin/subjects');
+Route::get('/admin/quarter', [App\Http\Controllers\AdminViewController::class, 'manage_quarter'])->name('admin/quarter');
 
 
 

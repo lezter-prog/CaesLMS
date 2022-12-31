@@ -28,12 +28,14 @@ class AdminViewController extends Controller
        
         $section =$this->section->getAll();
         
+        
         return view('admin/manage-teacher')
         ->with('adminHome', "")
         ->with('adminSections', "")
         ->with('adminTeacher', "active")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
         ->with('sections', $section);
     }
 
@@ -44,6 +46,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
         ->with('adminSections', "active");
     }
 
@@ -57,6 +60,7 @@ class AdminViewController extends Controller
         ->with('adminSections', "")
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
         ->with('adminStudent', "active")
         ->with('sections', $section);
     }
@@ -71,8 +75,22 @@ class AdminViewController extends Controller
         ->with('adminSections', "")
         ->with('adminTeacher', "")
         ->with('adminSubjects', "active")
+        ->with('adminQuarter', "")
         ->with('adminStudent', "")
         ->with('sections', $section);
+    }
+    public function manage_quarter()
+    {
+               
+        return view('admin/manage-quarter')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminSubjects', "")
+        ->with('adminQuarter', "active")
+        ->with('adminStudent', "");
+        
+    
     }
     
 }

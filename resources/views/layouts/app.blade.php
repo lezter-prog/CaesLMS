@@ -103,6 +103,10 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Announcement</span>
                         </a>
+                        <a href="/admin/quarter" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Quarters</span>
+                        </a>
                         
                     @endif
                    

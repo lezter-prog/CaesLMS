@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\HashTable;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
 
 
 class AdminSeeder extends Seeder
@@ -32,6 +34,11 @@ class AdminSeeder extends Seeder
         HashTable::create([
             'hash_id'=>$user->id,
             'value'=>$pass
+        ]);
+
+        DB::table("quarters").create([
+            'quarter_code'=>"Q1",
+            'quarter_desc'=>"First Quarter"
         ]);
 
         

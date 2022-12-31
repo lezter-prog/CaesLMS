@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('caes_profile', function (Blueprint $table) {
             $table->id();
             $table->string('school_name');
-            $table->integer('school_year')->unique();
+            $table->string('school_year')->unique();
             $table->string('school_address')->nullable();
             $table->string('school_type')->nullable();
             $table->string('school_logo')->nullable();
