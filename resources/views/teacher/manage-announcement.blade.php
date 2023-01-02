@@ -23,7 +23,7 @@
             <th>Announcement For:</th>
             <th>Announcement Description</th>
             <th>Date</th>
-            <th>Status</th>
+            <th>Uploaded By:</th>
         </tr>
       </thead>
       <tbody>
@@ -34,39 +34,6 @@
     </table>
   </div>
 </div>
-
-{{-- Modals edit/update --}}
-
-  <!-- <div class="modal fade" id="updateAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Update Announcement</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="updateForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="sectionName" class="form-label">Announcent For:</label>
-            <input type="text" class="form-control" id="updateAnnouncement" required data-code="">
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-         
-          <div class="mb-3">
-            <label for="updateTeacher" class="form-label">Select Teacher</label>
-            <select class="js-example-responsive form-control" id="updateTeacher">
-            </select>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
 
 
   <!-- UpdateModal -->
@@ -87,7 +54,6 @@
           <div class="mb-3">
             <label for="grade" class="form-label">Announcement For:</label>
             <select type="text" class="form-control" id="updateAnnouncementFor" required>
-              <option value="Teacher">Teachers</option>
               <option value="Student">Student</option>
           
             </select>
@@ -119,7 +85,6 @@
           <div class="mb-3">
             <label for="grade" class="form-label">Announcement For:</label>
             <select type="text" class="form-control" id="announcementFor" required>
-              <option value="Teacher">Teachers</option>
               <option value="Student">Student</option>
           
             </select>
@@ -147,7 +112,7 @@
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/announcement/get/all",
+      "sAjaxSource": baseUrl+"/api/announcement/get/student",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 

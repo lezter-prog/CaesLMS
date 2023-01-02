@@ -25,6 +25,7 @@ Route::get('/student/home', [App\Http\Controllers\HomeController::class, 'studen
 
 Route::get('/teacher/home', [App\Http\Controllers\HomeController::class, 'teacherIndex'])->name('teacher/home');
 Route::get('/teacher/handled/section', [App\Http\Controllers\TeacherViewController::class, 'section'])->name('teacher/handled/section');
+Route::get('/teacher/announcement', [App\Http\Controllers\TeacherViewController::class, 'manage_announcement'])->name('teacher/announcement');
 
 
 Route::get('/admin/home', [App\Http\Controllers\HomeController::class, 'adminIndex'])->name('admin/home');

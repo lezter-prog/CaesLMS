@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title> @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -22,6 +22,7 @@
     <link href="{{ URL::asset('js/select2-4.0.13/dist/css/select2.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/select2/select2-bootstrap-5-theme.min.css'); }} " rel="stylesheet">
 
+    @yield('style')
 
 
 </head>
@@ -43,7 +44,7 @@
                                 <span>Teacher Profile</span>
                         </a>
 
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/teacher/announcement" class="{{$teacherAnnouncement}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Announcement</span>
                         </a>
@@ -80,19 +81,19 @@
                         
 
                         <a href="/admin/teacher" class=" {{ $adminTeacher }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-user-tie fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Teachers</span>
                         </a>
                         <a href="/admin/sections" class="{{ $adminSections }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-puzzle-piece fa-fw fa-lg icon-bg-color"></i></i></span> 
                                 <span>Sections</span>
                         </a>
                         <a href="/admin/subjects" class="{{ $adminSubjects }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-id-card fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-swatchbook fa-fw fa-lg icon-bg-color"></i></i></span> 
                                 <span>Subjects</span>
                         </a>
                         <a href="/admin/students" class="{{ $adminStudent }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-user-group fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Students</span>
                         </a>
                         {{-- <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
@@ -100,11 +101,11 @@
                                 <span>Subjects / Grade</span>
                         </a> --}}
                         <a href="/admin/announcement" class="{{ $adminAnnouncement }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-bullhorn fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Announcement</span>
                         </a>
                         <a href="/admin/quarter" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Quarters</span>
                         </a>
                         
