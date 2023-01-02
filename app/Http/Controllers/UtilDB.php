@@ -50,5 +50,27 @@ class UtilDB extends Controller
             return false;
         }
     }
+
+    public function addAnnouncement(Request $request){
+        $add=DB::table('announcement')->insert([
+            'announcement_for' => $request->announcement_for,
+            'announcement_desc' => $request->announcement_desc
+        ]);
+
+        if($add){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function getAllAnnouncement()
+    {
+        $announcement = DB::table('announcement')->get();
+        return [
+            "data" =>  $announcement
+        ];
+    }
     
 }

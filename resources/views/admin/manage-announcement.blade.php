@@ -8,7 +8,7 @@
     
     <div class="btn-group me-2">
       <button type="button" id ="addAnnouncementBtn" class="btn btn-sm btn-outline-primary">Add</button>
-      <button type="button" id="updateSectionBtn"class="btn btn-sm btn-outline-primary">Edit</button>
+      <button type="button" id="updateAnnouncementBtn"class="btn btn-sm btn-outline-primary">Edit</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -23,7 +23,7 @@
             <th>Announcement For:</th>
             <th>Announcement Description</th>
             <th>Date</th>
-            <th></th>
+            <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -35,33 +35,23 @@
   </div>
 </div>
 
-{{-- Modals --}}
+{{-- Modals edit/update --}}
 
-  <div class="modal fade" id="updateAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- <div class="modal fade" id="updateAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Update Announcement</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="updateSectionForm">
+        <form id="updateForm">
         <div class="modal-body">
           <div class="mb-3">
-            <label for="sectionName" class="form-label">Announcent Type</label>
+            <label for="sectionName" class="form-label">Announcent For:</label>
             <input type="text" class="form-control" id="updateAnnouncement" required data-code="">
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Grade</label>
-            <select type="text" class="form-control" id="updateGradeCode" required>
-              <option value="G1">Grade 1</option>
-              <option value="G2">Grade 2</option>
-              <option value="G3">Grade 3</option>
-              <option value="G4">Grade 4</option>
-              <option value="G5">Grade 5</option>
-              <option value="G6">Grade 6</option>
-            </select>
-          </div>
+         
           <div class="mb-3">
             <label for="updateTeacher" class="form-label">Select Teacher</label>
             <select class="js-example-responsive form-control" id="updateTeacher">
@@ -76,9 +66,41 @@
         </form>
       </div>
     </div>
+  </div> -->
+
+
+  <!-- UpdateModal -->
+  <div class="modal fade" id="updateAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Annoucement</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="updateAnnouncementForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="announcementName" class="form-label">Announcement Description</label>
+            <textarea type="text" class="form-control" rows="4" cols="50" id="updateAnnouncement" required > </textarea>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
+            <label for="grade" class="form-label">Announcement For:</label>
+            <select type="text" class="form-control" id="updateannouncementFor" required>
+              <option value="Teacher">Teachers</option>
+              <option value="Student">Student</option>
+          
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+        </form>
+      </div>
+    </div>
   </div>
-
-
 <!-- addModal -->
   <div class="modal fade" id="addAnnouncementModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -90,24 +112,18 @@
         <form id="addAnnouncementForm">
         <div class="modal-body">
           <div class="mb-3">
-            <label for="sectionName" class="form-label">Announcement Type</label>
-            <input type="text" class="form-control" id="Announcement" required >
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+            <label for="announcementName" class="form-label">Announcement Description</label>
+            <textarea type="text" class="form-control" rows="4" cols="50" id="announcement" required > </textarea>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
           </div>
           <div class="mb-3">
-            <label for="grade" class="form-label">Announcement Type</label>
-            <select type="text" class="form-control" id="gradeCode" required>
-              <option value="G1">Teachers</option>
-              <option value="G2">Student</option>
+            <label for="grade" class="form-label">Announcement For:</label>
+            <select type="text" class="form-control" id="announcementFor" required>
+              <option value="Teacher">Teachers</option>
+              <option value="Student">Student</option>
           
             </select>
           </div>
-          <div class="mb-3">
-            <label for="teacher" class="form-label">Select Teacher</label>
-            <select class="js-example-responsive form-control" id="teacher">
-            </select>
-          </div>
-          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -118,43 +134,7 @@
     </div>
   </div>
 
-{{-- Subjec Section Modal --}}
-  <div class="modal fade bd-example-modal-lg" id="subjectSectionModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Section Subjects</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <table id ="sectionSubjectsTable"  class="table table-striped" style="width:100%">
-              <thead>
-                <tr>
-                    <th>Section Code</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
-                    <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                
-               
-              </tbody>
-          
-        
-            </table>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button> --}}
-        </div>
-        
-      </div>
-    </div>
-  </div>
+
 <script>
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
@@ -167,7 +147,7 @@
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/get",
+      "sAjaxSource": baseUrl+"/api/announcement/get/all",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -177,7 +157,6 @@
             "type": "GET",
             "url": sSource,
             "data":{
-              "gradeCode":$("#grades").val()
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -186,14 +165,13 @@
           });
         },
       "columns":[
-        { "data":"s_code"},
-        { "data":"s_desc"},
-        { "data":"g_code" },
-        { "data":"teacher_id" },
+        { "data":"announcement_for"},
+        { "data":"announcement_desc"},
         {"data":"status" },
         {
           "data":"status",
           "render": function ( data, type, row, meta ) {
+            console.log(row);
               return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
             }
          }
@@ -204,134 +182,6 @@
         },
     });
 
-    // subjects Section Table
-    var sectionSubjectsTable= $('#sectionSubjectsTable').DataTable({
-      "bPaginate": false,
-      "bLengthChange": false,
-      "bFilter": true,
-      "bInfo": false,
-      "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/subjects/get",
-      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-        console.log("ajaxSRC: "+sSource);
-          oSettings.jqXHR = 
-          $.ajax({
-           
-            "dataType": 'json',
-            "type": "GET",
-            "url": sSource,
-            "data":function(d){
-              d.sectionCode = sectionCode;
-              return d;
-            },
-            "beforeSend": function (request) {
-              request.setRequestHeader("Authorization", "Bearer "+token);
-            },
-            "success": fnCallback
-          });
-        },
-      "columns":[
-        { "data":"s_section"},
-        { "data":"subject"},
-        { "data":"teacher" },
-        {"data":"status" },
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
-            }
-         }
-      ],
-      "fnDrawCallback": function() {
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-        },
-    });
-
-    $("#grades").on('change',()=>{
-      sectionTable.ajax.reload();
-    });
-
-    
-    $("#teacher").select2({
-      dropdownParent: $('#addSectionModal'),
-      theme: 'bootstrap-5',
-      delay: 250,
-      placeholder: 'Search for a Teacher',
-      ajax: {
-        method:"GET",
-        headers: {
-          "Authorization" : "Bearer "+token
-        },
-        dataType: "json",
-        url: baseUrl+'/api/teacher/get/select2',
-        data: function (params) {
-          console.log("select2 params:"+params.term);
-          var query = {
-            search: params.term
-          }
-
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        processResults: function (data) {
-          // data = JSON.parse(data);
-          // console.log("process result:"+data.results);
-          return data;
-        },
-        
-        minimumInputLength: 1,
-        templateResult: (t)=>{
-          console.log(t);
-          if (repo.loading) {
-            return repo.text;
-          }
-        }
-       
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-      }
-
-    });
-
-    $("#updateTeacher").select2({
-      dropdownParent: $('#updateSectionModal'),
-      theme: 'bootstrap-5',
-      delay: 250,
-      placeholder: 'Search for a Teacher',
-      ajax: {
-        method:"GET",
-        headers: {
-          "Authorization" : "Bearer "+token
-        },
-        dataType: "json",
-        url: baseUrl+'/api/teacher/get/select2',
-        data: function (params) {
-          console.log("select2 params:"+params.term);
-          var query = {
-            search: params.term
-          }
-
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        processResults: function (data) {
-          // data = JSON.parse(data);
-          // console.log("process result:"+data.results);
-          return data;
-        },
-        
-        minimumInputLength: 1,
-        templateResult: (t)=>{
-          console.log(t);
-          if (repo.loading) {
-            return repo.text;
-          }
-        }
-       
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-      }
-
-    });
     $('#sectionsTable tbody').on('click', '.section-subjects', function(){
       var data = sectionTable.row( $(this).closest('tr') ).data();
       sectionCode =data.s_code;
@@ -357,23 +207,20 @@
       $("#addAnnouncementModal").modal("show");
     });
     
-    $("#updateSectionBtn").click(()=>{
-      var data = sectionTable.row( ".selected" ).data();
+    $("#updateAnnouncementBtn").click(()=>{
+      var data = announcementTable.row( ".selected" ).data();
       console.log(data);
-      $("#updateSectionName").data("code",data.s_code);
-      $("#updateSectionName").val(data.s_desc);
-      $("#updateGradeCode").val(data.g_code);
-      $("#updateTeacher").val(data.teacher_id);
+      $("#updateannouncementFor").val(data.announcement_for);
+      $("#updateAnnouncement").val(data.announcement_desc);
+    
 
-      $("#updateSectionModal").modal("show");
+      $("#updateAnnouncementModal").modal("show");
     });
 
-    $("#addSectionForm").submit((e)=>{
+    $("#addAnnouncementForm").submit((e)=>{
       e.preventDefault();
-      var selectedTeacher =$("#teacher").select2('data')[0];
-      console.log(selectedTeacher);
       swal.fire({
-        title: 'Do you want to save the Section?',
+        title: 'Do you want to save the Announcement?',
         showCancelButton: true,
         confirmButtonText: 'Save',
       }).then((result) => {
@@ -381,12 +228,11 @@
         if (result.isConfirmed) {
 
           $.ajax({
-            url:baseUrl+"/api/section/create",
+            url:baseUrl+"/api/announcement/create",
             type:"POST",
             data:{
-              "section_desc":$("#sectionName").val(),
-              "grade_code":$("#gradeCode").val(),
-              "teacher_id":selectedTeacher.id,
+              "announcement_desc":$("#announcement").val(),
+              "announcement_for":$("#announcementFor").val(),
               "school_year":"2022-2023"
             },
             success:(res)=>{
@@ -394,8 +240,8 @@
               if(res){
                 swal.fire('Saved!', '', 'success');
                 swal.close();
-                $("#addSectionModal").modal("hide");
-                sectionTable.ajax.reload();
+                $("#addAnnouncementModal").modal("hide");
+                announcementTable.ajax.reload();
               }
 
             },
@@ -417,7 +263,7 @@
     });
 
 
-    $("#updateSectionForm").submit((e)=>{
+    $("#updateAnnouncementForm").submit((e)=>{
       var code =$("#updateSectionName").data("code");
 
       e.preventDefault();

@@ -70,6 +70,9 @@ Route::middleware('auth:sanctum')->controller(SubjectController::class)->group(f
 Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('quarters/get/all', 'getAllQuarters');
     Route::patch('quarter/update/{quarterCode}','updateQuarter');
+    Route::post('announcement/create','addAnnouncement');
+    Route::get('announcement/get/all', 'getAllAnnouncement');
+    Route::get('announcement/update', 'updateAnnouncement');
 });
 
 
