@@ -39,6 +39,15 @@ class SubjectController extends Controller
             "data" =>   $subjects
         ];
     }
+    
+    public function getAllSubjects2(Request $request){
+        $subjects = $this->subjectService->getAllSubjects2($request);
+        $results= [
+            "results" =>   $subjects
+        ];
+        
+        return response()->json($results,200)->header('Content-Type', 'application/json');
+    }
     public function getSubjectByGradeCode(Request $request){
         Log::info("Request gradeCode: ". $request->gradeCode);
         $subjects = $this->subjectService->getSubjectsByGradeCode($request->gradeCode);

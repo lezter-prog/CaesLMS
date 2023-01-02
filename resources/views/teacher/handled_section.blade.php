@@ -7,12 +7,13 @@
   <div class="btn-toolbar mb-2 mb-md-0">
     
     
-    <div class="btn-group me-2">
+    {{-- <div class="btn-group me-2">
       <button type="button" id ="addSectionBtn" class="btn btn-sm btn-outline-primary">Upload</button>
       <button type="button" id="updateSectionBtn"class="btn btn-sm btn-outline-primary">View</button>
-    </div>
+    </div> --}}
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
+    </button>
   </div>
   
 </div>
@@ -47,14 +48,22 @@
               </table>
           </div>
           <div class="tab-pane fade" id="v-pills-lessons" role="tabpanel" aria-labelledby="v-pills-lessons-tab">
+            <div class="btn-toolbar mb-2 mb-md-0">
+    
+    
+              <div class="btn-group me-2">
+                <button type="button" id ="addLessonBtn" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Lesson">Add</button>
+                <button type="button" id="updateLessonBtn"class="btn btn-sm btn-outline-primary">Edit</button>
+              </div>
+            </div>
             <table id ="teacherLessonsTable"  class="table table-striped" style="width:100%">
                 <thead>
                   <tr>
                       <th>Lesson</th>
                       <th>Subject</th>
-                      <th>Number</th>
-                      <th>Number of quizes</th>
-                      <th>Assesment</th>
+                      <th>file</th>
+                      <th>Status</th>
+                      <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -186,6 +195,43 @@
     </div>
   </div>
 
+{{-- Add Lesson  --}}
+
+  <div class="modal fade" id="addLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Lesson</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addLessonForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Lesson</label>
+            <input type="text" class="form-control" id="lesson" name="lesson" required >
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <input type="file" class="form-control" id="lesson_file" name="lesson_file" aria-describedby="upload-lesson" aria-label="Upload">
+              <button class="btn btn-outline-secondary" type="button" id="upload_lesson">Upload Lesson</button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="grade" class="form-label">Select Subject</label>
+            <select type="text" class="form-control" id="selectSubject" name="selectSubject" >
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
 {{-- Subjec Section Modal --}}
   <div class="modal fade bd-example-modal-lg" id="subjectSectionModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -228,7 +274,8 @@
   var token ={{ Js::from(session('token')) }};
 
   $(document).ready(function(){
-   var sectionCode="";
+   var sectionCode={{ Js::from($sectionCode) }};
+   console.log(sectionCode);
    var teacherStudentsTable= $('#teacherStudentsTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -278,18 +325,14 @@
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/get",
+      "sAjaxSource": baseUrl+"/api/lesson/get/all",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
           $.ajax({
-           
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
-            "data":{
-              "gradeCode":$("#grades").val()
-            },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
             },
@@ -297,11 +340,10 @@
           });
         },
       "columns":[
-        { "data":"s_code"},
-        { "data":"s_desc"},
-        { "data":"g_code" },
-        { "data":"teacher_id" },
-        {"data":"status" },
+        { "data":"lesson"},
+        { "data":"subj_desc"},
+        { "data":"file" },
+        { "data":"status" },
         {
           "data":"status",
           "render": function ( data, type, row, meta ) {
@@ -446,24 +488,23 @@
 
     });
 
-    $("#updateTeacher").select2({
-      dropdownParent: $('#updateSectionModal'),
+    $("#selectSubject").select2({
+      dropdownParent: $('#addLessonModal'),
       theme: 'bootstrap-5',
       delay: 250,
-      placeholder: 'Search for a Teacher',
+      placeholder: 'Select for a Subject',
       ajax: {
         method:"GET",
         headers: {
           "Authorization" : "Bearer "+token
         },
         dataType: "json",
-        url: baseUrl+'/api/teacher/get/select2',
+        url: baseUrl+'/api/subjects/get/select2',
         data: function (params) {
           console.log("select2 params:"+params.term);
           var query = {
             search: params.term
           }
-
           // Query parameters will be ?search=[term]&type=public
           return query;
         },
@@ -506,8 +547,8 @@
 
 
 
-    $("#addSectionBtn").click(()=>{
-      $("#addSectionModal").modal("show");
+    $("#addLessonBtn").click(()=>{
+      $("#addLessonModal").modal("show");
     });
     
     $("#updateSectionBtn").click(()=>{
@@ -521,34 +562,39 @@
       $("#updateSectionModal").modal("show");
     });
 
-    $("#addSectionForm").submit((e)=>{
+    $("#addLessonForm").submit((e)=>{
       e.preventDefault();
-      var selectedTeacher =$("#teacher").select2('data')[0];
-      console.log(selectedTeacher);
+      var selectedSubject =$("#selectSubject").select2('data')[0];
+      console.log(selectedSubject);
+      var form = $("#addLessonForm");
+
+      var formData = new FormData(form[0]);
+      formData.append("subj_code", selectedSubject.id);
+      formData.append("section_code", sectionCode);
+
       swal.fire({
-        title: 'Do you want to save the Section?',
+        title: 'Do you want to save the Lesson?',
         showCancelButton: true,
-        confirmButtonText: 'Save',
+        confirmButtonText: 'Save'
       }).then((result) => {
        
         if (result.isConfirmed) {
 
           $.ajax({
-            url:baseUrl+"/api/section/create",
+            url:baseUrl+"/api/lesson/create",
             type:"POST",
-            data:{
-              "section_desc":$("#sectionName").val(),
-              "grade_code":$("#gradeCode").val(),
-              "teacher_id":selectedTeacher.id,
-              "school_year":"2022-2023"
-            },
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data:formData,
             success:(res)=>{
               console.log(res);
               if(res){
                 swal.fire('Saved!', '', 'success');
                 swal.close();
-                $("#addSectionModal").modal("hide");
-                sectionTable.ajax.reload();
+                $("#addLessonModal").modal("hide");
+                teacherLessonsTable.ajax.reload();
               }
 
             },

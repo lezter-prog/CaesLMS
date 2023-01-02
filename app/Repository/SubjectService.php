@@ -22,6 +22,21 @@ class SubjectService
         return $subjects;
     }
 
+    public function getAllSubjects2($request)
+    {
+        $result =[];
+        $subjects= $this->subjects->getAllSubjects2($request);
+
+        foreach($subjects as $subject){
+            
+            array_push($result, (object)[
+                'id' => $subject->subj_code,
+                'text' => $subject->subj_desc,
+        ]);
+        }
+        return $result;
+    }
+
     public function getSubjectsByGradeCode($gradeCode){
         $subjects= $this->subjects->getSubjectsByGradeCode($gradeCode);
         return $subjects;

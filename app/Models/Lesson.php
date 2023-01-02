@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 
-class Subjects extends Model
+class Lesson extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'subj_code',
+        'lesson',
         'subj_desc',
         'g_code',
         'sy',

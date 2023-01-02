@@ -62,6 +62,7 @@ Route::middleware('auth:sanctum')->controller(TeacherController::class)->group(f
 Route::middleware('auth:sanctum')->controller(SubjectController::class)->group(function(){
     Route::get('subjects/get/all', 'getAllSubjects');
     Route::get('subjects/get', 'getSubjectByGradeCode');
+    Route::get('subjects/get/select2', 'getAllSubjects2');
     Route::post('subject/create', 'createSubject');
     Route::patch('subject/{sucbjectCode}/update', 'updateSubject');
 });
@@ -70,6 +71,8 @@ Route::middleware('auth:sanctum')->controller(SubjectController::class)->group(f
 Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('quarters/get/all', 'getAllQuarters');
     Route::patch('quarter/update/{quarterCode}','updateQuarter');
+    Route::post('lesson/create','addLesson');
+    Route::get('lesson/get/all','getAllLesson');
 });
 
 

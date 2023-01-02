@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Repository\TeacherService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class UtilDB extends Controller
@@ -49,6 +51,46 @@ class UtilDB extends Controller
         }else{
             return false;
         }
+    }
+
+    public function addLesson(Request $request){
+        if ($request->hasFile('lesson_file')){
+            $filenameWithExt = $request->file('lesson_file')->getClientOriginalName();
+
+            Log::info("FileName:".$filenameWithExt);
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('lesson_file')->getClientOriginalExtension();
+            $fileNameToStore = $request->lesson.'_'.time().'.'.$extension;
+            $file= $request->file("lesson_file")->storeAs('public/lessons',$fileNameToStore);
+
+            Log::info("file:".$file);
+            // Log::info("Request:".$request->all());
+
+            $lesson =DB::table("lesson")->insert([
+                'lesson'=>$request->lesson,
+                'subj_code'=>$request->subj_code,
+                'section_code'=>$request->section_code,
+                'file'=>$fileNameToStore,
+                'uploadedBy'=>Auth::id()
+            ]);
+            return [
+                "message"=>"success"
+            ];
+        }else{
+            return [
+                "message"=>"No file chosen"
+            ];
+        }
+    }
+
+    public function getAllLesson()
+    {
+        $lessons = DB::table('lesson')
+        ->rightJoin('subjects', 'subjects.subj_code', '=', 'lesson.subj_code')
+        ->get();
+        return [
+            "data" =>  $lessons
+        ];
     }
     
 }
