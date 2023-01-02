@@ -92,6 +92,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "active")
+        ->with('adminAnnouncement', "")
         ->with('adminStudent', "");
         
     
@@ -107,6 +108,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
         ->with('adminAnnouncement', "active");
         }
     

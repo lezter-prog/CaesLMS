@@ -60,6 +60,8 @@ class HomeController extends Controller
             ->with('adminSections', "")
             ->with('adminStudent', "")
             ->with('adminSubjects', "")
+            ->with('adminQuarter', "")
+            ->with('adminAnnouncement', "")
             ->with("profile",$profile[0]);
         }
        
