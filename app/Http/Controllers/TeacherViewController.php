@@ -34,6 +34,7 @@ class TeacherViewController extends Controller
         return view('teacher/handled_section')
         ->with('teacherDashboard',"active")
         ->with('sectionCode', $request->s_code)
+        ->with('teacherAnnouncement',"")
         ->with('sections', $section);
     }
 

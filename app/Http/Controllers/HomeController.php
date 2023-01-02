@@ -46,6 +46,7 @@ class HomeController extends Controller
         $sections = $sec->getByTeacher($id);
         return view('teacher/home')
         ->with('teacherDashboard',"active")
+        ->with('teacherAnnouncement',"")
         ->with('sections',$sections);
     }
     public function adminIndex()

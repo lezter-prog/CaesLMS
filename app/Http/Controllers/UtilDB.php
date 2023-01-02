@@ -86,7 +86,7 @@ class UtilDB extends Controller
     public function getAllLesson()
     {
         $lessons = DB::table('lesson')
-        ->rightJoin('subjects', 'subjects.subj_code', '=', 'lesson.subj_code')
+        ->join('subjects', 'subjects.subj_code', '=', 'lesson.subj_code')
         ->get();
         return [
             "data" =>  $lessons
