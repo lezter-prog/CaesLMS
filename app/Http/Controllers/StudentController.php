@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Repository\StudentService;
 
+
 class StudentController extends Controller
 {
     /**
@@ -46,6 +47,12 @@ class StudentController extends Controller
     public function updateStudent(Request $request,$idNumber){
         $student = $this->studentService->updateStudent($request,$idNumber);
         return $student;
+    }
+
+    public function importStudents(Requuest $request){
+
+       $excel = Excel::import(new UsersImport, request()->file('file'));
+
     }
     
 }
