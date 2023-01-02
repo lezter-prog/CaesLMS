@@ -93,4 +93,47 @@ class UtilDB extends Controller
         ];
     }
     
+    public function addAnnouncement(Request $request){
+        $add=DB::table('announcement')->insert([
+            'announcement_for' => $request->announcement_for,
+            'announcement_desc' => $request->announcement_desc
+        ]);
+
+        if($add){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function getAllAnnouncement()
+    {
+        $announcement = DB::table('announcement')->get();
+        return [
+            "data" =>  $announcement
+        ];
+    }
+    public function updateAnnouncement(Request $request){
+        $add=DB::table('announcement')
+        ->where('id', $request->id)
+        ->update(array('announcement_for' => $request->announcement_for,
+                       'announcement_desc'=> $request->announcement_desc));
+
+        if($add){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public function getStudentAnnouncement()
+    {
+        $announcement = DB::table('announcement')
+        ->where('announcement_for','Student')
+        ->get();
+        return [
+            "data" =>  $announcement
+        ];
+    }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Subjects')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
   <h1 class="h2">Subjects</h1>

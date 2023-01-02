@@ -47,6 +47,14 @@ class TeacherViewController extends Controller
         ->with('adminSections', "active");
     }
 
-    
+    public function manage_announcement()
+    {
+       
+        
+        return view('teacher/manage-announcement')
+        ->with('teacherDashboard',"")
+        // ->with('sections', $section)
+        ->with('teacherAnnouncement',"active");
+        }
     
 }
