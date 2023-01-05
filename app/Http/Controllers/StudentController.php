@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Repository\StudentService;
+use App\Imports\StudentsImport;
 
 
 class StudentController extends Controller
@@ -32,11 +36,20 @@ class StudentController extends Controller
     }
 
     public function getAllStudentAccount(){
-        $sections = $this->studentService->getAllStudentAccount();
+        $students = $this->studentService->getAllStudentAccount();
         
         return [
-            "data" =>   $sections
+            "data" =>   $students
         ];
+    }
+
+    public function getStudentsBySection($sectionCode){
+        $students = $this->studentService->getStudentsBySection($sectionCode);
+
+        return [
+            "data"=> $students
+        ];
+
     }
 
     public function createStudentAccount(Request $request){
@@ -49,9 +62,29 @@ class StudentController extends Controller
         return $student;
     }
 
-    public function importStudents(Requuest $request){
+    public function importStudents(Request $request){
+        if ($request->hasFile('studentFile')){
+            // $filenameWithExt = $request->file('studentFile')->getClientOriginalName();
 
-       $excel = Excel::import(new UsersImport, request()->file('file'));
+            // Log::info("FileName:".$filenameWithExt);
+            // $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // $extension = $request->file('studentFile')->getClientOriginalExtension();
+            // $fileNameToStore = $request->lesson.'_'.time().'.'.$extension;
+            $file= $request->file("studentFile")->getRealPath();
+            Log::info("path:".$file);
+            
+            $excel = Excel::import(new StudentsImport, $file);
+            
+            return [
+                "result"=>true
+            ];
+        }else{
+            return [
+                "message"=>"File Not Found"
+            ];
+        }
+       
+
 
     }
     

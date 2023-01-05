@@ -4,6 +4,8 @@ namespace App\Repository;
 use App\Models\SyStudents;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+
 
 
 
@@ -25,16 +27,17 @@ class StudentService
 
     public function createStudentAccount($request)
     {
+        $pwd =Str::random(8);
         $request->fullname =Str::upper($request->first_name." ".$request->last_name);
-        $request->password =Crypt::encryptString(Str::random(8));
-        $request->decrypted_pass =Crypt::decryptString($request->password);
+        $request->password =Hash::make($pwd);
+        $request->decrypted_pass =$pwd;
         $request->username =Str::lower($request->first_name).".".Str::lower($request->last_name);
         $request->role ="R1";
         return $this->student->createStudentAccount($request);
     }
 
-    public function get($request, $sectionCode){
-        return $this->section->updateSection($request,$sectionCode);
+    public function getStudentsBySection( $sectionCode){
+        return $this->student->getStudentsBySection($sectionCode);
     }
 
     public function updateStudent($request,$idNumber){

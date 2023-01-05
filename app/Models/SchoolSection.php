@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+
 
 class SchoolSection extends Model
 {
@@ -30,9 +32,20 @@ class SchoolSection extends Model
     public function getBySectionCode($sectionCode){
         return static::where('s_code',$sectionCode)->first();
     }
+
+    public function getAllSection2($request){
+
+        return DB::table("school_sections")
+        ->join('school_grades', 'school_grades.grade_code','=', 'school_sections.g_code')
+        ->where('school_sections.s_desc','like','%'.$request->search.'%')->get();
+
+    }
     
     public function getByTeacher($teacher_id){
-        return static::where('teacher_id',$teacher_id)->get();
+        return DB::table('school_sections')
+        ->join('school_grades','school_grades.grade_code','=','school_sections.g_code')
+        ->where('teacher_id',$teacher_id)->get();
+        // return static::;
     }
 
     public function updateSection($request,$sectionCode){

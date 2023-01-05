@@ -202,6 +202,7 @@
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
     <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>
     <script src="{{ URL::asset('js/particles.js'); }}"></script>
+    
 
     <script>
 

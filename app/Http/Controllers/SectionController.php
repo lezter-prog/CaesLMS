@@ -38,6 +38,16 @@ class SectionController extends Controller
         ];
     }
 
+    public function getAllSection2(Request $request){
+        $sections = $this->sectionService->getAllSection2($request);
+        
+        $results= [
+            "results" =>   $sections
+        ];
+        
+        return response()->json($results,200)->header('Content-Type', 'application/json');
+    }
+
     public function getSubjectSection(Request $request, $sectionCode){
 
         return [

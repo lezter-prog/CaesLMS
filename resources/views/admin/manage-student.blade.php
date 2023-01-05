@@ -61,7 +61,7 @@
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
           <div class="mb-3">
-            <label for="gradeCode" class="form-label">Select Grade</label>
+            <label for="update_gradeCode" class="form-label">Select Grade</label>
             <select type="text" class="form-control" id="update_gradeCode">
               <option value="">Select Grade</option>
               <option value="G1">Grade 1</option>
@@ -73,12 +73,8 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="sectionCode" class="form-label">Select Section</label>
+            <label for="update_sectionCode" class="form-label">Select Section</label>
             <select type="text" class="form-control" id="update_sectionCode" required >
-            <option value="">Select Section</option>
-              @foreach ($sections as $section)
-              <option value="{{ $section->section_code }}">{{ $section->section_desc}}</option>
-              @endforeach
             </select>
           </div>
         </div>
@@ -102,8 +98,8 @@
         <div class="modal-body">
           <div class="mb-3">
             <div class="input-group">
-              <input type="file" class="form-control" id="importStudents" name="studentsFile" aria-describedby="importStudentsBtn" aria-label="Upload">
-              <button class="btn btn-outline-secondary" type="button" id="importStudentsBtn">Import</button>
+              <input type="file" class="form-control" id="studentFile" name="studentFile" aria-describedby="importStudentsBtn" aria-label="Upload">
+              <button class="btn btn-outline-secondary" type="submit" id="importStudentsBtn">Import</button>
             </div>
           </div>
          
@@ -120,7 +116,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Teacher</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form id="addStudentForm">
@@ -153,10 +149,7 @@
           </div>
           <div class="mb-3">
             <label for="sectionCode" class="form-label">Select Section</label>
-            <select type="text" class="form-control" id="sectionCode" required >
-              @foreach ($sections as $section)
-              <option value="{{ $section->section_code }}">{{ $section->section_desc}}</option>
-              @endforeach
+            <select  class="js-example-responsive  form-control" id="sectionCode" required >
             </select>
           </div>
         </div>
@@ -197,12 +190,12 @@ $(document).ready(function(){
       "columns":[
         { "data":"name"},
         { "data":"username" },
-        { "data":"s_code" },
-        { "data":"g_code" },
-        { "data":"g_code",
+        { "data":"s_desc" },
+        { "data":"grade_desc" },
+        { "data":"",
             "render":function(row,settings,data){
                 console.log(data);
-                return "<button class='showpass btn btn-success btn-sm' data-id='"+data.user_id+"'>show password</button>";
+                return "<button class='showpass btn btn-success btn-sm' data-bs-toggle='tooltip' data-bs-placement='top' title='Generate New Password' data-id='"+data.user_id+"'><i class='fa-solid fa-rotate'></i></button>";
             }
         }
       ],
@@ -211,8 +204,14 @@ $(document).ready(function(){
             "target":4,
             "className":"text-center"
         }
-    ]
+    ],
+      "fnDrawCallback": function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+        },
     });
+
+    
 
     // select row
     $('#studentsTable tbody').on( 'click', 'tr', function () {   
@@ -256,6 +255,7 @@ $(document).ready(function(){
     $("#addStudentForm").submit((e)=>{
 
       e.preventDefault();
+      var selectedSection =$("#sectionCode").select2('data')[0];
       swal.fire({
         title: 'Do you want to save the Student?',
         showCancelButton: true,
@@ -271,8 +271,8 @@ $(document).ready(function(){
               "first_name":$("#first_name").val(),
               "middle_name":$("#middle_name").val(),
               "last_name":$("#last_name").val(),
-              "g_code":$("#gradeCode").val(),
-              "s_code":$("#sectionCode").val(),
+              "g_code":selectedSection.g_code,
+              "s_code":selectedSection.id,
               "sy":"2022-2023"
             },
             success:(res)=>{
@@ -364,6 +364,126 @@ $(document).ready(function(){
         }
       })
   });
+
+  $("#importStudentForm").submit((e)=>{
+      e.preventDefault();
+
+      var form = $("#importStudentForm");
+
+      var formData = new FormData(form[0]);
+      swal.fire({
+        title: 'Do you want to import all students in file?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+      
+        if (result.isConfirmed) {
+
+          $.ajax({
+            url:baseUrl+"/api/student/import",
+            type:"post",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data:formData,
+            success:(res)=>{
+              console.log(res);
+              if(res){
+                studentsTable.ajax.reload();
+                swal.fire({
+                  icon:'success',
+                  title: 'Imported Successfully',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  $("#updateStudentModal").modal("hide");
+                });
+              }else{
+                swal.fire({
+                  icon:'warning',
+                  title: 'Import Failed',
+                  message:res.message,
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  // swal.close();
+                  // $("#updateStudentModal").modal("hide");
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      })
+
+  });
+
+  $("#sectionCode").select2({
+      dropdownParent: $('#addStudentModal'),
+      theme: 'bootstrap-5',
+      delay: 250,
+      placeholder: 'Select Section',
+      ajax: {
+        method:"GET",
+        headers: {
+          "Authorization" : "Bearer "+token
+        },
+        dataType: "json",
+        url: baseUrl+'/api/section/get/select2',
+        data: function (params) {
+          console.log("select2 params:"+params.term);
+          var query = {
+            search: params.term
+          }
+          // Query parameters will be ?search=[term]&type=public
+          return query;
+        },
+        processResults: function (data) {
+          // data = JSON.parse(data);
+          console.log("process result:"+data.results);
+          return data;
+        },
+        minimumInputLength: 1,
+        
+       
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+      },
+      templateResult: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      },
+      templateSelection: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      }
+
+    });
+
+    $('#sectionCode').on('select2:select', function (e) {
+        var data = e.params.data;
+        console.log("Selected Section: "+data.g_code);
+        $("#gradeCode").val(data.g_code);
+    });
+
 
 });
 </script>

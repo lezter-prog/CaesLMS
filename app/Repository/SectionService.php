@@ -20,6 +20,25 @@ class SectionService
         return $this->section->getByGradeCode($gradeCode);
     }
 
+    public function getAllSection2($request)
+    {
+        $result =[];
+        $sections= $this->section->getAllSection2($request);
+
+        foreach($sections as $section){
+            
+            array_push($result, (object)[
+                'id' => $section->s_code,
+                'text' => '<strong>'.$section->s_desc.'</strong> - <small>'.$section->grade_desc.'<small>',
+                'g_code'=>$section->g_code,
+                'g_desc'=>$section->grade_desc
+        ]);
+        }
+        
+        return $result;
+        // return $this->section->getAll();
+    }
+
     public function getSectionBySectionCode($sectionCode){
         return $this->section->getBySectionCode($sectionCode);
     }

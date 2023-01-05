@@ -282,7 +282,7 @@
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/get",
+      "sAjaxSource": baseUrl+"/api/student/get/"+sectionCode,
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -301,11 +301,15 @@
           });
         },
       "columns":[
-        { "data":"s_code"},
-        { "data":"s_desc"},
-        { "data":"g_code" },
-        { "data":"teacher_id" },
-        {"data":"status" },
+        { "data":"id_number",
+          "render":function(data, type, row, meta ){
+            console.log(row);
+            return row.first_name+" "+row.last_name;
+          }
+        },
+        { "data":"id_number"},
+        { "data":"id_number" },
+        { "data":"id_number" },
         {
           "data":"status",
           "render": function ( data, type, row, meta ) {
@@ -325,7 +329,7 @@
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/lesson/get/all",
+      "sAjaxSource": baseUrl+"/api/lesson/get/"+sectionCode,
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 

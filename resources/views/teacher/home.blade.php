@@ -8,7 +8,7 @@
             <div class="card" style="width: 20rem;">
                 <div class="card-body">
                   <h5 class="card-title"><strong>{{ $section->s_desc}}</strong></h5>
-                  <h6 class="card-subtitle mb-2 text-muted">{{ $section->g_desc}}</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">{{ $section->grade_desc}}</h6>
                   <p class="card-text">Section in Calamba Adventist Elementary School.</p>
                   <a href="/teacher/handled/section?s_code={{$section->s_code}}" class="btn btn-primary">Manage Section</a>
                 </div>
