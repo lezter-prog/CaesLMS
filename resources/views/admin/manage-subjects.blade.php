@@ -4,16 +4,17 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
   <h1 class="h2">Subjects</h1>
   <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group me-2">
-      <select class="form-select" id="grades" aria-label="Default select example">
-          <option value="G1">Grade 1</option>
-          <option value="G2">Grade 2</option>
-          <option value="G3">Grade 3</option>
-          <option value="G4">Grade 4</option>
-          <option value="G5">Grade 5</option>
-          <option value="G6">Grade 6</option>
-        </select>
-  </div>
+    <div class=" me-2">
+      <select class="form-select " id="grades" aria-expanded="false"   multiple="multiple" style="width:500px">
+        <option value="G1">Grade 1</option>
+        <option value="G2">Grade 2</option>
+        <option value="G3">Grade 3</option>
+        <option value="G4">Grade 4</option>
+        <option value="G5">Grade 5</option>
+        <option value="G6">Grade 6</option>
+      </select>
+    </div>
+      
     <div class="btn-group me-2">
       <button type="button" id ="addSubjectBtn" class="btn btn-sm btn-outline-primary">Add</button>
       <button type="button" id="updateSubjectBtn" class="btn btn-sm btn-outline-primary">Edit</button>
@@ -62,13 +63,13 @@
             <input type="text" class="form-control" id="update_subject_desc">
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
-          <div class="mb-3">
+          <div class="mb-10">
             <label for="gradeCode" class="form-label">Select Grade</label>
             <select type="text" class="form-control" id="update_gradeCode">
               <option value="G1">Grade 1</option>
               <option value="G2">Grade 2</option>
               <option value="G3">Grade 3</option>
-              <option value="G4">Grade 4</option>
+              <option value="G4">Grade 10</option>
               <option value="G5">Grade 5</option>
               <option value="G6">Grade 6</option>
             </select>
@@ -128,6 +129,7 @@
 
 $(document).ready(function(){
     console.log('log');
+    var gradeCode =['G1'];
     var subjectsTable = $('#subjectsTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -186,6 +188,14 @@ $(document).ready(function(){
 
       });
 
+      $("#grades").select2({
+        dropdownAutoWidth: true,
+        theme: 'classic',
+        multiple: true,
+        delay: 250,
+        placeholder: 'Select Grade'
+      });
+
       $("#grades").on('change',()=>{
         subjectsTable.ajax.reload();
       });
@@ -204,6 +214,7 @@ $(document).ready(function(){
       $("#update_gradeCode").val(data.g_code);
       $("#updateSubjectModal").modal("show");
     });
+    $('.select2-search__field').css('width', '100%');
 
     $("#addSubjectForm").submit((e)=>{
 

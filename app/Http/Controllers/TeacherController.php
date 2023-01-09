@@ -49,6 +49,7 @@ class TeacherController extends Controller
     }
 
     public function createTeacher(Request $request){
+        Log::info("request:".$request->subjects);
         $teacher = $this->service->createTeacher($request);
         return $teacher;
     }

@@ -19,6 +19,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <link href="{{ URL::asset('css/app.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/DataTables/datatables.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/DataTables/datatables.select.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/select2-4.0.13/dist/css/select2.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/select2/select2-bootstrap-5-theme.min.css'); }} " rel="stylesheet">
 
@@ -200,6 +201,7 @@
     </div>
     @yield('script')
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/DataTables/datatables.select.min.js'); }}"></script>
     <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>
     <script src="{{ URL::asset('js/particles.js'); }}"></script>
     

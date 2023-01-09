@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -18,7 +19,8 @@ class SyTeachers extends Model
 
     protected $fillable = [
         'user_id',
-        'name',
+        'first_name',
+        'last_name',
         'status',
         'sy',
         'addedBy'
@@ -39,14 +41,14 @@ class SyTeachers extends Model
 
     public function getAllTeachers2($request){
 
-        return static::where('name','like','%'.$request->search.'%')->get();
+        return static::where('first_name','like','%'.$request->search.'%')->get();
 
     }
 
     public function createTeacher($request){
         DB::beginTransaction();
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->first_name.' '.$request->last_name,
             'email' => '',
             'username'=> $request->username,
             'password'=> $request->password,
@@ -60,11 +62,24 @@ class SyTeachers extends Model
 
         $teacher = static::create([
             'user_id' => $user->id,
-            'name' => $request->name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
             'sy'=> $request->sy,
             'status'=> $request->status, 
             'addedBy' => 'admin'
         ]);
+        $subjects =json_decode($request->subjects,true);
+        // Log::info("subjects:".json_encode($subjects));
+        foreach($subjects as $subject){
+            Log::info("subject:".json_encode($subject));
+            DB::table('teachers_subjects_section')
+            ->insert([
+                'teacher_id'=>$user->id,
+                'subj_code'=>$subject['subj_code'],
+                'section_code'=>$subject['s_code'],
+                'status'=>'ACTIVE'
+            ]);
+        }
 
 
         if( !$teacher || !$user)

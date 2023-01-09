@@ -41,8 +41,8 @@ class Subjects extends Model
     }
 
     public function getSubjectsByGradeCode($gradeCode){
-        Log::info("Model Request log:".$gradeCode);
-        return static::where('g_code',$gradeCode)->get();
+        Log::info("Model Request log:".json_encode($gradeCode));
+        return static::whereIn('g_code',$gradeCode)->get();
     }
 
     public function updateSubject($request,$subjectCode){

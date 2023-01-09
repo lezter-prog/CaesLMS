@@ -49,7 +49,7 @@ class SubjectController extends Controller
         return response()->json($results,200)->header('Content-Type', 'application/json');
     }
     public function getSubjectByGradeCode(Request $request){
-        Log::info("Request gradeCode: ". $request->gradeCode);
+        Log::info("Request gradeCode: ". json_encode($request->gradeCode));
         $subjects = $this->subjectService->getSubjectsByGradeCode($request->gradeCode);
         Log::info("Subjects: ".$subjects);
       

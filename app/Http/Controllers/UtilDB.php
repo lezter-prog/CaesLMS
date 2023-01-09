@@ -147,4 +147,5 @@ class UtilDB extends Controller
             "data" =>  $announcement
         ];
     }
+
 }

@@ -80,7 +80,7 @@
 </div>
 
   <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add Teacher</h5>
@@ -88,34 +88,54 @@
         </div>
         <form id="addTeacherForm">
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="teacherName" class="form-label">Teacher Name</label>
-            <input type="text" class="form-control" id="teacherName" >
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          <div class="row g-3" style="padding-bottom:10px">
+            <div class="col-4" style="padding-right:10px">
+              <input type="text" class="form-control" id="teacherFirstName" placeholder="First name" aria-label="First name">
+            </div>
+            <div class="col-4">
+              <input type="text" class="form-control" id="teacherLastName"placeholder="Last name" aria-label="Last name">
+            </div>
+            
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email">
+          <div class="row" style="padding-bottom:10px">
+            <div class="col-8">
+              <select type="text" class="form-control" id="sectionCode" multiple="multiple" >
+                {{-- @foreach ($sections as $section)
+                <option value="{{ $section->s_code }}">{{ $section->s_desc}}</option>
+                @endforeach --}}
+              </select>            
+            </div>
           </div>
-          {{-- <div class="mb-3">
-            <label for="gradeCode" class="form-label">Select Grade</label>
-            <select type="text" class="form-control" id="gradeCode">
-              <option value="G1">Grade 1</option>
-              <option value="G2">Grade 2</option>
-              <option value="G3">Grade 3</option>
-              <option value="G4">Grade 4</option>
-              <option value="G5">Grade 5</option>
-              <option value="G6">Grade 6</option>
-            </select>
-          </div> --}}
-          {{-- <div class="mb-3">
-            <label for="sectionCode" class="form-label">Select Section</label>
-            <select type="text" class="form-control" id="sectionCode" required >
-              @foreach ($sections as $section)
-              <option value="{{ $section->s_code }}">{{ $section->s_desc}}</option>
-              @endforeach
-            </select>
-          </div> --}}
+          <div class="row" style="padding-bottom:10px">
+            <div class="col-12">
+              <table id ="subjectsTable"  class="table table-striped" style="width:100%">
+                <thead>
+                   <tr>
+                      <th>
+                        <div class="form-check" style="min-height: 0.44rem;">
+                          <input class="form-check-input" type="checkbox" value="" id="allsubject">
+                          <label class="form-check-label" for="flexCheckDefault">
+                            All
+                          </label>
+                        </div>
+                      </th>
+                      <th>Subject Code</th>
+                      <th>Subject Desc</th>
+                      <th>Grade Code</th>
+                      <th>Select Section</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+            
+          
+              </table>
+            </div>
+          
+          </div>
+
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -131,7 +151,74 @@
   console.log(token);
 
 $(document).ready(function(){
-    console.log('log');
+    var gradeCode =[];
+    var selectAllSubject =false;
+    var subjectsTable = $('#subjectsTable').DataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+      "bFilter": true,
+      "bInfo": false,
+      "bAutoWidth": false,
+      "ordering": false,
+      "sAjaxSource": baseUrl+"/api/subjects/get",
+      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+        console.log("ajaxSRC: "+sSource);
+          oSettings.jqXHR = 
+          $.ajax({
+            "dataType": 'json',
+            "type": "GET",
+            "url": sSource,
+            "data":{
+              gradeCode:gradeCode
+            },
+            "beforeSend": function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+            "success": fnCallback
+          });
+        },
+      "columns":[
+        { "data":"subj_code",
+          "render":function(row,settings,data){
+                // var checked ="";
+                // if(selectAllSubject){
+                //   checked="checked"
+                // }
+                // return '<div class="form-check"><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" '+checked+'></div>';
+                  return "";
+              }
+    
+        },
+        {"data":"subj_code" },
+        {"data":"subj_desc"},
+        {"data":"g_code"},
+        {"data":"g_code",
+          "render":function(row,settings,data){
+            var select ='<select id="'+data.subj_code+'" class="form-select">';
+            var options =$("#sectionCode").select2('data');
+              console.log(options);
+              for(option of options){
+                select=select+'<option value="'+option.id+'">'+option.s_desc+'</option>';
+              }
+              select=select+'</select>'
+              return select;
+          }
+  
+        }
+        
+      ],
+      columnDefs: [ {
+            orderable: false,
+            className: 'select-checkbox',
+            targets:   0
+        } ],
+        select: {
+            style:    'os',
+            selector: 'td:first-child'
+        },
+        order: [[ 1, 'asc' ]]
+    });
+
     var teachersTable = $('#teachersTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -158,6 +245,16 @@ $(document).ready(function(){
         {"data":"status"}
       ]
     });
+
+    $("#allsubject").on('click',function(){
+      if($(this).is(':checked')){
+        selectAllSubject =true;
+        subjectsTable.rows().select();   
+      }else{
+        selectAllSubject =false;
+        subjectsTable.rows().deselect();   
+      }
+    })
 
     // select row
     $('#teachersTable tbody').on( 'click', 'tr', function () {   
@@ -193,8 +290,28 @@ $(document).ready(function(){
     });
 
     $("#addTeacherForm").submit((e)=>{
-
       e.preventDefault();
+      var arrayData=[];
+      var s_code="";
+      // var api =subjectsTable.api();
+        subjectsTable
+        .rows({selected: true})
+        .every(function(rowIdx,tableLoop,rowLoop){
+          var data = this.data();
+          console.log(this.row(rowIdx).column(4).nodes());
+          $(this.row(rowIdx).column(4).nodes())
+          .find("select#"+data.subj_code+".form-select").each( function () {
+            // console.log("found"+$(this).val());
+            s_code=$(this).val();
+          });
+          data.s_code=s_code;
+
+          console.log(data);
+          arrayData.push(data);
+        });
+    //  console.log(JSON.stringify(subjects));
+      console.log(arrayData);
+      console.log($("#sectionCode").val());
       swal.fire({
         title: 'Do you want to save the Teacher?',
         showCancelButton: true,
@@ -207,7 +324,9 @@ $(document).ready(function(){
             url:baseUrl+"/api/teacher/create",
             type:"POST",
             data:{
-              "name":$("#teacherName").val(),
+              "first_name":$("#teacherFirstName").val(),
+              "last_name":$("#teacherLastName").val(),
+              "subjects":JSON.stringify(arrayData),
               "sy":"2022-2023"
             },
             success:(res)=>{
@@ -296,6 +415,65 @@ $(document).ready(function(){
         }
       })
   });
+
+  $("#sectionCode").select2({
+      dropdownParent: $('#addTeacherModal'),
+      theme: 'bootstrap-5',
+      delay: 250,
+      placeholder: 'Select Section',
+      ajax: {
+        method:"GET",
+        headers: {
+          "Authorization" : "Bearer "+token
+        },
+        dataType: "json",
+        url: baseUrl+'/api/section/get/select2',
+        data: function (params) {
+          console.log("select2 params:"+params.term);
+          var query = {
+            search: params.term
+          }
+          // Query parameters will be ?search=[term]&type=public
+          return query;
+        },
+        processResults: function (data) {
+          // data = JSON.parse(data);
+          console.log("process result:"+data.results);
+          return data;
+        },
+        minimumInputLength: 1,
+        
+       
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+      },
+      templateResult: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      },
+      templateSelection: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      }
+
+    });
+
+    $('#sectionCode').on('select2:select', function (e) {
+        var data = e.params.data;
+        console.log("Selected Section: "+data.g_code);
+        if(!gradeCode.includes(data.g_code)){
+          gradeCode.push(data.g_code)
+        }
+        
+
+        console.log(gradeCode);
+        subjectsTable.ajax.reload();
+    });
 
 });
 </script>

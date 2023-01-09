@@ -42,7 +42,7 @@ class TeacherService
     public function createTeacher($request)
     {
         $pwd =Str::random(8);
-        $request->username =str_replace(' ', '.', Str::lower($request->name));
+        $request->username =Str::lower($request->first_name).'.'.Str::lower($request->last_name);
         $request->password =Hash::make($pwd);
         $request->decrypted_pass =$pwd;
         $request->status ="ACTIVE";

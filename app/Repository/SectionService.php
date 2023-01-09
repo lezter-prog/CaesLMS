@@ -30,6 +30,7 @@ class SectionService
             array_push($result, (object)[
                 'id' => $section->s_code,
                 'text' => '<strong>'.$section->s_desc.'</strong> - <small>'.$section->grade_desc.'<small>',
+                's_desc'=>$section->s_desc,
                 'g_code'=>$section->g_code,
                 'g_desc'=>$section->grade_desc
         ]);
