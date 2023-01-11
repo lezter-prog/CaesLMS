@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repository\TeacherService;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -146,6 +148,48 @@ class UtilDB extends Controller
         return [
             "data" =>  $announcement
         ];
+    }
+
+    public function getAllGrades()
+    {
+        $grades = DB::table('school_grades')->get();
+        return [
+            "data" =>  $grades
+        ];
+    }
+    public function updatePassword(Request $request){
+
+        $oldPassword= $request->oldPassword;
+        $newPassword=$request->newPassword;
+        $idNumber=Auth::id();
+        Log::info("request:".json_encode($request->all()));
+
+        $currentPass = DB::table('hash_tables')->select('value')->where('hash_id',Auth::id())->get();
+        Log::info("old:".$oldPassword);
+        Log::info("current:".$currentPass[0]->value);
+
+        if($oldPassword!=$currentPass[0]->value){
+            return [
+                "message"=>"invalid password"
+            ];
+        }
+        
+        DB::beginTransaction();
+        $user= User::where('id',$idNumber)->update([
+            'password' => Hash::make($newPassword)
+        ]);
+
+        $hash=DB::table('hash_tables')
+        ->where('hash_id', $idNumber)
+        ->update(['value'=>$newPassword]);
+
+        if( !$hash || !$user)
+        {
+            throw new Exception('invalid changing password!');
+        }else{
+            DB::commit();
+            return true;
+        }
     }
 
 }

@@ -81,6 +81,9 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('announcement/get/all', 'getAllAnnouncement');
     Route::get('announcement/get/student', 'getStudentAnnouncement');
     Route::patch('announcement/update', 'updateAnnouncement');
+    Route::get('grades/get/all', 'getAllGrades');
+    Route::patch('user/update/password', 'updatePassword');
+
     
 });
 

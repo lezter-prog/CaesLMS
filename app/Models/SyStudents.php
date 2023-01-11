@@ -83,18 +83,5 @@ class SyStudents extends Model
 
     }
 
-    public function updatePassword($oldPassword, $newPassword,$idNumber){
-
-        $userCount = User::where(
-            ['password','=',$oldPassword],
-            ['id','=',$idNumber]
-            )->count();
-        if($userCount>0){
-            return User::where('id',$idNumber)->update([
-                'password' => $newPassword
-            ]);
-        }else{
-            throw new \Exception('updating Password Failed!');
-        }
-    }
+    
 }

@@ -109,6 +109,10 @@
                             <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Quarters</span>
                         </a>
+                        <a href="/admin/grades" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Grades</span>
+                        </a>
                         
                     @endif
                    
@@ -170,8 +174,8 @@
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">
-                            My Profile
+                        <a class="dropdown-item" href="/auth/change-password">
+                           Change Password
                         </a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                            onclick="event.preventDefault();

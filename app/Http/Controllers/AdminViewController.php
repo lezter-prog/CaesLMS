@@ -36,6 +36,7 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
@@ -48,6 +49,7 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('adminSections', "active");
     }
@@ -63,6 +65,7 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminGrades', "")
         ->with('adminStudent', "active")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
@@ -80,6 +83,7 @@ class AdminViewController extends Controller
         ->with('adminSubjects', "active")
         ->with('adminQuarter', "")
         ->with('adminStudent', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
@@ -94,6 +98,7 @@ class AdminViewController extends Controller
         ->with('adminAnnouncement', "")
         ->with('adminQuarter', "active")
         ->with('adminAnnouncement', "")
+        ->with('adminGrades', "")
         ->with('adminStudent', "");
     
     }
@@ -109,7 +114,23 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "active");
+        }
+
+        public function manage_grades()
+    {
+       
+        
+        return view('admin/manage-grades')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
+        ->with('adminGrades', "active")
+        ->with('adminAnnouncement', "");
         }
     
 }
