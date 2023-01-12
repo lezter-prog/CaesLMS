@@ -162,6 +162,7 @@ class UtilDB extends Controller
             $data = DB::table('teachers_subjects_section')
                     ->where([
                         ['teacher_id','=',$request->teacherId],
+                        ['section_code','=',$request->sectionCode],
                         ['subj_code','=',$obj->subj_code]
                         ])->get();
             Log::info("Count :".json_encode($data));
@@ -177,6 +178,21 @@ class UtilDB extends Controller
 
         return [
             "data"=>$arrayData
+        ];
+
+    }
+
+    public function getTeacherHandledSubjects2(Request $request){  
+        Log::info("Request Data:".json_encode($request->all()));
+        $subjects = DB::table('teachers_subjects_section')
+            ->join('subjects','subjects.subj_code', '=', 'teachers_subjects_section.subj_code')
+            ->where([
+                ['teachers_subjects_section.section_code','=',$request->sectionCode],
+                ['teachers_subjects_section.teacher_id','=',Auth::id()]
+            ])->get();
+
+        return [
+            "data"=>$subjects
         ];
 
     }
@@ -237,6 +253,44 @@ class UtilDB extends Controller
             DB::commit();
             return true;
         }
+    }
+
+    public function saveTeacherSectionSubjects(Request $request){
+
+
+        $count= DB::table('teachers_subjects_section')
+                ->where([
+                    ['section_code','=',$request->section_code],
+                    ['teacher_id','=',$request->teacherId]])
+                ->count();
+        if($count>0){
+            return [
+                "message"=>"The teacher section you are trying to save is already exist"
+            ];
+        }
+        DB::beginTransaction();
+        $subjects =json_decode($request->subjects);
+        // Log::info("subjects: ".$subjects);
+        foreach($subjects as $subject){
+                Log::info("subject:".json_encode($subject));
+                $insert=DB::table('teachers_subjects_section')
+                ->insert([
+                    'teacher_id'=>$request->teacherId,
+                    'subj_code'=>$subject->subj_code,
+                    'section_code'=>$request->section_code,
+                    'status'=>'ACTIVE'
+                ]);
+
+                if(!$insert){
+                    DB::rollBack();
+                    return [
+                        "message"=>"Failed saving ".json_encode($subject)
+                    ];
+                }
+
+            }
+        DB::commit();
+        return true;
     }
 
 }

@@ -113,7 +113,7 @@
                    <tr>
                       <th>
                         <div class="form-check" style="min-height: 0.44rem;">
-                          <input class="form-check-input" type="checkbox" value="" id="update_allsubject">
+                          <input class="form-check-input" type="checkbox" value="" id="add_allsubject">
                           <label class="form-check-label" for="flexCheckDefault">
                             All
                           </label>
@@ -154,6 +154,7 @@
 $(document).ready(function(){
     var gradeCode =[''];
     var selectAllSubject =false;
+    var sectionCode ="";
     var teacherId ={{ Js::from($teacherId) }};
     var subjectsTable = $('#subjectsTable').DataTable({
       "bPaginate": false,
@@ -172,7 +173,8 @@ $(document).ready(function(){
             "url": sSource,
             "data":{
               gradeCode:gradeCode,
-              teacherId:teacherId
+              teacherId:teacherId,
+              sectionCode:sectionCode
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -240,7 +242,8 @@ $(document).ready(function(){
             "url": sSource,
             "data":{
               gradeCode:gradeCode,
-              teacherId:teacherId
+              teacherId:teacherId,
+              sectionCode:sectionCode
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -321,7 +324,7 @@ $(document).ready(function(){
         {"data":"s_desc" },
         {"data":"s_code",
             "render":function(data,settings,row){
-                return '<button role="button" id="handledSections" class="btn btn-primary btn-sm">View Handled Subjects</button>'
+                return '<button role="button" id="handledSections" class="btn btn-primary btn-sm handledSections">View Handled Subjects</button>'
 
             }
         }
@@ -338,13 +341,13 @@ $(document).ready(function(){
       }
     });
 
-    $("#update_allsubject").on('click',function(){
+    $("#add_allsubject").on('click',function(){
       if($(this).is(':checked')){
         selectAllSubject =true;
-        updateSubjectsTable.rows().select();   
+        addSubjectsTable.rows().select();   
       }else{
         selectAllSubject =false;
-        updateSubjectsTable.rows().deselect();   
+        addSubjectsTable.rows().deselect();   
       }
     })
 
@@ -370,123 +373,116 @@ $(document).ready(function(){
       $("#addSectionModal").modal("show");
     });
 
-    $('#sectionsTable tbody').on( 'click','#handledSections',(event)=>{
-        event.preventDefault();
-        console.log($(this).closest('tr'));
-        var data = sectionsTable.row().data();
+    $('#sectionsTable tbody').on( 'click','.handledSections',function(){
+        // event.preventDefault();
+        // console.log($(this).closest('tr'));
+        var data = sectionsTable.row($(this).parents('tr')).data();
         console.log(data);
         $("#sectionDesc").val(data.s_desc);
+        sectionCode=data.s_code;
         gradeCode.push(data.g_code);
         subjectsTable.ajax.reload();
         $("#viewSubjectsModal").modal("show");
     })
 
 // Open Update Modal
-    $("#updateTeacherBtn").click(()=>{
-      var data = teachersTable.row( ".selected" ).data();
-      teaceherId=data.user_id;
+    // $("#updateTeacherBtn").click(()=>{
+    //   var data = teachersTable.row( ".selected" ).data();
+    //   teaceherId=data.user_id;
 
-      $("#updateTeacherFirstName").data("code",data.user_id);
-      $("#updateTeacherFirstName").val(data.first_name);
-      $("#updateTeacherLastName").val(data.last_name);
+    //   $("#updateTeacherFirstName").data("code",data.user_id);
+    //   $("#updateTeacherFirstName").val(data.first_name);
+    //   $("#updateTeacherLastName").val(data.last_name);
 
-        var sections = [];
-        var sectionCodes = [];
-            gradeCode=[''];
-          for(obj of data.sections){
-            sections.push({
-              id:obj.s_code,
-              text:'<strong>'+obj.s_desc+'</strong> - <small>'+obj.grade_desc+'<small>',
-              s_desc:obj.s_desc
-            });
-            sectionCodes.push(obj.s_code);
-            console.log(obj);
-            if(!gradeCode.includes(obj.g_code)){
-              gradeCode.push(obj.g_code);
-            }
-          }
-          console.log(sections);
-          $('#updateSectionCode').select2('destroy');
-          $("#updateSectionCode").select2({
-              dropdownParent: $('#updateTeacherModal'),
-              theme: 'bootstrap-5',
-              delay: 250,
-              placeholder: 'Select Section',
-              data:sections,
-              ajax: {
-                method:"GET",
-                headers: {
-                  "Authorization" : "Bearer "+token
-                },
-                dataType: "json",
-                url: baseUrl+'/api/section/get/select2',
-                data: function (params) {
-                  console.log("select2 params:"+params.term);
-                  var query = {
-                    search: params.term
-                  }
-                  // Query parameters will be ?search=[term]&type=public
-                  return query;
-                },
-                processResults: function (data) {
-                  // data = JSON.parse(data);
-                  console.log("process result:"+data.results);
-                  return data;
-                },
-                minimumInputLength: 1,
+    //     var sections = [];
+    //     var sectionCodes = [];
+    //         gradeCode=[''];
+    //       for(obj of data.sections){
+    //         sections.push({
+    //           id:obj.s_code,
+    //           text:'<strong>'+obj.s_desc+'</strong> - <small>'+obj.grade_desc+'<small>',
+    //           s_desc:obj.s_desc
+    //         });
+    //         sectionCodes.push(obj.s_code);
+    //         console.log(obj);
+    //         if(!gradeCode.includes(obj.g_code)){
+    //           gradeCode.push(obj.g_code);
+    //         }
+    //       }
+    //       console.log(sections);
+    //       $('#updateSectionCode').select2('destroy');
+    //       $("#updateSectionCode").select2({
+    //           dropdownParent: $('#updateTeacherModal'),
+    //           theme: 'bootstrap-5',
+    //           delay: 250,
+    //           placeholder: 'Select Section',
+    //           data:sections,
+    //           ajax: {
+    //             method:"GET",
+    //             headers: {
+    //               "Authorization" : "Bearer "+token
+    //             },
+    //             dataType: "json",
+    //             url: baseUrl+'/api/section/get/select2',
+    //             data: function (params) {
+    //               console.log("select2 params:"+params.term);
+    //               var query = {
+    //                 search: params.term
+    //               }
+    //               // Query parameters will be ?search=[term]&type=public
+    //               return query;
+    //             },
+    //             processResults: function (data) {
+    //               // data = JSON.parse(data);
+    //               console.log("process result:"+data.results);
+    //               return data;
+    //             },
+    //             minimumInputLength: 1,
                 
               
-                  // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-              },
-              templateResult: function(repo){
-                console.log(repo);
-                if (!repo.loading) {
-                  // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
-                  return $(repo.text);
-                }
-              },
-              templateSelection: function(repo){
-                console.log(repo);
-                  return $(repo.text);
+    //               // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+    //           },
+    //           templateResult: function(repo){
+    //             console.log(repo);
+    //             if (!repo.loading) {
+    //               // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+    //               return $(repo.text);
+    //             }
+    //           },
+    //           templateSelection: function(repo){
+    //             console.log(repo);
+    //               return $(repo.text);
                 
-              }
+    //           }
 
-          });
+    //       });
 
       
 
-      if ($('#updateSectionCode').hasClass("select2-hidden-accessible")) {
-        $("#updateSectionCode").val(sectionCodes).trigger("change.select2");
-        $("#updateTeacherModal").modal("show");
-      }
+    //   if ($('#updateSectionCode').hasClass("select2-hidden-accessible")) {
+    //     $("#updateSectionCode").val(sectionCodes).trigger("change.select2");
+    //     $("#updateTeacherModal").modal("show");
+    //   }
       
-      updateSubjectsTable.ajax.reload();
-      var tableCount=updateSubjectsTable.data().count();
-      var rowsSelectedCount =updateSubjectsTable.rows('.selected').count();
-      console.log("Count rows:"+rowsSelectedCount);
-      if(tableCount==rowsSelectedCount){
-        $("#update_allsubject").prop( "checked", true );
-      }
-    });
+    //   updateSubjectsTable.ajax.reload();
+    //   var tableCount=updateSubjectsTable.data().count();
+    //   var rowsSelectedCount =updateSubjectsTable.rows('.selected').count();
+    //   console.log("Count rows:"+rowsSelectedCount);
+    //   if(tableCount==rowsSelectedCount){
+    //     $("#update_allsubject").prop( "checked", true );
+    //   }
+    // });
 
 
-    $("#addTeacherForm").submit((e)=>{
+    $("#addSectionForm").submit((e)=>{
       e.preventDefault();
       var arrayData=[];
-      var s_code="";
-      // var api =subjectsTable.api();
-        subjectsTable
+      var section=$("#sectionCode").select2("data");
+      console.log(section);
+      addSubjectsTable
         .rows({selected: true})
         .every(function(rowIdx,tableLoop,rowLoop){
           var data = this.data();
-          console.log(this.row(rowIdx).column(4).nodes());
-          $(this.row(rowIdx).column(4).nodes())
-          .find("select#"+data.subj_code+".form-select").each( function () {
-            // console.log("found"+$(this).val());
-            s_code=$(this).val();
-          });
-          data.s_code=s_code;
-
           console.log(data);
           arrayData.push(data);
         });
@@ -502,19 +498,18 @@ $(document).ready(function(){
         if (result.isConfirmed) {
 
           $.ajax({
-            url:baseUrl+"/api/teacher/create",
+            url:baseUrl+"/api/teacher/section/subjects",
             type:"POST",
             data:{
-              "first_name":$("#teacherFirstName").val(),
-              "last_name":$("#teacherLastName").val(),
+              "section_code":section[0].id,
+              "teacherId":teacherId,
               "subjects":JSON.stringify(arrayData),
               "sy":"2022-2023"
             },
             success:(res)=>{
               console.log(res);
               if(res){
-                teachersTable.ajax.reload();
-
+                sectionsTable.ajax.reload();
                 swal.fire({
                   icon:'success',
                   title: 'Saving Success',
@@ -522,7 +517,7 @@ $(document).ready(function(){
                   confirmButtonText: 'Ok',
                 }).then((result) => {
                   swal.close();
-                $("#addTeacherModal").modal("hide");
+                $("#addSectionModal").modal("hide");
                 });
               }
 

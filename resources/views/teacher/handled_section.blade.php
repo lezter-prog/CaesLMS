@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">{{ $sections->s_desc}}</h1>
+  <h1 class="h2">{{ $sections->s_desc}} - {{ $sections->g_code}}</h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
     
@@ -19,93 +19,48 @@
 </div>
 <div class="" style="padding:0px 10px">
   <div class="col-sm-12">
-    
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab" aria-controls="students" aria-selected="true">Students</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="true">Subjects</button>
+      </li>
+    </ul>
 
-    <div class="d-flex align-items-start">
-        <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-students-tab" data-bs-toggle="pill" data-bs-target="#v-pills-students" type="button" role="tab" aria-controls="v-pills-students" aria-selected="true">Students</button>
-          <button class="nav-link" id="v-pills-lessons-tab" data-bs-toggle="pill" data-bs-target="#v-pills-lessons" type="button" role="tab" aria-controls="v-pills-lessons" aria-selected="false">Lessons</button>
-          <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Quizes</button>
-          <button class="nav-link" id="v-pills-activities-tab" data-bs-toggle="pill" data-bs-target="#v-pills-activities" type="button" role="tab" aria-controls="v-pills-activities" aria-selected="false">Activities</button>
-
-          <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Exams</button>
-        </div>
-        <div class="tab-content" id="v-pills-tabContent" style="width: 100%">
-          <div class="tab-pane fade show active" id="v-pills-students" role="tabpanel" aria-labelledby="v-pills-students-tab">
-            <table id ="teacherStudentsTable"  class="table table-striped" style="width:100%">
-                <thead>
-                  <tr>
-                      <th>Student Name</th>
-                      <th>Status</th>
-                      <th>Quizes</th>
-                      <th>Activities</th>
-                      <th>Exams</th>
-                  </tr>
-                </thead>
-                <tbody>
-                 
-                </tbody>
-              </table>
-          </div>
-          <div class="tab-pane fade" id="v-pills-lessons" role="tabpanel" aria-labelledby="v-pills-lessons-tab">
-            <div class="btn-toolbar mb-2 mb-md-0">
-    
-    
-              <div class="btn-group me-2">
-                <button type="button" id ="addLessonBtn" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Lesson">Add</button>
-                <button type="button" id="updateLessonBtn"class="btn btn-sm btn-outline-primary">Edit</button>
-              </div>
-            </div>
-            <table id ="teacherLessonsTable"  class="table table-striped" style="width:100%">
-                <thead>
-                  <tr>
-                      <th>Lesson</th>
-                      <th>Subject</th>
-                      <th>file</th>
-                      <th>Status</th>
-                      <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                 
-                </tbody>
-            
-          
-              </table>          
-          </div>
-          <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-          <table id ="quizzeTable"  class="table table-striped" style="width:100%">
-                <thead>
-                  <tr>
-                      <th>Quizze Name </th>
-                      <th>Subject</th>
-                      <th>Uploaded Date</th>
-                      <th>Deadline</th>
-                  </tr>
-                </thead>
-                <tbody>
-                 
-                </tbody>
-            
-          
-              </table> 
-          </div>
-          <div class="tab-pane fade" id="v-pills-activities" role="tabpanel" aria-labelledby="v-pills-activities-tab">...</div>
-
-          <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
-        </div>
+    <div class="tab-content" id="SectionTabContent">
+      <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
+        <table id ="teacherStudentsTable"  class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Status</th>
+                <th>Quizes</th>
+                <th>Activities</th>
+                <th>Exams</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
       </div>
-    {{-- <table id ="sectionsTable"  class="table table-striped" style="width:100%">
-      <thead>
-        <tr>
-            <th>Student Name</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table> --}}
+      <div class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
+        <table id ="sectionSubjects"  class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+                <th>SubjectCode</th>
+                <th>Subject</th>
+                <th></th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table> 
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -233,39 +188,47 @@
   </div>
 
 {{-- Subjec Section Modal --}}
-  <div class="modal fade bd-example-modal-lg" id="subjectSectionModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  <div class="modal fade bd-example " id="uploadQuizModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Section Subjects</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Upload Quiz</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <form id="uploadQuizForm">
         <div class="modal-body">
           <div class="mb-3">
-            <table id ="sectionSubjectsTable"  class="table table-striped" style="width:100%">
-              <thead>
-                <tr>
-                    <th>Section Code</th>
-                    <th>Subject</th>
-                    <th>Teacher</th>
-                    <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                
-               
-              </tbody>
-          
-        
-            </table>
+            <label for="grade" class="form-label">Select if Activity</label>
+            <select type="text" class="form-control" id="quizType" name="quizType" >
+              <option  value="quiz">Quiz</option>
+              <option value="activity">Activity</option>
+            </select>
           </div>
-          
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" readonly>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <input type="file" class="form-control" id="lesson_file" name="lesson_file" aria-describedby="upload-lesson" aria-label="Upload">
+              <button class="btn btn-outline-secondary" type="button" id="upload_lesson">Upload Lesson</button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="grade" class="form-label">Select Quiz Type</label>
+            <select type="text" class="form-control" id="quizType" name="quizType" >
+              <option value="multiple">Multiple Choice</option>
+              <option value="identification">Identification</option>
+              <option value="enumeration">Enumeration</option>
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
-          {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button> --}}
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
-        
+        </form>
       </div>
     </div>
   </div>
@@ -323,60 +286,22 @@
         },
     });
 
-    var teacherLessonsTable= $('#teacherLessonsTable').DataTable({
+    var sectionSubjects= $('#sectionSubjects').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/lesson/get/"+sectionCode,
+      "sAjaxSource": baseUrl+"/api/teacher/section/subjects",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
           $.ajax({
-            "dataType": 'json',
-            "type": "GET",
-            "url": sSource,
-            "beforeSend": function (request) {
-              request.setRequestHeader("Authorization", "Bearer "+token);
-            },
-            "success": fnCallback
-          });
-        },
-      "columns":[
-        { "data":"lesson"},
-        { "data":"subj_desc"},
-        { "data":"file" },
-        { "data":"status" },
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
-            }
-         }
-      ],
-      "fnDrawCallback": function() {
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-        },
-    });
-    var quizzeTable= $('#quizzeTable').DataTable({
-      "bPaginate": false,
-      "bLengthChange": false,
-      "bFilter": true,
-      "bInfo": false,
-      "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/get",
-      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-        console.log("ajaxSRC: "+sSource);
-          oSettings.jqXHR = 
-          $.ajax({
-           
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
             "data":{
-              "gradeCode":$("#grades").val()
+              "sectionCode":sectionCode
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -385,70 +310,27 @@
           });
         },
       "columns":[
-        { "data":"s_code"},
-        { "data":"s_desc"},
-        { "data":"g_code" },
-        { "data":"teacher_id" },
-        {"data":"status" },
+        { "data":"subj_code"},
+        { "data":"subj_desc"},
         {
           "data":"status",
           "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
+                  var lesson ='<button class="btn btn-success btn-sm lesson-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Lesson"><i class="fa-solid fa-chalkboard-user"></i></button> ';
+                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Quiz"><i class="fa-solid fa-lightbulb"></i></button> ';
+                  var exam ='<button class="btn btn-danger btn-sm exam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Exam"><i class="fa-solid fa-list-check"></i></button> ';
+              return lesson+quiz+exam;
             }
          }
+      ],
+      "columnDefs":[
+        {"target":0,"width":"25%"},
+        {"target":1,"width":"50%"}
+
       ],
       "fnDrawCallback": function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
 
         },
-    });
-
-    // subjects Section Table
-    var sectionSubjectsTable= $('#sectionSubjectsTable').DataTable({
-      "bPaginate": false,
-      "bLengthChange": false,
-      "bFilter": true,
-      "bInfo": false,
-      "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/section/subjects/get",
-      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-        console.log("ajaxSRC: "+sSource);
-          oSettings.jqXHR = 
-          $.ajax({
-           
-            "dataType": 'json',
-            "type": "GET",
-            "url": sSource,
-            "data":function(d){
-              d.sectionCode = sectionCode;
-              return d;
-            },
-            "beforeSend": function (request) {
-              request.setRequestHeader("Authorization", "Bearer "+token);
-            },
-            "success": fnCallback
-          });
-        },
-      "columns":[
-        { "data":"s_section"},
-        { "data":"subject"},
-        { "data":"teacher" },
-        {"data":"status" },
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
-            }
-         }
-      ],
-      "fnDrawCallback": function() {
-            $('[data-bs-toggle="tooltip"]').tooltip();
-
-        },
-    });
-
-    $("#grades").on('change',()=>{
-      sectionTable.ajax.reload();
     });
 
     
@@ -492,48 +374,14 @@
 
     });
 
-    $("#selectSubject").select2({
-      dropdownParent: $('#addLessonModal'),
-      theme: 'bootstrap-5',
-      delay: 250,
-      placeholder: 'Select for a Subject',
-      ajax: {
-        method:"GET",
-        headers: {
-          "Authorization" : "Bearer "+token
-        },
-        dataType: "json",
-        url: baseUrl+'/api/subjects/get/select2',
-        data: function (params) {
-          console.log("select2 params:"+params.term);
-          var query = {
-            search: params.term
-          }
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        processResults: function (data) {
-          // data = JSON.parse(data);
-          // console.log("process result:"+data.results);
-          return data;
-        },
-        
-        minimumInputLength: 1,
-        templateResult: (t)=>{
-          console.log(t);
-          if (repo.loading) {
-            return repo.text;
-          }
-        }
-       
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-      }
+   
+    $('#sectionSubjects tbody').on('click', '.quiz-btn', function(){
+      var data = sectionSubjects.row($(this).parents('tr')).data();
+      console.log(data.subj_desc);
 
-    });
-    $('#sectionsTable tbody').on('click', '.section-subjects', function(){
-      var data = sectionTable.row( $(this).closest('tr') ).data();
-      sectionCode =data.s_code;
-      $("#subjectSectionModal").modal("show");
+      $("#subject").val(data.subj_desc);
+      
+      $("#uploadQuizModal").modal("show");
     })
 
     $('#sectionsTable tbody').on( 'click', 'tr', function () {   
