@@ -111,5 +111,19 @@ class AdminViewController extends Controller
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "active");
         }
+    public function manage_handled_section(Request $request)
+    {
+        // $section =$this->section->getAll();
+        return view('admin/manage-handled-section')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "active")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "")
+        ->with('teacherName', $request->name)
+        ->with('teacherId', $request->teacherId);
+    }
     
 }

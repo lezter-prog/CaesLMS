@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 use App\Models\HashTable;
+use App\Models\SchoolSection;
 
 
 class SyTeachers extends Model
@@ -28,15 +29,35 @@ class SyTeachers extends Model
 
     public function getAll()
     {
-        return static::all();
+        $all= static::all();
+
+        return $all;
     }
 
     public function getAllTeachers(){
+
+        $sections = new SchoolSection();
         $role ="R2";
-        return DB::table('users')
+        $all = DB::table('users')
         ->join('sy_teachers', 'users.id', '=', 'sy_teachers.user_id')
         ->where('users.role', $role)
         ->get();
+
+        $arrayData =[];
+        
+        Log::info("Teachers:".json_encode($all));
+
+        foreach($all as $object){
+
+            // $object->sections =DB::table("teachers_subjects_section")
+            // ->select('section_code')
+            // ->where('teacher_id',$object->user_id)
+            // ->groupBy('section_code')
+            // ->get();
+            $object->sections = $sections->getSectionHandled($object->user_id);
+            array_push($arrayData,$object);
+        }
+        return $arrayData;
     }
 
     public function getAllTeachers2($request){
@@ -68,23 +89,21 @@ class SyTeachers extends Model
             'status'=> $request->status, 
             'addedBy' => 'admin'
         ]);
-        $subjects =json_decode($request->subjects,true);
-        // Log::info("subjects:".json_encode($subjects));
-        foreach($subjects as $subject){
-            Log::info("subject:".json_encode($subject));
-            DB::table('teachers_subjects_section')
-            ->insert([
-                'teacher_id'=>$user->id,
-                'subj_code'=>$subject['subj_code'],
-                'section_code'=>$subject['s_code'],
-                'status'=>'ACTIVE'
-            ]);
-        }
-
-
+        // $subjects =$request->subjects;
+        // // Log::info("subjects:".json_encode($subjects));
+        // foreach($subjects as $subject){
+        //     Log::info("subject:".json_encode($subject));
+        //     DB::table('teachers_sections')
+        //     ->insert([
+        //         'teacher_id'=>$user->id,
+        //         'section_code'=>$subject,
+        //         'status'=>'ACTIVE'
+        //     ]);
+        // }
         if( !$teacher || !$user)
         {
-            throw new \Exception('Student Account not created!');
+            DB::rollBack();
+            throw new Exception('Student Account not created!');
         }else{
             DB::commit();
             return $request->all();
@@ -93,20 +112,39 @@ class SyTeachers extends Model
     }
     
     public function updateTeacher($request,$teacherId){
+        DB::beginTransaction();
         $email =$request->email;
         if($email!=null){
-            DB::beginTransaction();
             $user = User::where("id",$teacherId)->update(['email'=>$email]);
         }
-        unset($request->email);
+        
         $teacher= static::where('user_id',$teacherId)->update(
             [
-                "name"=>$request->name,
-                "handled_g_code"=>$request->handled_g_code,
-                "handled_s_code"=>$request->handled_s_code,
+                "first_name"=>$request->first_name,
+                "last_name"=>$request->last_name
             ]
         );
-        if($email!=null){
+
+        DB::table('teachers_subjects_section')
+        ->where('teacher_id',$teacherId)
+        ->delete();
+
+        $subjects =json_decode($request->subjects,true);
+        // Log::info("subjects:".json_encode($subjects));
+        foreach($subjects as $subject){
+            Log::info("subject:".json_encode($subject));
+            DB::table('teachers_subjects_section')
+            ->insert([
+                'teacher_id'=>$teacherId,
+                'subj_code'=>$subject['subj_code'],
+                'section_code'=>$subject['s_code'],
+                'status'=>'ACTIVE'
+            ]);
+        }
+        if(!$teacher || !$subjects){
+            DB::rollBack();
+            throw new Exception('Student Account not created!');
+        }else{
             DB::commit();
         }
         return $teacher;

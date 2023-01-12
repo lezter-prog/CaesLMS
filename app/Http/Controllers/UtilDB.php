@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Subjects;
+
 
 class UtilDB extends Controller
 {
@@ -146,6 +148,51 @@ class UtilDB extends Controller
         return [
             "data" =>  $announcement
         ];
+    }
+
+    public function getTeacherHandledSubjects(Request $request){
+
+        $subjects = new Subjects();
+        Log::info("Request Data:".json_encode($request->all()));
+        $arrayData =[];
+        $allSubjectsByGradeCode = $subjects->getSubjectsByGradeCode($request->gradeCode);
+        foreach($allSubjectsByGradeCode as $obj){
+            $data = DB::table('teachers_subjects_section')
+                    ->where([
+                        ['teacher_id','=',$request->teacherId],
+                        ['subj_code','=',$obj->subj_code]
+                        ])->get();
+            Log::info("Count :".json_encode($data));
+
+            if(count($data)>0){
+                $obj->status ='selected';
+                $obj->section= $data[0]->section_code;
+            }else{
+                $obj->status ='';
+            }
+            array_push($arrayData,$obj);
+        }
+
+        return [
+            "data"=>$arrayData
+        ];
+
+    }
+
+    public function getTeacherHandledSections(Request $request){
+        $handledSection = DB::table('teachers_subjects_section')
+            ->select('section_code')
+            ->where('teacher_id',$request->teacherId)
+            ->groupBy('section_code');
+
+        $section =DB::table('school_sections')
+            ->whereIn('s_code',$handledSection)
+            ->get();
+
+        return [
+            "data"=>$section
+        ];
+
     }
 
 }

@@ -35,6 +35,7 @@ Route::get('/admin/students', [App\Http\Controllers\AdminViewController::class, 
 Route::get('/admin/subjects', [App\Http\Controllers\AdminViewController::class, 'manage_subjects'])->name('admin/subjects');
 Route::get('/admin/quarter', [App\Http\Controllers\AdminViewController::class, 'manage_quarter'])->name('admin/quarter');
 Route::get('/admin/announcement', [App\Http\Controllers\AdminViewController::class, 'manage_announcement'])->name('admin/announcement');
+Route::get('/admin/handled/sections', [App\Http\Controllers\AdminViewController::class, 'manage_handled_section'])->name('admin/handled/sections');
 
 
 

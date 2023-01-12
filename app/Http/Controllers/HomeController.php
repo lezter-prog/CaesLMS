@@ -43,7 +43,8 @@ class HomeController extends Controller
         $sec = new SchoolSection();
         $id =  Auth::id();
 
-        $sections = $sec->getByTeacher($id);
+        $sections = $sec->getSectionHandled($id);
+        Log::info("Sections: ".json_encode($sections));
         return view('teacher/home')
         ->with('teacherDashboard',"active")
         ->with('teacherAnnouncement',"")

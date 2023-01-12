@@ -28,9 +28,9 @@ class TeacherViewController extends Controller
     public function section(Request $request)
     {
        
-        $section =$this->section->getBySectionCode($request->s_code);
+        $section =$this->section->getSectionHandled($request->s_code);
         
-        Log::info("sectionBySectionCode: ".$section);
+        Log::info("sectionHandled: ".$section);
         return view('teacher/handled_section')
         ->with('teacherDashboard',"active")
         ->with('sectionCode', $request->s_code)
