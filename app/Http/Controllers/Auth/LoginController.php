@@ -77,4 +77,7 @@ class LoginController extends Controller
             "token"=> $user->createToken("API TOKEN")->plainTextToken
         ];
     }
+
+    
+   
 }

@@ -122,7 +122,7 @@ class AdminViewController extends Controller
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "")
-        ->with('teacherName', $request->name)
+        ->with('teacherName', $request->name)   
         ->with('teacherId', $request->teacherId);
     }
     

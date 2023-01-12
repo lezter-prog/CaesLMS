@@ -1,8 +1,8 @@
 @extends('layouts.app')
-@section('title', 'Quaters')
+@section('title', 'Grades')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">Quarters</h1>
+  <h1 class="h2">Grade</h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
     
@@ -13,13 +13,12 @@
 </div>
 <div class="" style="padding:0px 10px">
   <div class="col-12">
-    <table id ="quarterTable"  class="table table-striped" style="width:100%">
+    <table id ="gradesTable"  class="table table-striped" style="width:100%">
       <thead>
         <tr>
-            <th>  Quater Code</th>
-            <th>Quater Description</th>
-            <th>Status</th>
-            <th></th>
+            <th> Grade Code</th>
+            <th> Grade Description</th>
+            <th>School Year</th>
         </tr>
       </thead>
       <tbody>
@@ -38,13 +37,13 @@
 
   $(document).ready(function(){
    var sectionCode="";
-   var quarterTable= $('#quarterTable').DataTable({
+   var gradesTable= $('#gradesTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/quarters/get/all",
+      "sAjaxSource": baseUrl+"/api/grades/get/all",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -63,21 +62,10 @@
           });
         },
       "columns":[
-        { "data":"quarter_code"},
-        { "data":"quarter_desc"},
-        { "data":"status" }, 
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-            console .log(row);
-            if(row.status==null|| row.status=="" ){
-              return '<button class="btn btn-success btn-sm quarter" data-bs-toggle="tooltip" data-bs-placement="top" title="Quarter" id="updateStatusBtn" > <i class="fa-solid fa-lock"></i> </button>';
-
-            }
-            return "";
-
-            }
-         }
+        { "data":"grade_code"},
+        { "data":"grade_desc"},
+     
+        
       ],
       "fnDrawCallback": function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
@@ -86,8 +74,8 @@
     });
 
       
-          $('#quarterTable tbody').on( 'click', '#updateStatusBtn', function () {
-            var data = quarterTable.row( $(this).closest('tr') ).data();
+          $('#gradesTable tbody').on( 'click', '#updateStatusBtn', function () {
+            var data = gradesTable.row( $(this).closest('tr') ).data();
 
             swal.fire({
               title: 'Are you sure to use this Quarter?',
@@ -105,7 +93,7 @@
                     if(res){
                       swal.fire('Saved!', '', 'success');
                       swal.close();
-                      quarterTable.ajax.reload();
+                     gradesTable.ajax.reload();
                     }
 
                   },

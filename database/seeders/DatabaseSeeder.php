@@ -26,14 +26,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        Users::create([
-            'name' =>'Admin',
-            'email'=>'admin@admin.com',
-            'username'=>'admin',
-            'password'=>Hash::make($pass),
-            'role' => 'R0'
-        ]);
-
         
     }
 }
