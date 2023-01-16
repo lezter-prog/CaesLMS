@@ -52,23 +52,25 @@
                     @endif
 
                     @if ( Auth::user()->role == "R1")
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                            <i class="fas fa-tachometer-alt fa-fw me-3"></i>
-                                <span>Main dashboard</span>
+                        <a href="/student/home" class="{{ $studentHome }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <h6><i class="fas fa-tachometer-alt fa-fw me-1 fa-lg icon-bg-color"></i>
+                                <span>Students Dashboard</span></h6>
+                            {{-- <h4><i class="{{$subj->icon}} fa-fw me-3 fa-fw fa-sm" style="background:white;padding:2px 2px;border-radius:10px;color:{{$subj->color}}"></i>
+                                <span>{{$subj->subj_code}}</span></h4> --}}
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <h6><i class="fa-solid fa-id-card me-1 fa-fw fa-lg icon-bg-color"></i>
+                                <span>Students Profile</span></h6>
+                                
                         </a>
 
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                            <i class="fa-solid fa-id-card fa-fw me-3"></i>
-                                <span>Student Profile</span>
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <h6><i class="fa-solid fa-book-open  me-1 fa-fw fa-lg icon-bg-color"></i>
+                                <span>Subjects</span></h6>
                         </a>
-
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                            <i class="fa-solid fa-book-open fa-fw me-3"></i>
-                                <span>Subjects</span>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                            <i class="fa-solid fa-person-running fa-fw me-3"></i>
-                                <span>School Activities</span>
+                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <h6><i class="fa-solid fa-person-running me-1 fa-fw fa-lg icon-bg-color"></i>
+                                <span>School Activities</span></h6>
                         </a>
                     @endif
 

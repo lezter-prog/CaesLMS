@@ -4,6 +4,7 @@ window._ = _;
 // import $ from 'jquery/dist/jquery';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap';
 import Swal from 'sweetalert2';
+import 'jquery-datetimepicker/jquery.datetimepicker';
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

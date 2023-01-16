@@ -35,7 +35,7 @@ class AdminSeeder extends Seeder
             'hash_id'=>$user->id,
             'value'=>$pass
         ]);
-
+        
         DB::table("quarters").create([
             'quarter_code'=>"Q1",
             'quarter_desc'=>"First Quarter"

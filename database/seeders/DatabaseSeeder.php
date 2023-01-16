@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
                 'grade_code' => 'G'.$i,
                 'grade_desc' => 'Grade '.$i
             ]);
-        }
+        }     
 
         
     }

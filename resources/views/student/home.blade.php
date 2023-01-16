@@ -1,23 +1,32 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container pt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-
+<div class="container">
+    <div class="row " style="padding-left:15px !important;">
+        @foreach ($subjects as $subject)
+        <div class="col-sm-4 pt-4">
+            <div class="card" style="width: 20rem; border-color:{{$subject->color}}">
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in! Student Home') }}
+                  <h3 class="card-title"><i class="{{$subject->icon}}" style="color:{{$subject->color}}"></i> <strong>{{ $subject->subj_code}}</strong></h5>
+                  <h6 class="card-subtitle mb-2 text-muted"><strong>Subject:</strong> {{ $subject->subj_desc}}</h6>
+                  <p class="card-text mb-0">Teacher: {{ $subject->first_name." ".$subject->last_name}}</p>
+                  <p class="card-text">Calamba Adventist Elementary School.</p>
+                  <a href="/student/handled/subject?subj_code={{$subject->subj_code}}&&section_code={{$subject->section_code}}" class="btn btn-primary">Manage Subject</a>
                 </div>
-            </div>
+              </div>
         </div>
-    </div>
+        @endforeach
+        
+
+        {{-- <div class="col-4">
+            <div class="card" style="width: 20rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Special title treatment</h5>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+        </div> --}}
+      </div>
 </div>
 @endsection

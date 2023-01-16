@@ -22,6 +22,8 @@ Auth::routes();
 
 
 Route::get('/student/home', [App\Http\Controllers\HomeController::class, 'studentIndex'])->name('student/home');
+Route::get('/student/handled/subject', [App\Http\Controllers\StudentViewController::class, 'subject'])->name('student/handled/subject');
+
 
 Route::get('/teacher/home', [App\Http\Controllers\HomeController::class, 'teacherIndex'])->name('teacher/home');
 Route::get('/teacher/handled/section', [App\Http\Controllers\TeacherViewController::class, 'section'])->name('teacher/handled/section');

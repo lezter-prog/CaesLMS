@@ -8,8 +8,9 @@ import './bootstrap';
 // import './bootstrapbunddle'
 import './fontawesome';
 // import './particles';
-import './select2'
+import './select2';
 // import './datatable';
+import './datetimpicker';
 import { createApp } from 'vue';
 
 /**

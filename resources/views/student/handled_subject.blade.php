@@ -1,8 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.subjects')
 
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">{{ $sections->s_desc}} - {{ $sections->g_code}}</h1>
+  <h1 class="h2"><strong>{{ $subject->subj_desc}}</strong></h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
     
@@ -21,43 +21,69 @@
   <div class="col-sm-12">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab" aria-controls="students" aria-selected="true">Students</button>
+        <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab" aria-controls="lessons" aria-selected="true">Lesson</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="true">Subjects</button>
+        <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="true">Quiz</button>
       </li>
     </ul>
 
-    <div class="tab-content" id="SectionTabContent">
-      <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
-        <table id ="teacherStudentsTable"  class="table table-striped" style="width:100%">
-          <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>Status</th>
-                <th>Quizes</th>
-                <th>Activities</th>
-                <th>Exams</th>
-            </tr>
-          </thead>
-          <tbody>
-           
-          </tbody>
-        </table>
+    <div class="tab-content" id="SubjectTabContent">
+      <div class="tab-pane fade show active pt-10" id="lessons" role="tabpanel" aria-labelledby="lessons-tab" style="padding-top: 20px;">
+        <div class="row">
+            <div class="col-6 pe-3">
+              <table id ="studentLesson"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
+                <thead>
+                  <tr>
+                      <th>Lessons</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                </tbody>
+              </table>
+            </div>
+            <div class="col-6">
+              <div class="card mt-6" style="margin-top:6px">
+                <div class="card-header " style="background-color: #516a8a; color:white">
+                  Details
+                </div>
+                <div class="card-body">
+                  {{-- <h5 class="card-title">Special title treatment</h5>
+                  <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                </div>
+              </div>
+            </div>
+        </div>
+        
       </div>
       <div class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
-        <table id ="sectionSubjects"  class="table table-striped" style="width:100%">
-          <thead>
-            <tr>
-                <th>SubjectCode</th>
-                <th>Subject</th>
-                <th></th>
-            </tr>
-          </thead>
-          <tbody>
-           
-          </tbody>
-        </table> 
+        <div class="row">
+          <div class="col-6 pe-3">
+            <table id ="quizTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
+              <thead>
+                <tr>
+                    <th>Quiz</th>
+                </tr>
+              </thead>
+              <tbody>
+               
+              </tbody>
+            </table>
+          </div>
+          <div class="col-6">
+            <div class="card mt-6" style="margin-top:6px">
+              <div class="card-header " style="background-color: #516a8a; color:white">
+                Details
+              </div>
+              <div class="card-body">
+                {{-- <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+              </div>
+            </div>
+          </div>
       </div>
     </div>
 
@@ -249,15 +275,18 @@
   var token ={{ Js::from(session('token')) }};
 
   $(document).ready(function(){
+   var subjectCode={{ Js::from($subjectCode) }};
    var sectionCode={{ Js::from($sectionCode) }};
-   console.log(sectionCode);
-   var teacherStudentsTable= $('#teacherStudentsTable').DataTable({
+   console.log(subjectCode);
+   var studentLesson= $('#studentLesson').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
       "bInfo": false,
+      "ordering":false,
+      "searching": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/student/get/"+sectionCode,
+      "sAjaxSource": baseUrl+"/api/lesson/get/"+subjectCode+"/"+sectionCode,
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -276,21 +305,16 @@
           });
         },
       "columns":[
-        { "data":"id_number",
+        { "data":"lesson",
           "render":function(data, type, row, meta ){
             console.log(row);
-            return row.first_name+" "+row.last_name;
+                  var html ='<div class=""> <i class="fa-solid fa-file"></i> '+data;
+                  var lesson ='<div class="float-end"><button class="btn btn-success btn-sm download-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Lesson"><i class="fa-solid fa-download"></i></button> ';
+                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
+                  var exam ='<button class="btn btn-info btn-sm exam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Lesson Details"><i class="fa-solid fa-list-check"></i></button> </div>';
+                  return html+lesson+quiz+exam+'</div>';
           }
-        },
-        { "data":"id_number"},
-        { "data":"id_number" },
-        { "data":"id_number" },
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
-            }
-         }
+        }
       ],
       "fnDrawCallback": function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
@@ -298,10 +322,12 @@
         },
     });
 
-    var sectionSubjects= $('#sectionSubjects').DataTable({
+    var sectionSubjects= $('#quizTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
+      "ordering":false,
+      "searching": false,
       "bInfo": false,
       "bAutoWidth": false,
       "sAjaxSource": baseUrl+"/api/teacher/section/subjects",

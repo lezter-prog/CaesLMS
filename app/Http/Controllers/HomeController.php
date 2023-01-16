@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\SchoolSection;
+use App\Models\Subjects;
+
 
 
 
@@ -35,8 +37,17 @@ class HomeController extends Controller
     }
     public function studentIndex()
     {
-        
-        return view('student/home');
+        $sub = new Subjects();
+        $id =  Auth::id();
+        $section = DB::table('sy_students')->select('s_code')->where('id_number',$id)->first();
+        Log::info("SectionCode:".json_encode($section->s_code));
+        $subjects = $sub->getSubjectsBySection($section->s_code,"");
+        Log::info("Subjects:".json_encode($subjects));
+
+        return view('student/home') 
+        ->with('studentHome',"active")
+        ->with('',"")
+        ->with('subjects',$subjects);
     }
     public function teacherIndex()
     {

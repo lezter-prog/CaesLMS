@@ -9,6 +9,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UtilDB;
+use App\Http\Controllers\UploadController;
+
 
 
 
@@ -77,6 +79,7 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('lesson/create','addLesson');
     Route::get('lesson/get/all','getAllLesson');
     Route::get('lesson/get/{sectionCode}','getLessonBySectionCode');
+    Route::get('lesson/get/{subjectCode}/{sectionCode}','getLessonBySubjectAndSection');
     Route::post('announcement/create','addAnnouncement');
     Route::get('announcement/get/all', 'getAllAnnouncement');
     Route::get('announcement/get/student', 'getStudentAnnouncement');
@@ -87,10 +90,13 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::patch('user/update/password', 'updatePassword');
     Route::post('teacher/section/subjects', 'saveTeacherSectionSubjects');
     Route::get('teacher/section/subjects', 'getTeacherHandledSubjects2');
+    Route::get('quiz/get/{sectionCode}/{subjCode}', 'getQuizBySectionAndSubject');
 
+});
 
+Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){
 
-    
+    Route::post('teacher/upload/quiz','uploadQuiz');
 });
 
 

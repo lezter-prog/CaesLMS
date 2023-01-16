@@ -107,6 +107,19 @@ class UtilDB extends Controller
             "data" =>  $lessons
         ];
     }
+    public function getLessonBySubjectAndSection($subjectCode,$sectionCode){
+        Log::info("User:".$sectionCode." Subject:".$subjectCode);
+        $lessons = DB::table('lesson')
+        ->where([
+            ['section_code','=',$sectionCode],
+            ['subj_code','=',$subjectCode],
+            ])
+        ->get();
+        return [
+            "data" =>  $lessons
+        ];
+
+    }
     
     public function addAnnouncement(Request $request){
         $add=DB::table('announcement')->insert([

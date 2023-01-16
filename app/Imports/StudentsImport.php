@@ -47,7 +47,7 @@ class StudentsImport implements ToModel, WithHeadingRow
             'last_name' => $row['last_name'],
             'email' => '',
             's_code'=> $row['section_code'],
-            'g_code'=> $row['section_code'],
+            'g_code'=> $row['grade_code'],
             'sy'=> '2022-2023',
             'added_by' => 'admin'
         ]);

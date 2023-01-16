@@ -37,3 +37,6 @@ body {
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
   }
+.light-blue{
+  background: rgb(153, 182, 192) !important;
+}
