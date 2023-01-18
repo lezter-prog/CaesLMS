@@ -197,6 +197,52 @@ $(document).ready(function(){
 
 // Open Add Modal
     $("#addTeacherBtn").click(()=>{
+      $("#sectionCode").select2('destroy');
+      $("#sectionCode").select2().val("").trigger('change');
+      $("#sectionCode").select2({
+      dropdownParent: $('#addTeacherModal'),
+      theme: 'bootstrap-5',
+      delay: 250,
+      placeholder: 'Select Section',
+      ajax: {
+        method:"GET",
+        headers: {
+          "Authorization" : "Bearer "+token
+        },
+        dataType: "json",
+        url: baseUrl+'/api/section/get/select2',
+        data: function (params) {
+          console.log("select2 params:"+params.term);
+          var query = {
+            search: params.term
+          }
+          // Query parameters will be ?search=[term]&type=public
+          return query;
+        },
+        processResults: function (data) {
+          // data = JSON.parse(data);
+          console.log("process result:"+data.results);
+          return data;
+        },
+        minimumInputLength: 1,
+          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+      },
+      templateResult: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      },
+      templateSelection: function(repo){
+        console.log(repo);
+        if (!repo.loading) {
+          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
+          return $(repo.text);
+        }
+      }
+
+    });
       $("#addTeacherModal").modal("show");
     });
 
@@ -412,50 +458,7 @@ $(document).ready(function(){
       })
   });
 
-  $("#sectionCode").select2({
-      dropdownParent: $('#addTeacherModal'),
-      theme: 'bootstrap-5',
-      delay: 250,
-      placeholder: 'Select Section',
-      ajax: {
-        method:"GET",
-        headers: {
-          "Authorization" : "Bearer "+token
-        },
-        dataType: "json",
-        url: baseUrl+'/api/section/get/select2',
-        data: function (params) {
-          console.log("select2 params:"+params.term);
-          var query = {
-            search: params.term
-          }
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        processResults: function (data) {
-          // data = JSON.parse(data);
-          console.log("process result:"+data.results);
-          return data;
-        },
-        minimumInputLength: 1,
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-      },
-      templateResult: function(repo){
-        console.log(repo);
-        if (!repo.loading) {
-          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
-          return $(repo.text);
-        }
-      },
-      templateSelection: function(repo){
-        console.log(repo);
-        if (!repo.loading) {
-          // return "<strong>"+repo.text+"</strong>-"+repo.g_desc;
-          return $(repo.text);
-        }
-      }
-
-    });
+  
 
     $("#updateSectionCode").select2({
       dropdownParent: $('#updateTeacherModal'),

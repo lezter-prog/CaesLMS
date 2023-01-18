@@ -5,6 +5,8 @@ window._ = _;
 import * as bootstrap from 'bootstrap/dist/js/bootstrap';
 import Swal from 'sweetalert2';
 import 'jquery-datetimepicker/jquery.datetimepicker';
+import { annotate } from 'rough-notation';
+import ApexCharts from 'apexcharts';
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -20,6 +22,8 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 // window.$=$;
 window.bootstrap = bootstrap;
 window.swal =Swal;
+window.annotate =annotate;
+window.ApexCharts=ApexCharts;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

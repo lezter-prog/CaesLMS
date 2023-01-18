@@ -25,6 +25,11 @@ Route::get('/student/home', [App\Http\Controllers\HomeController::class, 'studen
 Route::get('/student/handled/subject', [App\Http\Controllers\StudentViewController::class, 'subject'])->name('student/handled/subject');
 
 
+// Assesment
+Route::get('/assesment/multiple', [App\Http\Controllers\AssesmentViewController::class, 'assesmentMultiple'])->name('assesment/multiple');
+
+
+
 Route::get('/teacher/home', [App\Http\Controllers\HomeController::class, 'teacherIndex'])->name('teacher/home');
 Route::get('/teacher/handled/section', [App\Http\Controllers\TeacherViewController::class, 'section'])->name('teacher/handled/section');
 Route::get('/teacher/announcement', [App\Http\Controllers\TeacherViewController::class, 'manage_announcement'])->name('teacher/announcement');

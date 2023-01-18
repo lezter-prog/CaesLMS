@@ -60,7 +60,6 @@ class SectionService
             's_desc' => $section->section_desc,
             'g_code' => $section->grade_code,
             'sy' => $section->school_year,
-            'teacher_id'=>$section->teacher_id,
             'status'=>'ACTIVE'
         ]);
     }

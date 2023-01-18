@@ -20,6 +20,7 @@
     "dependencies": {
         "@eonasdan/tempus-dominus": "^6.2.10",
         "@fortawesome/fontawesome-free": "^6.2.1",
+        "apexcharts": "^3.36.3",
         "datatables.net": "^1.13.1",
         "datatables.net-dt": "^1.13.1",
         "datatables.net-vue3": "^2.0.0",
@@ -27,6 +28,7 @@
         "jquery-datetimepicker": "^2.5.21",
         "moment": "^2.29.4",
         "particles.js": "^2.0.0",
+        "rough-notation": "^0.5.1",
         "select2": "^4.1.0-rc.0",
         "sweetalert2": "^11.6.15"
     }

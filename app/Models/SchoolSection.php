@@ -49,7 +49,7 @@ class SchoolSection extends Model
     }
 
     public function updateSection($request,$sectionCode){
-        return static::where('section_code',$sectionCode)->update($request->all());
+        return static::where('s_code',$sectionCode)->update($request->all());
     }
 
     public function getSectionHandled($teacher_id){

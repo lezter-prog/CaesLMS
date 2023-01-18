@@ -16,12 +16,9 @@ return new class extends Migration
         Schema::create('student_assessment_answer', function (Blueprint $table) {
             $table->id();
             $table->string('student_id');
-            $table->string('sec_code');
-            $table->string('subj_code');
             $table->string('assesment_id');
             $table->integer('number');
-            $table->string('question');
-            $table->string('answer')->nullable();
+            $table->string('answer');
             $table->timestamps();
         });
     }

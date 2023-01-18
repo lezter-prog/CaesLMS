@@ -306,4 +306,119 @@ class UtilDB extends Controller
         return true;
     }
 
+    public function getQuizBySectionAndSubject($sectionCode,$subjectCode){
+        $quizesArray=[];
+        $quizes = DB::table('assesment_header')
+                    ->where([
+                        ['assesment_type','=','quiz'],
+                        ['subj_code','=',$subjectCode],
+                        ['section_code','=',$sectionCode],
+                    ])->get();
+        foreach($quizes as $quiz){
+                $status = DB::table('student_assessment_answer_header')
+                        ->select('status')
+                        ->where([
+                            ['student_id','=',Auth::id()],
+                            ['assesment_id','=',$quiz->assesment_id],
+                        ])->first();
+                $quiz->isTaken =false;
+                if($status!=null){
+                    $quiz->isTaken =true;
+                }
+                array_push($quizesArray,$quiz);
+        }
+        return [
+            "data"=>$quizesArray
+        ];
+
+    }
+
+    public function tempAnswer(Request $request){
+
+        $count=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+                ['number','=',$request->number]
+            ])->count();
+
+        if($count>0){
+            $exec=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+                ['number','=',$request->number]
+            ])
+            ->update([
+                'answer'=>$request->answer,
+            ]);
+        }else{
+            $exec=DB::table('student_assessment_answer_tmp')->insert([
+                'student_id'=>Auth::id(),
+                'assesment_id'=>$request->assesmentId,
+                'number'=>$request->number,
+                'answer'=>$request->answer,
+            ]);
+        }
+
+       
+        if($exec){
+            return true;
+        }else{
+            return null;
+        }
+
+    }
+
+    public function finalAnswer(Request $request){
+
+        $tempAnswer=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+            ])->get();
+       DB::beginTransaction();
+       foreach($tempAnswer as $answer){
+            $exec=DB::table('student_assessment_answer')->insert([
+                'student_id'=>Auth::id(),
+                'assesment_id'=>$answer->assesment_id,
+                'number'=>$answer->number,
+                'answer'=>$answer->answer,
+            ]);
+            if(!$exec){
+                DB::rollBack();
+                return false;
+            }
+       }
+       $insert=DB::table('student_assessment_answer_header')->insert([
+                        'student_id'=>Auth::id(),
+                        'assesment_id'=>$request->assesmentId,
+                        'status'=>'submitted'
+                    ]);
+        if(!$insert){
+            DB::rollBack();
+            return false;
+        }
+
+        DB::commit();
+        return true;
+
+    }
+
+    public function select2Icons(Request $request){
+            $array =[];
+            $icons = DB::table('animal_icons')
+            ->where('icon','like','%'.$request->search.'%')->get();
+
+            foreach($icons as $icon){
+                $icon->text='<i class="'.$icon->icon.'"></i> - <strong>'.$icon->icon.'</strong>';
+                array_push($array,$icon);
+            }
+            Log::info("array:".json_encode($array));
+            return [
+                "results"=>$array
+            ];
+            
+    }
+
 }

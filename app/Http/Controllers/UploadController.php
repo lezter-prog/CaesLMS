@@ -35,10 +35,10 @@ class UploadController extends Controller
         DB::beginTransaction();
         
         $filenameWithExt = $request->file('quiz_file')->getClientOriginalName();
-        $assesment = DB::table('assesment_header')->latest()->get();
+        $assesment = DB::table('assesment_header')->latest()->first();
         $quarter = DB::table('quarters')->where('status','ACTIVE')->first();
-
-        if(count($assesment) >0){
+        Log::info("Assesment:".json_encode($assesment));
+        if($assesment !=null){
             $assesmentId= "ASS".preg_replace('/[0-9]+/', '', $assesment->assesment_id);
         }else{
             $assesmentId="ASS"."1";

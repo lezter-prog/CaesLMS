@@ -7,10 +7,14 @@
   <div class="btn-toolbar mb-2 mb-md-0">
     
     
-    {{-- <div class="btn-group me-2">
-      <button type="button" id ="addSectionBtn" class="btn btn-sm btn-outline-primary">Upload</button>
-      <button type="button" id="updateSectionBtn"class="btn btn-sm btn-outline-primary">View</button>
-    </div> --}}
+    <div class="btn-group me-2">
+      <select class="form-select js-data-example-ajax" id="quarter" aria-label="Default select example">
+          <option value="Q1">First Grading</option>
+          <option value="Q2">Second Grading</option>
+          <option value="Q3">Third Grading</option>
+          <option value="Q4">Fourth Grading</option>
+        </select>
+  </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
     </button>
@@ -44,7 +48,7 @@
               </table>
             </div>
             <div class="col-6">
-              <div class="card mt-6" style="margin-top:6px">
+              <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
                 <div class="card-header " style="background-color: #516a8a; color:white">
                   Details
                 </div>
@@ -60,7 +64,7 @@
       </div>
       <div class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
         <div class="row">
-          <div class="col-6 pe-3">
+          <div class="col-lg-6 col-sm-12 pe-3">
             <table id ="quizTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
               <thead>
                 <tr>
@@ -72,15 +76,18 @@
               </tbody>
             </table>
           </div>
-          <div class="col-6">
-            <div class="card mt-6" style="margin-top:6px">
-              <div class="card-header " style="background-color: #516a8a; color:white">
+          <div class="col-lg-6 col-sm-12">
+            <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
+              <div class="card-header " style="background-color: #516a8a; color:white;">
                 Details
               </div>
               <div class="card-body">
-                {{-- <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                <div class="row ">
+                  <div class="col-12 text-center" id="chart">
+                    
+                  </div>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -271,10 +278,13 @@
     </div>
   </div>
 <script>
+
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
 
   $(document).ready(function(){
+
+   
    var subjectCode={{ Js::from($subjectCode) }};
    var sectionCode={{ Js::from($sectionCode) }};
    console.log(subjectCode);
@@ -322,7 +332,7 @@
         },
     });
 
-    var sectionSubjects= $('#quizTable').DataTable({
+    var quizTable= $('#quizTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
@@ -330,7 +340,7 @@
       "searching": false,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/teacher/section/subjects",
+      "sAjaxSource": baseUrl+"/api/quiz/get/"+sectionCode+"/"+subjectCode,
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -338,9 +348,6 @@
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
-            "data":{
-              "sectionCode":sectionCode
-            },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
             },
@@ -348,21 +355,37 @@
           });
         },
       "columns":[
-        { "data":"subj_code"},
-        { "data":"subj_desc"},
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-                  var lesson ='<button class="btn btn-success btn-sm lesson-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Lesson"><i class="fa-solid fa-chalkboard-user"></i></button> ';
-                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Quiz"><i class="fa-solid fa-lightbulb"></i></button> ';
-                  var exam ='<button class="btn btn-danger btn-sm exam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="upload Exam"><i class="fa-solid fa-list-check"></i></button> ';
-              return lesson+quiz+exam;
+        { "data":"assesment_desc",
+          "render":function(data, type, row, meta ){
+            console.log(row);
+            var disabled="";
+            var status='';
+            var takingStatus='';
+            if(row.isTaken){
+               disabled ="disabled";
+               takingStatus='<span class="badge text-bg-success">DONE</span>';
+            }else{
+               takingStatus='<span class="badge text-bg-warning">Ready to Take</span>';
+
             }
-         }
+
+            if(row.status="ACTIVE")
+              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
+            else
+              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+
+            
+
+                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+' '+status+takingStatus+' <div style="font-size:9px;margin-left:10px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.updated_at).format('MM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
+                  var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
+                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
+                  var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
+                  return html+take+quiz+exam+'</div>';
+          }
+        }
       ],
       "columnDefs":[
-        {"target":0,"width":"25%"},
-        {"target":1,"width":"50%"}
+       
 
       ],
       "fnDrawCallback": function() {
@@ -371,60 +394,73 @@
         },
     });
 
+    // $("#quarter").select2({
+    //   theme: 'bootstrap-5',
+    //   placeholder: 'Select Quarter Period',
+    //   closeOnSelect:true
+    // });
+    // $('#quarter').on('select2:opening select2:closing', function( event ) {
+    //     var $searchfield = $(this).parent().find('select2-search__field');
+    //     $searchfield.css('display', 'none');
+    //   });
     
-    $("#teacher").select2({
-      dropdownParent: $('#addSectionModal'),
-      theme: 'bootstrap-5',
-      delay: 250,
-      placeholder: 'Search for a Teacher',
-      ajax: {
-        method:"GET",
-        headers: {
-          "Authorization" : "Bearer "+token
-        },
-        dataType: "json",
-        url: baseUrl+'/api/teacher/get/select2',
-        data: function (params) {
-          console.log("select2 params:"+params.term);
-          var query = {
-            search: params.term
-          }
-
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        processResults: function (data) {
-          // data = JSON.parse(data);
-          // console.log("process result:"+data.results);
-          return data;
-        },
-        
-        minimumInputLength: 1,
-        templateResult: (t)=>{
-          console.log(t);
-          if (repo.loading) {
-            return repo.text;
-          }
-        }
-       
-          // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-      }
-
-    });
+    
 
     const picker= new datetimepicker(document.getElementById('endDate'));
     picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
    
-    $('#sectionSubjects tbody').on('click', '.quiz-btn', function(){
-      var data = sectionSubjects.row($(this).parents('tr')).data();
+    $('#quizTable tbody').on('click', '.take-btn', function(){
+      var data = quizTable.row($(this).parents('tr')).data();
      
-      $("#subject").data("subjectCode",data.subj_code);
-      $("#subject").val(data.subj_desc);
-      console.log($("#subject").data("subjectCode"));
-      
-      $("#uploadQuizModal").modal("show");
-    })
+      swal.fire({
+        icon:'warning',
+        title: 'Are you ready to take this quiz?',
+        showCancelButton: false,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        swal.close();
+        window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+
+      });
+    });
+
+    $('#quizTable tbody').on('click', '.view-quiz', function(){
+      var data = quizTable.row($(this).parents('tr')).data();
+
+      var options = {
+      chart: {
+        type: 'donut'
+      },
+      series: [11, 4],
+      labels: ['Correct Answer','Wrong Answer'],
+      colors:['#198754', '#dc3545'],
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              name: {
+                
+              },
+              value: {
+                
+              },
+              total:{
+                show:true,
+                showAlways:true,
+                label:"Total Score",
+              }
+            }
+          }
+        }
+      }
+    }
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+     
+    });
 
     $('#sectionsTable tbody').on( 'click', 'tr', function () {   
       console.log($(this).hasClass('selected'));         

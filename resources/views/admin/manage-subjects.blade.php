@@ -55,7 +55,7 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="update_subject_code" class="form-label">Subject Code</label>
-            <input type="text" class="form-control" id="update_subject_code" >
+            <input type="text" class="form-control" id="update_subject_code" readonly >
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
           <div class="mb-3">
@@ -112,6 +112,11 @@
               <option value="G4">Grade 4</option>
               <option value="G5">Grade 5</option>
               <option value="G6">Grade 6</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="icons" class="form-label">Select Icon</label>
+            <select type="text" class="form-control" id="icons">
             </select>
           </div>
         </div>
@@ -219,6 +224,8 @@ $(document).ready(function(){
     $("#addSubjectForm").submit((e)=>{
 
       e.preventDefault();
+
+      var selectedIcon =$("#icons").select2('data')[0];
       swal.fire({
         title: 'Do you want to save the subject?',
         showCancelButton: true,
@@ -234,6 +241,7 @@ $(document).ready(function(){
               "subj_code":$("#subject_code").val(),
               "subj_desc":$("#subject_desc").val(),
               "g_code":$("#gradeCode").val(),
+              "icon":selectedIcon.id,
               "sy":"2022-2023"
             },
             success:(res)=>{
@@ -326,6 +334,47 @@ $(document).ready(function(){
         }
       })
   });
+
+  // icons/get/select2
+
+  $("#icons").select2({
+      dropdownParent: $('#addSubjectModal'),
+      theme: 'bootstrap-5',
+      delay: 250,
+      placeholder: 'Search for a Icon',
+      ajax: {
+        method:"GET",
+        headers: {
+          "Authorization" : "Bearer "+token
+        },
+        dataType: "json",
+        url: baseUrl+'/api/icons/get/select2',
+        data: function (params) {
+          console.log("select2 params:"+params.term);
+          var query = {
+            search: params.term
+          }
+
+          // Query parameters will be ?search=[term]&type=public
+          return query;
+        },
+        processResults: function (data) {
+          // data = JSON.parse(data);
+          console.log("process result:"+data.results);
+          return data;
+        },
+        minimumInputLength: 1
+      },
+      templateResult: function(repo){
+        console.log(repo);
+          return $(repo.text);
+      },
+      templateSelection: function(repo){
+          return $(repo.text);
+        
+      }
+
+    });
 
 });
 </script>

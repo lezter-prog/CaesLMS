@@ -130,7 +130,7 @@
             @yield('content')
         </main>
     </div>
-    @yield('script')
+   
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
     <script src="{{ URL::asset('js/DataTables/datatables.select.min.js'); }}"></script>
     <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>
@@ -144,4 +144,5 @@
         });
     </script>
 </body>
+@yield('script')
 </html>

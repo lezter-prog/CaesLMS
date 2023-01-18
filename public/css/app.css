@@ -153,6 +153,7 @@ table.dataTable thead tr {
   font-size: 12px;
   height: 30px;
 }
+.pointer {cursor: pointer;}
 
 .light-blue{
   background: rgba(57, 135, 255, 0.1) !important;

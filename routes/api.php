@@ -91,6 +91,11 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('teacher/section/subjects', 'saveTeacherSectionSubjects');
     Route::get('teacher/section/subjects', 'getTeacherHandledSubjects2');
     Route::get('quiz/get/{sectionCode}/{subjCode}', 'getQuizBySectionAndSubject');
+    Route::get('quiz/get/temp/answers', 'getTempAnswer');
+    Route::post('quiz/save/temp', 'tempAnswer');
+    Route::post('quiz/submit/answer', 'finalAnswer');
+    
+    Route::get('icons/get/select2', 'select2Icons');
 
 });
 

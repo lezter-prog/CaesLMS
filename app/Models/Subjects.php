@@ -18,7 +18,8 @@ class Subjects extends Model
         'subj_desc',
         'g_code',
         'sy',
-        'status'
+        'status',
+        'icon'
     ];
 
     public function getAll()
@@ -36,6 +37,7 @@ class Subjects extends Model
             "subj_code"=>$request->subj_code,
             "subj_desc"=>$request->subj_desc,
             "g_code"=>$request->g_code,
+            "icon"=>$request->icon,
             "status"=>"ACTIVE",
             "sy"=>$request->sy,
         ]);

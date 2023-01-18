@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 
 use App\Models\User;
+use App\Models\HashTable;
 
 class SyStudents extends Model
 {
@@ -53,6 +54,11 @@ class SyStudents extends Model
             'username'=> $request->username,
             'password'=> $request->password,
             'role'=> $request->role
+        ]);
+
+        $hashtable = HashTable::create([
+            'hash_id'=>$user->id,
+            'value'=> $request->decrypted_pass
         ]);
 
         $student = static::create([

@@ -33,9 +33,7 @@
             <th>Section Code</th>
             <th>Section</th>
             <th>Grade Code</th>
-            <th>Teacher</th>
             <th>Status</th>
-            <th></th>
         </tr>
       </thead>
       <tbody>
@@ -117,12 +115,6 @@
               <option value="G6">Grade 6</option>
             </select>
           </div>
-          <div class="mb-3">
-            <label for="teacher" class="form-label">Select Teacher</label>
-            <select class="js-example-responsive form-control" id="teacher">
-            </select>
-          </div>
-          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -204,14 +196,7 @@
         { "data":"s_code"},
         { "data":"s_desc"},
         { "data":"g_code" },
-        { "data":"teacher_id" },
-        {"data":"status" },
-        {
-          "data":"status",
-          "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
-            }
-         }
+        {"data":"status" }
       ],
       "fnDrawCallback": function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
@@ -385,8 +370,6 @@
 
     $("#addSectionForm").submit((e)=>{
       e.preventDefault();
-      var selectedTeacher =$("#teacher").select2('data')[0];
-      console.log(selectedTeacher);
       swal.fire({
         title: 'Do you want to save the Section?',
         showCancelButton: true,
@@ -401,7 +384,6 @@
             data:{
               "section_desc":$("#sectionName").val(),
               "grade_code":$("#gradeCode").val(),
-              "teacher_id":selectedTeacher.id,
               "school_year":"2022-2023"
             },
             success:(res)=>{
@@ -450,8 +432,7 @@
             data:{
               "s_code":code,
               "s_desc":$("#updateSectionName").val(),
-              "g_code":$("#updateGradeCode").val(),
-              "teacher_id":$("#updateTeacher").select2('data')
+              "g_code":$("#updateGradeCode").val()
             },
             success:(res)=>{
               console.log(res);
