@@ -36,6 +36,8 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminIcons', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
@@ -48,6 +50,8 @@ class AdminViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminIcons', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('adminSections', "active");
     }
@@ -63,6 +67,8 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
         ->with('adminQuarter', "")
+        ->with('adminIcons', "")
+        ->with('adminGrades', "")
         ->with('adminStudent', "active")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
@@ -80,6 +86,8 @@ class AdminViewController extends Controller
         ->with('adminSubjects', "active")
         ->with('adminQuarter', "")
         ->with('adminStudent', "")
+        ->with('adminIcons', "")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('sections', $section);
     }
@@ -92,7 +100,9 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminSubjects', "")
         ->with('adminAnnouncement', "")
+        ->with('adminIcons', "")
         ->with('adminQuarter', "active")
+        ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
         ->with('adminStudent', "");
     
@@ -108,6 +118,8 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminGrades', "")
+        ->with('adminIcons', "")
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "active");
         }
@@ -120,6 +132,42 @@ class AdminViewController extends Controller
         ->with('adminTeacher', "active")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('adminGrades', "")
+        ->with('adminIcons', "")
+        ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "")
+        ->with('teacherName', $request->name)   
+        ->with('teacherId', $request->teacherId);
+    }
+
+    public function manage_grades(Request $request)
+    {
+        
+        return view('admin/manage-grades')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminGrades', "active")
+        ->with('adminIcons', "")
+        ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "")
+        ->with('adminIcons', "")
+        ->with('teacherName', $request->name)   
+        ->with('teacherId', $request->teacherId);
+    }
+    public function manage_icons(Request $request)
+    {
+        
+        return view('admin/manage-icons')
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminGrades', "")
+        ->with('adminIcons', "active")
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "")
         ->with('teacherName', $request->name)   

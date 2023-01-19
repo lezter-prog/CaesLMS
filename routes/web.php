@@ -43,6 +43,8 @@ Route::get('/admin/subjects', [App\Http\Controllers\AdminViewController::class, 
 Route::get('/admin/quarter', [App\Http\Controllers\AdminViewController::class, 'manage_quarter'])->name('admin/quarter');
 Route::get('/admin/announcement', [App\Http\Controllers\AdminViewController::class, 'manage_announcement'])->name('admin/announcement');
 Route::get('/admin/handled/sections', [App\Http\Controllers\AdminViewController::class, 'manage_handled_section'])->name('admin/handled/sections');
+Route::get('/admin/icons', [App\Http\Controllers\AdminViewController::class, 'manage_icons'])->name('admin/icons');
+
 
 Route::get('/admin/grades', [App\Http\Controllers\AdminViewController::class, 'manage_grades'])->name('admin/grades');
 Route::get('/auth/change-password', [App\Http\Controllers\Auth\PasswordChangeController::class, 'changePassword'])->name('auth/change-password');
