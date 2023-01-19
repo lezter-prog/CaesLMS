@@ -162,6 +162,11 @@
         <form id="addLessonForm">
         <div class="modal-body">
           <div class="mb-3">
+            <label for="lesson" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" readonly>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
             <label for="lesson" class="form-label">Lesson</label>
             <input type="text" class="form-control" id="lesson" name="lesson" required >
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
@@ -169,13 +174,8 @@
           <div class="mb-3">
             <div class="input-group">
               <input type="file" class="form-control" id="lesson_file" name="lesson_file" aria-describedby="upload-lesson" aria-label="Upload">
-              <button class="btn btn-outline-secondary" type="button" id="upload_lesson">Upload Lesson</button>
+              <button class="btn btn-outline-secondary" type="button" id="upload_lesson" disabled>Upload Lesson</button>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Subject</label>
-            <select type="text" class="form-control" id="selectSubject" name="selectSubject" >
-            </select>
           </div>
         </div>
         <div class="modal-footer">
@@ -393,11 +393,22 @@
     $('#sectionSubjects tbody').on('click', '.quiz-btn', function(){
       var data = sectionSubjects.row($(this).parents('tr')).data();
      
-      $("#subject").data("subjectCode",data.subj_code);
-      $("#subject").val(data.subj_desc);
+      $("#uploadQuizForm #subject").data("subjectCode",data.subj_code);
+      $("#uploadQuizForm #subject").val(data.subj_desc);
       console.log($("#subject").data("subjectCode"));
       
       $("#uploadQuizModal").modal("show");
+    })
+
+
+    $('#sectionSubjects tbody').on('click', '.lesson-btn', function(){
+      var data = sectionSubjects.row($(this).parents('tr')).data();
+     
+      $("#addLessonModal #subject").data("subjectCode",data.subj_code);
+      $("#addLessonModal #subject").val(data.subj_desc);
+      // console.log($("#subject").data("subjectCode"));
+      
+      $("#addLessonModal").modal("show");
     })
 
     $('#sectionsTable tbody').on( 'click', 'tr', function () {   
@@ -430,12 +441,11 @@
 
     $("#addLessonForm").submit((e)=>{
       e.preventDefault();
-      var selectedSubject =$("#selectSubject").select2('data')[0];
-      console.log(selectedSubject);
+      var subjCode =$("#addLessonForm #subject").data("subjectCode");      
       var form = $("#addLessonForm");
 
       var formData = new FormData(form[0]);
-      formData.append("subj_code", selectedSubject.id);
+      formData.append("subj_code", subjCode);
       formData.append("section_code", sectionCode);
 
       swal.fire({
@@ -457,10 +467,16 @@
             success:(res)=>{
               console.log(res);
               if(res){
-                swal.fire('Saved!', '', 'success');
-                swal.close();
-                $("#addLessonModal").modal("hide");
-                teacherLessonsTable.ajax.reload();
+                swal.fire({
+                  icon:'success',
+                  title: 'Uploading Lesson Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  $("#addLessonModal").modal("hide");
+                });
+                  
               }
 
             },
@@ -485,7 +501,7 @@
 
     $("#uploadQuizForm").submit((e)=>{
       e.preventDefault();
-      var subjCode =$("#subject").data("subjectCode");
+      var subjCode =$("#uploadQuizForm #subject").data("subjectCode");
       var form = $("#uploadQuizForm");
       var formData = new FormData(form[0]);
       formData.append("subj_code", subjCode);
@@ -517,7 +533,6 @@
                   swal.close();
                 $("#uploadQuizModal").modal("hide");
                 });
-                
               }
 
             },

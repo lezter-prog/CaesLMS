@@ -12,10 +12,6 @@ use App\Http\Controllers\UtilDB;
 use App\Http\Controllers\UploadController;
 
 
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -94,9 +90,12 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('quiz/get/temp/answers', 'getTempAnswer');
     Route::post('quiz/save/temp', 'tempAnswer');
     Route::post('quiz/submit/answer', 'finalAnswer');
-    
     Route::get('icons/get/select2', 'select2Icons');
 
+});
+
+Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){
+    Route::get('assessment/get/quiz', 'getAllQuiz');
 });
 
 Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){

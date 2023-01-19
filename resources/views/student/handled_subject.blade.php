@@ -376,7 +376,7 @@
 
             
 
-                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+' '+status+takingStatus+' <div style="font-size:9px;margin-left:10px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.updated_at).format('MM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
+                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+' '+status+takingStatus+' <div style="font-size:9px;margin-left:10px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.updated_at).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
                   var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
                   var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
                   var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
@@ -416,12 +416,13 @@
       swal.fire({
         icon:'warning',
         title: 'Are you ready to take this quiz?',
-        showCancelButton: false,
+        showCancelButton: true,
         confirmButtonText: 'Yes',
       }).then((result) => {
-        swal.close();
+        if (result.isConfirmed) {
+          swal.close();
         window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
-
+        }
       });
     });
 
