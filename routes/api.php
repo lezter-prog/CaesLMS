@@ -91,6 +91,8 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('quiz/save/temp', 'tempAnswer');
     Route::post('quiz/submit/answer', 'finalAnswer');
     Route::get('icons/get/select2', 'select2Icons');
+    Route::get('icons/get/all', 'getAllIcons');
+    Route::post('icon/create','addIcon');
 
 });
 

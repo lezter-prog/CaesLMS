@@ -115,6 +115,10 @@
                             <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Grades</span>
                         </a>
+                        <a href="/admin/icons" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Icons</span>
+                        </a>
                         
                     @endif
                    

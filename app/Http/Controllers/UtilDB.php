@@ -38,6 +38,13 @@ class UtilDB extends Controller
             "data" =>  $quarters
         ];
     }
+    public function getAllIcons()
+    {
+        $icons = DB::table('animal_icons')->get();
+        return [
+            "data" =>  $icons
+        ];
+    }
 
     public function updateQuarter(Request $request,$quarterCode){
 
@@ -125,6 +132,19 @@ class UtilDB extends Controller
         $add=DB::table('announcement')->insert([
             'announcement_for' => $request->announcement_for,
             'announcement_desc' => $request->announcement_desc
+        ]);
+
+        if($add){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+     public function addIcon(Request $request){
+        $add=DB::table('animal_icons')->insert([
+            'icon' => $request->icon,
+            'color' => $request->color
         ]);
 
         if($add){
