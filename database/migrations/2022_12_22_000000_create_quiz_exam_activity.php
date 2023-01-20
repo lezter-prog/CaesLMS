@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('assesment_type');
             $table->string('test_type');
             $table->string('filename');
+            $table->integer('total_points');
+            $table->integer('points_each');
             $table->date('deadline')->nullable();
             $table->string('subj_code');
             $table->string('section_code');
