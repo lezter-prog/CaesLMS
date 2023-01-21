@@ -29,7 +29,7 @@ class QuizMultiple implements ToModel, WithHeadingRow
         Log::info("rows :".print_r($row, true));
        
         $insert=AssesmentDetails::create([
-            'assesment_id'=>$this->assId,
+            'assesment_id'=>"ASS".$this->assId,
             'number'=>$row['number'],
             'question'=>$row['question'],
             'choice_A'=>$row['1st_choice'],

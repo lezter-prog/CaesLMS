@@ -10,6 +10,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UtilDB;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\AssessmentController;
 
 
 /*
@@ -98,6 +99,7 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
 
 Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){
     Route::get('assessment/get/quiz', 'getAllQuiz');
+    Route::get('assessment/get/answer', 'getStudentAnswer');
 });
 
 Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){

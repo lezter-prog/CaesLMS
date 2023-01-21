@@ -336,14 +336,17 @@ class UtilDB extends Controller
                     ])->get();
         foreach($quizes as $quiz){
                 $status = DB::table('student_assessment_answer_header')
-                        ->select('status')
+                        ->select('status','score')
                         ->where([
                             ['student_id','=',Auth::id()],
                             ['assesment_id','=',$quiz->assesment_id],
                         ])->first();
                 $quiz->isTaken =false;
+                $quiz->score =0;
                 if($status!=null){
                     $quiz->isTaken =true;
+                    $quiz->score =$status->score;
+
                 }
                 array_push($quizesArray,$quiz);
         }
@@ -414,15 +417,24 @@ class UtilDB extends Controller
                 DB::rollBack();
                 return false;
             }
-            foreach($getCorrectAnswers as $correctAnwer){
-                if($answer->number == $correctAnwer->number && $answer->answer == $correctAnwer->answer){
-                    $countScore=$countScore+$request->pointsEach; 
-                }
+
+            $getCorrectAnswers =DB::table('assesment_details')
+                ->select('number','answer')
+                ->where([
+                    ['assesment_id','=',$answer->assesment_id],
+                    ['number','=',$answer->number],
+                    ['answer','=',$answer->answer]
+                ])->first();
+            Log::info("answer: ".json_encode($answer));
+            Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));
+            if($getCorrectAnswers!=null){
+                $countScore=$countScore+$request->pointsEach;
             }
+            
 
        }
-       
-
+       Log::info("PointsEach: ".json_encode($request->pointsEach));
+       Log::info("CorrectAnswer: ".json_encode($countScore));
 
        $insert=DB::table('student_assessment_answer_header')->insert([
                         'student_id'=>Auth::id(),

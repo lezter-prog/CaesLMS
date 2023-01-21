@@ -36,7 +36,9 @@ class AssesmentViewController extends Controller
         $assesment =DB::table('assesment_details')
                     ->where([
                         ['assesment_id',$request->assesmentId]
-                    ])->get();           
+                    ])->get();  
+        $assesmentHeader =DB::table('assesment_header')
+                    ->where('assesment_id',$request->assesmentId)->first();           
 
         Log::info("Assesment:".json_encode($assesment));
 
@@ -71,6 +73,9 @@ class AssesmentViewController extends Controller
         
         return view('assesment/multiple-assesment')
         ->with('assesmentId',$request->assesmentId)
+        ->with('pointsEach',$assesmentHeader->points_each)
+        ->with("sectionCode",$assesmentHeader->section_code)
+        ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
     }
     

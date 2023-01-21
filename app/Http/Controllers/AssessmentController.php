@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Repository\TeacherService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AssessmentController extends Controller
 {
@@ -31,5 +32,19 @@ class AssessmentController extends Controller
             "status" => 1,
             "data" => $assesment
         ];
+    }
+
+    public function getStudentAnswer(Request $request){
+
+        $StudentScore = DB::table('student_assessment_answer_header')
+                        ->where([
+                            ['assesment_id','=',$request->assessmentId],
+                            ['student_id','=',Auth::id()]
+                        ])->first();
+                        
+        return[
+            "data"=>$StudentScore
+        ];
+
     }
 }

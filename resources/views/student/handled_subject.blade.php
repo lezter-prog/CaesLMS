@@ -404,8 +404,41 @@
     //     $searchfield.css('display', 'none');
     //   });
     
-    
+    var options = {
+                  chart: {
+                    type: 'donut'
+                  },
+                  series: [0,0],
+                  labels: ['Correct Answer','Wrong Answer'],
+                  colors:['#198754', '#dc3545'],
+                  noData: {
+                      text: 'Loading...'
+                    },
+                  plotOptions: {
+                    pie: {
+                      donut: {
+                        labels: {
+                          show: true,
+                          name: {
+                            
+                          },
+                          value: {
+                            show:false
+                          },
+                          total:{
+                            show:true,
+                            showAlways:true,
+                            label:"Total Score ",
+                          }
+                        }
+                      }
+                    }
+                  }
+            };
 
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    
+    chart.render();
     const picker= new datetimepicker(document.getElementById('endDate'));
     picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
@@ -421,45 +454,51 @@
       }).then((result) => {
         if (result.isConfirmed) {
           swal.close();
-        window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+          window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
         }
       });
     });
 
     $('#quizTable tbody').on('click', '.view-quiz', function(){
       var data = quizTable.row($(this).parents('tr')).data();
+      console.log(data);
+      var wrongAnswer = (parseInt(data.total_points)-parseInt(data.score));
+      
+      chart.updateOptions({
+        series:[parseInt(data.score),wrongAnswer],
+        plotOptions: {
+                  pie: {
+                    donut: {
+                      labels: {
+                        show: true,
+                        name: {
+                          fontSize: "30"
+                        },
+                        value: {
+                          show:false
+                        },
+                        total:{
+                          show:true,
+                          showAlways:true,
+                          fontSize: "30",
+                          label:parseInt(data.score)+" Points",
+                        }
+                      }
+                    }
+                  }
+                }
+      });
+    
+          
+            
+           
+            // chart.render();
+               
+            
 
-      var options = {
-      chart: {
-        type: 'donut'
-      },
-      series: [11, 4],
-      labels: ['Correct Answer','Wrong Answer'],
-      colors:['#198754', '#dc3545'],
-      plotOptions: {
-        pie: {
-          donut: {
-            labels: {
-              show: true,
-              name: {
-                
-              },
-              value: {
-                
-              },
-              total:{
-                show:true,
-                showAlways:true,
-                label:"Total Score",
-              }
-            }
-          }
-        }
-      }
-    }
+      
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+    
      
     });
 

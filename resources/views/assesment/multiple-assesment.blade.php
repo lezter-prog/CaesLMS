@@ -42,34 +42,37 @@
 <script>
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
+  var sectionCode ={{ Js::from($sectionCode) }};
+  var subjCode ={{ Js::from($subjCode) }};
+  var pointsEach ={{ Js::from($pointsEach) }};
   var annotation =[];
   var numbers =[];
   // import { annotate } from 'https://unpkg.com/rough-notation?module';
   
  
 
-  window.onbeforeunload = function(){
-    alert('not allowed to leave');
-    return false;
-  };
+//   window.onbeforeunload = function(){
+//     alert('not allowed to leave');
+//     return false;
+//   };
 
-  document.addEventListener("visibilitychange", function (event) {
-    event.preventDefault();
-      alert("not allowed");
-      return false
-});
+//   document.addEventListener("visibilitychange", function (event) {
+//     event.preventDefault();
+//       alert("not allowed");
+//       return false
+// });
   
-document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-  alert('not allowed');
-});
+// document.addEventListener('contextmenu', function(e) {
+//   e.preventDefault();
+//   alert('not allowed');
+// });
 
-document.onkeydown = function(e) { 
-  if(event.keyCode == 123) { 
-    alert('not allowed');
-    return false; 
-  } 
-  } 
+// document.onkeydown = function(e) { 
+//   if(event.keyCode == 123) { 
+//     alert('not allowed');
+//     return false; 
+//   } 
+//   } 
 
   $(document).ready(function(){
     var assesmentId ={{ Js::from($assesmentId) }};
@@ -126,7 +129,8 @@ document.onkeydown = function(e) {
             url:baseUrl+"/api/quiz/submit/answer",
             type:"POST",
             data:{
-              "assesmentId":assesmentId
+              "assesmentId":assesmentId,
+              "pointsEach":pointsEach
             },
             success:(res)=>{
               console.log(res);
@@ -138,7 +142,7 @@ document.onkeydown = function(e) {
                   confirmButtonText: 'Ok',
                 }).then((result) => {
                   swal.close();
-                  location.href ="/student/handled/subject?subj_code=BIB1&&section_code=S1"
+                  location.href ="/student/handled/subject?subj_code="+subjCode+"&&section_code="+sectionCode;
                 });
               }
 
