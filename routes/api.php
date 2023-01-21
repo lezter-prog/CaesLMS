@@ -93,6 +93,11 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('icons/get/select2', 'select2Icons');
     Route::get('icons/get/all', 'getAllIcons');
     Route::post('icon/create','addIcon');
+    Route::patch('icon/update', 'updateIcons');
+    Route::post('icon/delete', 'deleteIcon');
+    Route::post('student/delete', 'deleteStudent');
+    Route::post('subject/delete', 'deleteSubject');
+    Route::post('section/delete', 'deleteSection');
 
 });
 

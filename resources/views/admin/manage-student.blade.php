@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('title', 'Students')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
@@ -8,6 +9,7 @@
       <button type="button" id ="importBtn" class="btn btn-sm btn-outline-primary">Import</button>
       <button type="button" id="addStudentBtn" class="btn btn-sm btn-outline-primary">add</button>
       <button type="button" id="updateStudentBtn" class="btn btn-sm btn-outline-primary">Edit</button>
+      <button type="button" id="removeStudentBtn" class="btn btn-sm btn-outline-primary">Remove</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -483,7 +485,50 @@ $(document).ready(function(){
         console.log("Selected Section: "+data.g_code);
         $("#gradeCode").val(data.g_code);
     });
+//  remove
+$("#removeStudentBtn").click(()=>{
+              var data = studentsTable.row( ".selected" ).data();
+              console.log(data);
+              swal.fire({
+                title: 'Do you want to remove Student?',
+                showCancelButton: true,
+                confirmButtonText: 'removed',
+              }).then((result) => {
+              
+                if (result.isConfirmed) {
 
+                  $.ajax({
+                    url:baseUrl+"/api/student/delete",
+                    type:"POST",
+                    data:{
+                      "id_number":data.id_number
+                      
+                    },
+                    success:(res)=>{
+                      console.log(res);
+                      if(res){
+                        swal.fire('Saved!', '', 'success');
+                        swal.close();
+                        studentsTable.ajax.reload();
+                      }
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      console.log(xhr);
+                      alert(xhr.status);
+                      alert(thrownError);
+                    },
+                    beforeSend: function (request) {
+                      request.setRequestHeader("Authorization", "Bearer "+token);
+                    },
+                  })
+                
+                } else {
+                  swal.fire('Changes are not saved', '', 'info')
+                }
+              })
+          
+            });
 
 });
 </script>

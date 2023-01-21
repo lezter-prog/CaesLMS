@@ -64,6 +64,72 @@ class UtilDB extends Controller
         }
     }
 
+    public function updateIcons(Request $request){
+        $update=DB::table('animal_icons')
+        ->where('id', $request->iconId)
+        ->update(array('icon' => $request->icon,
+                       'color'=> $request->color));
+
+        if($update){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public function deleteIcon(Request $request){
+        $delete=DB::table('animal_icons')
+        ->where('id', $request->iconId)->delete();
+        if($delete){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public function deleteSubject(Request $request){
+        $delete=DB::table('subjects')
+        ->where('subj_code', $request->subject)->delete();
+        if($delete){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    public function deleteSection(Request $request){
+        $delete=DB::table('school_sections')
+        ->where('s_code', $request->section)->delete();
+        if($delete){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+    
+    public function deleteStudent(Request $request){
+        DB::beginTransaction();
+        $deleteUsers=DB::table('users')
+        ->where('id', $request->id_number)->delete();
+
+        $deleteHashs=DB::table('hash_tables')
+        ->where('hash_id', $request->id_number)->delete();
+        
+        $deleteStudents=DB::table('sy_students')
+        ->where('id_number', $request->id_number)->delete();
+
+        if($deleteUsers && $deleteHashs && $deleteStudents){
+            DB::commit();
+            return true;
+        }else{
+            DB::rollBack();
+            return false;
+        }
+
+    }
+
     public function addLesson(Request $request){
         if ($request->hasFile('lesson_file')){
             $filenameWithExt = $request->file('lesson_file')->getClientOriginalName();

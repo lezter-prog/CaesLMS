@@ -19,6 +19,7 @@
     <div class="btn-group me-2">
       <button type="button" id ="addSectionBtn" class="btn btn-sm btn-outline-primary">Add</button>
       <button type="button" id="updateSectionBtn"class="btn btn-sm btn-outline-primary">Edit</button>
+      <button type="button" id="removeSectionBtn"class="btn btn-sm btn-outline-primary">Remove</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -459,6 +460,50 @@
         }
       })
   });
+      //  remove
+$("#removeSectionBtn").click(()=>{
+              var data = sectionTable.row( ".selected" ).data();
+              console.log(data);
+              swal.fire({
+                title: 'Do you want to remove Section?',
+                showCancelButton: true,
+                confirmButtonText: 'Removed',
+              }).then((result) => {
+              
+                if (result.isConfirmed) {
+
+                  $.ajax({
+                    url:baseUrl+"/api/section/delete",
+                    type:"POST",
+                    data:{
+                      "section":data.s_code
+                      
+                    },
+                    success:(res)=>{
+                      console.log(res);
+                      if(res){
+                        swal.fire('Saved!', '', 'success');
+                        swal.close();
+                        sectionTable.ajax.reload();
+                      }
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      console.log(xhr);
+                      alert(xhr.status);
+                      alert(thrownError);
+                    },
+                    beforeSend: function (request) {
+                      request.setRequestHeader("Authorization", "Bearer "+token);
+                    },
+                  })
+                
+                } else {
+                  swal.fire('Changes are not saved', '', 'info')
+                }
+              })
+          
+            });
 
     
 
