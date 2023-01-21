@@ -142,6 +142,7 @@
     <div class="btn-group me-2">
       <button type="button" id ="addIconsBtn" class="btn btn-sm btn-outline-primary">Add</button>
       <button type="button" id="updateIconstBtn"class="btn btn-sm btn-outline-primary">Edit</button>
+      <button type="button" id="removeIconstBtn"class="btn btn-sm btn-outline-primary">Delete</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -169,37 +170,38 @@
 
 
   <!-- UpdateModal -->
-  <div class="modal fade" id="updateIconsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Icons</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="updateIconsForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="iconsName" class="form-label">Icons </label>
-            <textarea type="text" class="form-control" rows="4" cols="50" id="updateIcons" required > </textarea>
-            {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
-          </div>
-         
+<div class="modal fade" id="updateIconsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Icon</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <form id="updateIconsForm">
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="iconsName" class="form-label">Icons</label>
+          <input type="text" class="form-control" id="updateIcons" required >
+          {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
         </div>
         <div class="mb-3">
-            <label for="colorName" class="form-label">Color</label>
-            <textarea type="text" class="form-control" rows="4" cols="50" id="updateColor" required > </textarea>
-            {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
-          </div>
-         
+          <label for="colorName" class="form-label">Color </label>
+          <input type="color" class="form-control" id="updateColor" required >
+          {{-- <div id="emailHelp" class="form-text">We'll never share your ema il with anyone else.</div> --}}
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-        </form>
       </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+      </form>
     </div>
   </div>
+</div>
+
+
+ 
 <!-- addModal -->
   <div class="modal fade" id="addIconsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -235,9 +237,10 @@
 <script>
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
-
+ 
   $(document).ready(function(){
-   var announcementId=null;
+   var iconId=null;
+   
    var iconsTable= $('#iconsTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -294,7 +297,7 @@
     $("#updateIconstBtn").click(()=>{
       var data = iconsTable.row( ".selected" ).data();
       console.log(data);
-      announcementId=data.id;
+      iconId=data.id;
       
       
       $("#updateIcons").val(data.announcement_desc);
@@ -303,7 +306,49 @@
 
       $("#updateIconsModal").modal("show");
     });
+//  remove
+        $("#removeIconstBtn").click(()=>{
+              var data = iconsTable.row( ".selected" ).data();
+              swal.fire({
+                title: 'Do you want to remove Icon?',
+                showCancelButton: true,
+                confirmButtonText: 'removed',
+              }).then((result) => {
+              
+                if (result.isConfirmed) {
 
+                  $.ajax({
+                    url:baseUrl+"/api/icon/delete",
+                    type:"POST",
+                    data:{
+                      "iconId":data.id
+                      
+                    },
+                    success:(res)=>{
+                      console.log(res);
+                      if(res){
+                        swal.fire('Saved!', '', 'success');
+                        swal.close();
+                        iconsTable.ajax.reload();
+                      }
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      console.log(xhr);
+                      alert(xhr.status);
+                      alert(thrownError);
+                    },
+                    beforeSend: function (request) {
+                      request.setRequestHeader("Authorization", "Bearer "+token);
+                    },
+                  })
+                
+                } else {
+                  swal.fire('Changes are not saved', '', 'info')
+                }
+              })
+          
+            });
     $("#addIconsForm").submit((e)=>{
       e.preventDefault();
       swal.fire({
@@ -355,7 +400,7 @@
 
       e.preventDefault();
       swal.fire({
-        title: 'Do you want to update the Section?',
+        title: 'Do you want to update the Icon?',
         showCancelButton: true,
         confirmButtonText: 'Update',
       }).then((result) => {
@@ -363,9 +408,10 @@
         if (result.isConfirmed) {
 
           $.ajax({
-            url:baseUrl+"/api/announcement/update",
+            url:baseUrl+"/api/icon/update",
             type:"patch",
             data:{
+              "iconId":iconId,
               "icon":$("#updateIcons").val(),
               "color":$("#updateColor").val(),
         
