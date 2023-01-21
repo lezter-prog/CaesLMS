@@ -210,10 +210,23 @@
             {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
           <div class="mb-3">
+            <label for="lesson" class="form-label">Quiz Description</label>
+            <input type="text" class="form-control" id="quizDesc" name="quizDesc" required>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
             <div class="input-group">
-              <input type="file" class="form-control" id="quiz_file" name="quiz_file" aria-describedby="upload-quiz" aria-label="upload">
+              <input type="file" class="form-control" id="quiz_file" name="quiz_file" aria-describedby="upload-quiz" aria-label="upload" required>
               
             </div>
+          </div>
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Total Points</label>
+            <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
+          </div>
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Points Each Item</label>
+            <input type="number" class="form-control" id="pointsEach" name="pointsEach" >
           </div>
           <div class="mb-3">
             <label for="grade" class="form-label">Select Quiz Type</label>
@@ -223,10 +236,11 @@
               <option value="enumeration">Enumeration</option>
             </select>
           </div>
+          
           <div class="mb-3">
             <label for="endDateInput" class="form-label">End Date</label>
             <div class="input-group log-event" id="endDate" data-td-target-input="nearest" data-td-target-toggle="nearest">
-              <input id="endDateInput" name="endDate" type="text" class="form-control" data-td-target="#endDate" readonly>
+              <input id="endDateInput" name="endDate" type="text" class="form-control" data-td-target="#endDate" readonly required>
               <span class="input-group-text" data-td-target="#endDate" data-td-toggle="datetimepicker">
                 <i class="fas fa-calendar"></i>
               </span>

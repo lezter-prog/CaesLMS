@@ -39,19 +39,21 @@ class UploadController extends Controller
         $quarter = DB::table('quarters')->where('status','ACTIVE')->first();
         Log::info("Assesment:".json_encode($assesment));
         if($assesment !=null){
-            $assesmentId= "ASS".preg_replace('/[0-9]+/', '', $assesment->assesment_id);
+            $assesmentId=preg_replace('/[^0-9]/', '', $assesment->assesment_id)+1;
         }else{
-            $assesmentId="ASS"."1";
+            $assesmentId=1;
         }
 
         $endDate = DateTime::createFromFormat('Y-m-d h:i A', $request->endDate);
         // Log::info("endDate:".$endDate);
 
         $user = DB::table("assesment_header")->insert([
-            "assesment_id"=>$assesmentId,
-            "assesment_desc"=>"",
+            "assesment_id"=>"ASS".$assesmentId,
+            "assesment_desc"=>$request->quizDesc,
             "assesment_type"=>"quiz",
             "test_type"=>$request->quizType,
+            "total_points"=>$request->totalPoints,
+            "points_each"=>$request->pointsEach,
             "filename"=>$filenameWithExt,
             "deadline"=>$endDate->format('Y-m-d H:i:s'),
             "subj_code"=>$request->subj_code,

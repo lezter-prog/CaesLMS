@@ -463,7 +463,12 @@ class UtilDB extends Controller
                 ['student_id','=',Auth::id()],
                 ['assesment_id','=',$request->assesmentId],
             ])->get();
+        $getCorrectAnswers =DB::table('assesment_details')
+                            ->select('number','answer')
+                            ->where('assesment_id',$request->assesmentId)
+                            ->get();
        DB::beginTransaction();
+       $countScore=0;
        foreach($tempAnswer as $answer){
             $exec=DB::table('student_assessment_answer')->insert([
                 'student_id'=>Auth::id(),
@@ -475,11 +480,21 @@ class UtilDB extends Controller
                 DB::rollBack();
                 return false;
             }
+            foreach($getCorrectAnswers as $correctAnwer){
+                if($answer->number == $correctAnwer->number && $answer->answer == $correctAnwer->answer){
+                    $countScore=$countScore+$request->pointsEach; 
+                }
+            }
+
        }
+       
+
+
        $insert=DB::table('student_assessment_answer_header')->insert([
                         'student_id'=>Auth::id(),
                         'assesment_id'=>$request->assesmentId,
-                        'status'=>'submitted'
+                        'status'=>'submitted',
+                        'score'=> $countScore
                     ]);
         if(!$insert){
             DB::rollBack();
