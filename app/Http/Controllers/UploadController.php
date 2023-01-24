@@ -6,8 +6,10 @@ use DateTime;
 use Illuminate\Http\Request;
 use App\Repository\SubjectService;
 use App\Imports\QuizMultiple;
+use App\Imports\QuizIdentification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -71,7 +73,14 @@ class UploadController extends Controller
                 if(!$excel){
                     DB::rollBack();
                 }
-
+            }else if($request->quizType=="identify"){
+                $excel = Excel::import(new QuizIdentification($assesmentId), $file);
+                if(!$excel){
+                    DB::rollBack();
+                }
+            }else{
+                return false;
+                DB::rollBack();
             }
         }
         DB::commit();
@@ -79,6 +88,15 @@ class UploadController extends Controller
         return[
             "result"=>true
         ];
+    }
+
+    public function downloadLesson($lessonId){
+
+       $lesson= DB::table('lesson')->where('id',$lessonId)->first();
+
+        return Storage::url('public/lessons/'.$lesson->file);
+
+
     }
     
 }

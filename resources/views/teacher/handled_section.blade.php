@@ -232,7 +232,7 @@
             <label for="grade" class="form-label">Select Quiz Type</label>
             <select type="text" class="form-control" id="quizType" name="quizType" >
               <option value="multiple">Multiple Choice</option>
-              <option value="identification">Identification</option>
+              <option value="identify">Identification</option>
               <option value="enumeration">Enumeration</option>
             </select>
           </div>

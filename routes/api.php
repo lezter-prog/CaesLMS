@@ -91,6 +91,7 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('quiz/get/temp/answers', 'getTempAnswer');
     Route::post('quiz/save/temp', 'tempAnswer');
     Route::post('quiz/submit/answer', 'finalAnswer');
+    Route::get('activity/get/{sectionCode}/{subjCode}', 'getActivityBySectionAndSubject');
     Route::get('icons/get/select2', 'select2Icons');
     Route::get('icons/get/all', 'getAllIcons');
     Route::post('icon/create','addIcon');
@@ -110,6 +111,7 @@ Route::middleware('auth:sanctum')->controller(AssessmentController::class)->grou
 Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){
 
     Route::post('teacher/upload/quiz','uploadQuiz');
+    Route::get('lesson/download/{lessonIdl}','downloadLesson');
 });
 
 

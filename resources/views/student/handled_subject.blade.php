@@ -9,12 +9,11 @@
     
     <div class="btn-group me-2">
       <select class="form-select js-data-example-ajax" id="quarter" aria-label="Default select example">
-          <option value="Q1">First Grading</option>
-          <option value="Q2">Second Grading</option>
-          <option value="Q3">Third Grading</option>
-          <option value="Q4">Fourth Grading</option>
-        </select>
-  </div>
+        @foreach ($quarters as $quarter)
+        <option value="{{$quarter->quarter_code}}" @if ($quarter->status === 'ACTIVE') selected @endif >{{$quarter->quarter_desc}}</option>
+        @endforeach
+      </select>
+    </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
     </button>
@@ -28,7 +27,10 @@
         <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab" aria-controls="lessons" aria-selected="true">Lesson</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="subjects-tab" data-bs-toggle="tab" data-bs-target="#subjects" type="button" role="tab" aria-controls="subjects" aria-selected="true">Quiz</button>
+        <button class="nav-link" id="quiz-tab" data-bs-toggle="tab" data-bs-target="#quiz" type="button" role="tab" aria-controls="quiz" aria-selected="true">Quiz</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="true">Activity</button>
       </li>
     </ul>
 
@@ -62,7 +64,7 @@
         </div>
         
       </div>
-      <div class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="subjects-tab">
+      <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
         <div class="row">
           <div class="col-lg-6 col-sm-12 pe-3">
             <table id ="quizTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
@@ -93,196 +95,61 @@
           </div>
       </div>
     </div>
+    <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+      <div class="row">
+        <div class="col-lg-6 col-sm-12 pe-3">
+          <table id ="activityTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
+            <thead>
+              <tr>
+                  <th>Activity</th>
+              </tr>
+            </thead>
+            <tbody>
+             
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-6 col-sm-12">
+          <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
+            <div class="card-header " style="background-color: #516a8a; color:white;">
+              Details
+            </div>
+            <div class="card-body">
+              <div class="row ">
+                <div class="col-12 text-center" id="chartActivity">
+                  
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
 
   </div>
 </div>
 
 {{-- Modals --}}
 
-  <div class="modal fade" id="updateSectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Update Section</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="updateSectionForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="sectionName" class="form-label">Section Name</label>
-            <input type="text" class="form-control" id="updateSectionName" required data-code="">
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Grade</label>
-            <select type="text" class="form-control" id="updateGradeCode" required>
-              <option value="G1">Grade 1</option>
-              <option value="G2">Grade 2</option>
-              <option value="G3">Grade 3</option>
-              <option value="G4">Grade 4</option>
-              <option value="G5">Grade 5</option>
-              <option value="G6">Grade 6</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="updateTeacher" class="form-label">Select Teacher</label>
-            <select class="js-example-responsive form-control" id="updateTeacher">
-            </select>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
+ 
 
 
 
-  <div class="modal fade" id="addSectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Section</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="addSectionForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="sectionName" class="form-label">Section Name</label>
-            <input type="text" class="form-control" id="sectionName" required >
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Grade</label>
-            <select type="text" class="form-control" id="gradeCode" required>
-              <option value="G1">Grade 1</option>
-              <option value="G2">Grade 2</option>
-              <option value="G3">Grade 3</option>
-              <option value="G4">Grade 4</option>
-              <option value="G5">Grade 5</option>
-              <option value="G6">Grade 6</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="teacher" class="form-label">Select Teacher</label>
-            <select class="js-example-responsive form-control" id="teacher">
-            </select>
-          </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
+ 
 
 {{-- Add Lesson  --}}
 
-  <div class="modal fade" id="addLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Add Lesson</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="addLessonForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="lesson" class="form-label">Lesson</label>
-            <input type="text" class="form-control" id="lesson" name="lesson" required >
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-          <div class="mb-3">
-            <div class="input-group">
-              <input type="file" class="form-control" id="lesson_file" name="lesson_file" aria-describedby="upload-lesson" aria-label="Upload">
-              <button class="btn btn-outline-secondary" type="button" id="upload_lesson">Upload Lesson</button>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Subject</label>
-            <select type="text" class="form-control" id="selectSubject" name="selectSubject" >
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-{{-- Subjec Section Modal --}}
-  <div class="modal fade bd-example " id="uploadQuizModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog ">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Upload Quiz</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form id="uploadQuizForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select if Activity</label>
-            <select type="text" class="form-control" id="quizType" name="quizType" >
-              <option  value="quiz">Quiz</option>
-              <option value="activity">Activity</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="lesson" class="form-label">Subject</label>
-            <input type="text" class="form-control" id="subject" name="subject" readonly>
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-          <div class="mb-3">
-            <div class="input-group">
-              <input type="file" class="form-control" id="quiz_file" name="quiz_file" aria-describedby="upload-quiz" aria-label="upload">
-              
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Select Quiz Type</label>
-            <select type="text" class="form-control" id="quizType" name="quizType" >
-              <option value="multiple">Multiple Choice</option>
-              <option value="identification">Identification</option>
-              <option value="enumeration">Enumeration</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="endDateInput" class="form-label">End Date</label>
-            <div class="input-group log-event" id="endDate" data-td-target-input="nearest" data-td-target-toggle="nearest">
-              <input id="endDateInput" name="endDate" type="text" class="form-control" data-td-target="#endDate" readonly>
-              <span class="input-group-text" data-td-target="#endDate" data-td-toggle="datetimepicker">
-                <i class="fas fa-calendar"></i>
-              </span>
-            </div>
-            {{-- <label for="lesson" class="form-label">Select End Date</label>
-            <input type="text" class="form-control" id="endDate" name="subject" readonly> --}}
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
+ 
 <script>
 
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
 
   $(document).ready(function(){
+
+    var currentQuarter =$("#quarter").val();
+    console.log(currentQuarter);
 
    
    var subjectCode={{ Js::from($subjectCode) }};
@@ -291,6 +158,11 @@
    var studentLesson= $('#studentLesson').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
+      "processing": true,
+      "language": {
+        "processing": "Lesson Table is currently processing"
+      },
+      "serverSide": true,
       "bFilter": true,
       "bInfo": false,
       "ordering":false,
@@ -301,12 +173,12 @@
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
           $.ajax({
-           
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
             "data":{
-              "gradeCode":$("#grades").val()
+              "gradeCode":$("#grades").val(),
+              "quarterCode":currentQuarter
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -334,6 +206,11 @@
 
     var quizTable= $('#quizTable').DataTable({
       "bPaginate": false,
+      "processing": true,
+      "language": {
+        "processing": "Quiz Table Processing"
+      },
+      "serverSide": true,
       "bLengthChange": false,
       "bFilter": true,
       "ordering":false,
@@ -348,6 +225,9 @@
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
+            "data":{
+              "quarterCode":currentQuarter
+            },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
             },
@@ -358,14 +238,15 @@
         { "data":"assesment_desc",
           "render":function(data, type, row, meta ){
             console.log(row);
+            var quizType ='';
             var disabled="";
             var status='';
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge text-bg-success">DONE</span>';
+               takingStatus='<span class="badge text-bg-success">DONE</span> ';
             }else{
-               takingStatus='<span class="badge text-bg-warning">Ready to Take</span>';
+               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
 
             }
 
@@ -373,10 +254,16 @@
               status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
             else
               status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+            
+            if(row.test_type == "multiple"){
+              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+            }else if(row.test_type == "identify"){
+              quizType='<span class="badge text-bg-primary">Identification</span>';
+            }
 
             
 
-                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+' '+status+takingStatus+' <div style="font-size:9px;margin-left:10px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.updated_at).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
+                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
                   var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
                   var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
                   var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
@@ -394,15 +281,82 @@
         },
     });
 
-    // $("#quarter").select2({
-    //   theme: 'bootstrap-5',
-    //   placeholder: 'Select Quarter Period',
-    //   closeOnSelect:true
-    // });
-    // $('#quarter').on('select2:opening select2:closing', function( event ) {
-    //     var $searchfield = $(this).parent().find('select2-search__field');
-    //     $searchfield.css('display', 'none');
-    //   });
+
+    var activityTable= $('#activityTable').DataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+      "bFilter": true,
+      "ordering":false,
+      "searching": false,
+      "bInfo": false,
+      "bAutoWidth": false,
+      "sAjaxSource": baseUrl+"/api/activity/get/"+sectionCode+"/"+subjectCode,
+      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+        console.log("ajaxSRC: "+sSource);
+          oSettings.jqXHR = 
+          $.ajax({
+            "dataType": 'json',
+            "type": "GET",
+            "url": sSource,
+            "beforeSend": function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+            "success": fnCallback
+          });
+        },
+      "columns":[
+        { "data":"assesment_desc",
+          "render":function(data, type, row, meta ){
+            console.log(row);
+            var quizType ='';
+            var disabled="";
+            var status='';
+            var takingStatus='';
+            if(row.isTaken){
+               disabled ="disabled";
+               takingStatus='<span class="badge text-bg-success">DONE</span> ';
+            }else{
+               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
+
+            }
+
+            if(row.status="ACTIVE")
+              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
+            else
+              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+            
+            if(row.test_type == "multiple"){
+              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+            }else if(row.test_type == "identify"){
+              quizType='<span class="badge text-bg-primary">Identification</span>';
+            }
+
+            
+
+                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
+                  var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
+                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
+                  var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
+                  return html+take+quiz+exam+'</div>';
+          }
+        }
+      ],
+      "columnDefs":[
+       
+
+      ],
+      "fnDrawCallback": function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+        },
+    });
+
+    $('#quarter').on('change', function(){
+      currentQuarter=$(this).val();
+      studentLesson.ajax.reload();
+      quizTable.ajax.reload();
+
+    });
     
     var options = {
                   chart: {
@@ -439,12 +393,13 @@
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     
     chart.render();
-    const picker= new datetimepicker(document.getElementById('endDate'));
-    picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
+    // const picker= new datetimepicker(document.getElementById('endDate'));
+    // picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
    
     $('#quizTable tbody').on('click', '.take-btn', function(){
       var data = quizTable.row($(this).parents('tr')).data();
+      console.log(data);
      
       swal.fire({
         icon:'warning',
@@ -454,7 +409,56 @@
       }).then((result) => {
         if (result.isConfirmed) {
           swal.close();
-          window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+          if(data.test_type=="multiple"){
+            window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+          }else if(data.test_type=="identify"){
+            window.location.href = "/assesment/identify?assesmentId="+data.assesment_id;
+          }
+        }
+      });
+    });
+
+    $('#studentLesson tbody').on('click', '.download-btn', function(){
+      var data = studentLesson.row($(this).parents('tr')).data();
+     
+      swal.fire({
+        icon:'info',
+        title: 'You are trying to download a lesson?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.close();
+          $.ajax({
+            url:baseUrl+"/api/lesson/download/"+data.id,
+            type:"GET",
+            success:(res)=>{
+              // console.log(res);
+              if(res){
+                // var blob = new Blob([res], { type: "application/octetstream"});
+                // const url = window.URL.createObjectURL(res);
+                console.log(res)
+                a = document.createElement('a');
+                a.href = res;
+                // Give filename you wish to download
+                a.download = data.lesson;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+
+               
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
         }
       });
     });
@@ -488,18 +492,6 @@
                   }
                 }
       });
-    
-          
-            
-           
-            // chart.render();
-               
-            
-
-      
-
-    
-     
     });
 
     $('#sectionsTable tbody').on( 'click', 'tr', function () {   

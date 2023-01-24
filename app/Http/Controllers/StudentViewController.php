@@ -40,12 +40,15 @@ class StudentViewController extends Controller
         Log::info("Subjects:".json_encode($subjects));
 
         $subject = $sub::where('subj_code',$request->subj_code)->first();
+        $quarters = DB::table('quarters')->get();
+
         
         return view('student/handled_subject') 
         ->with('studentHome',"active")
         ->with('sectionCode',$request->section_code)
         ->with('subjectCode',$request->subj_code)
         ->with('subject',$subject)
+        ->with('quarters',$quarters)
         ->with('subjects',$subjects);
     }
 

@@ -180,12 +180,14 @@ class UtilDB extends Controller
             "data" =>  $lessons
         ];
     }
-    public function getLessonBySubjectAndSection($subjectCode,$sectionCode){
+    public function getLessonBySubjectAndSection(Request $request,$subjectCode,$sectionCode){
+
         Log::info("User:".$sectionCode." Subject:".$subjectCode);
         $lessons = DB::table('lesson')
         ->where([
             ['section_code','=',$sectionCode],
             ['subj_code','=',$subjectCode],
+            ['quarter','=',$request->quarterCode]
             ])
         ->get();
         return [
@@ -392,11 +394,41 @@ class UtilDB extends Controller
         return true;
     }
 
-    public function getQuizBySectionAndSubject($sectionCode,$subjectCode){
+    public function getQuizBySectionAndSubject(Request $request,$sectionCode,$subjectCode){
         $quizesArray=[];
         $quizes = DB::table('assesment_header')
                     ->where([
                         ['assesment_type','=','quiz'],
+                        ['subj_code','=',$subjectCode],
+                        ['section_code','=',$sectionCode],
+                        ['quarter_period','=',$request->quarterCode]
+                    ])->get();
+        foreach($quizes as $quiz){
+                $status = DB::table('student_assessment_answer_header')
+                        ->select('status','score')
+                        ->where([
+                            ['student_id','=',Auth::id()],
+                            ['assesment_id','=',$quiz->assesment_id],
+                        ])->first();
+                $quiz->isTaken =false;
+                $quiz->score =0;
+                if($status!=null){
+                    $quiz->isTaken =true;
+                    $quiz->score =$status->score;
+
+                }
+                array_push($quizesArray,$quiz);
+        }
+        return [
+            "data"=>$quizesArray
+        ];
+
+    }
+    public function getActivityBySectionAndSubject($sectionCode,$subjectCode){
+        $quizesArray=[];
+        $quizes = DB::table('assesment_header')
+                    ->where([
+                        ['assesment_type','=','activity'],
                         ['subj_code','=',$subjectCode],
                         ['section_code','=',$sectionCode],
                     ])->get();
@@ -430,6 +462,10 @@ class UtilDB extends Controller
                 ['assesment_id','=',$request->assesmentId],
                 ['number','=',$request->number]
             ])->count();
+
+        if($request->answer==null){
+            $request->answer="";
+        }
 
         if($count>0){
             $exec=DB::table('student_assessment_answer_tmp')
