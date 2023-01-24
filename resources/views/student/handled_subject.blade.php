@@ -192,9 +192,9 @@
             console.log(row);
                   var html ='<div class=""> <i class="fa-solid fa-file"></i> '+data;
                   var lesson ='<div class="float-end"><button class="btn btn-success btn-sm download-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Lesson"><i class="fa-solid fa-download"></i></button> ';
-                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
+                  
                   var exam ='<button class="btn btn-info btn-sm exam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Lesson Details"><i class="fa-solid fa-list-check"></i></button> </div>';
-                  return html+lesson+quiz+exam+'</div>';
+                  return html+lesson+exam+'</div>';
           }
         }
       ],
@@ -265,9 +265,8 @@
 
                   var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
                   var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
-                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
                   var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
-                  return html+take+quiz+exam+'</div>';
+                  return html+take+exam+'</div>';
           }
         }
       ],

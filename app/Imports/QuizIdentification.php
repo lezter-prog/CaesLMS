@@ -18,9 +18,10 @@ use Illuminate\Support\Facades\Hash;
 class QuizIdentification implements ToModel, WithHeadingRow
 {
 
-    public function __construct($assId)
+    public function __construct($assId,$testType)
     {
         $this->assId = $assId; 
+        $this->testType = $testType; 
     }
     public function model(array $row)
     {
@@ -32,7 +33,8 @@ class QuizIdentification implements ToModel, WithHeadingRow
             'assesment_id'=>"ASS".$this->assId,
             'number'=>$row['number'],
             'question'=>$row['question'],
-            'answer'=>$row['key_answer']
+            'answer'=>$row['key_answer'],
+            'test_type'=> $this->testType,
         ]);
 
         Log::info("insert status: ".$insert);
