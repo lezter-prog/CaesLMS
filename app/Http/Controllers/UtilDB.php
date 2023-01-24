@@ -45,6 +45,8 @@ class UtilDB extends Controller
             "data" =>  $icons
         ];
     }
+   
+ 
 
     public function updateQuarter(Request $request,$quarterCode){
 
@@ -108,6 +110,16 @@ class UtilDB extends Controller
         }
 
     }
+    public function deleteAnnouncement(Request $request){
+        $delete=DB::table('announcement')
+        ->where('id', $request->anno)->delete();
+        if($delete){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
     
     public function deleteStudent(Request $request){
         DB::beginTransaction();
@@ -164,6 +176,7 @@ class UtilDB extends Controller
     {
         $lessons = DB::table('lesson')
         ->join('subjects', 'subjects.subj_code', '=', 'lesson.subj_code')
+        ->join('school_sections', 'school_sections.s_code', '=', 'lesson.section_code')
         ->get();
         return [
             "data" =>  $lessons
