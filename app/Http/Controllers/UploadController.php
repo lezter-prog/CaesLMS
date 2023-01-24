@@ -69,12 +69,12 @@ class UploadController extends Controller
             $file= $request->file("quiz_file")->getRealPath();
             Log::info("path:".$file);
             if($request->quizType=="multiple"){
-                $excel = Excel::import(new QuizMultiple($assesmentId), $file);
+                $excel = Excel::import(new QuizMultiple($assesmentId,$request->quizType), $file);
                 if(!$excel){
                     DB::rollBack();
                 }
             }else if($request->quizType=="identify"){
-                $excel = Excel::import(new QuizIdentification($assesmentId), $file);
+                $excel = Excel::import(new QuizIdentification($assesmentId,$request->quizType), $file);
                 if(!$excel){
                     DB::rollBack();
                 }
@@ -89,6 +89,8 @@ class UploadController extends Controller
             "result"=>true
         ];
     }
+
+
 
     public function downloadLesson($lessonId){
 
