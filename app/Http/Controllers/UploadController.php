@@ -57,7 +57,7 @@ class UploadController extends Controller
             "total_points"=>$request->totalPoints,
             "points_each"=>$request->pointsEach,
             "filename"=>$filenameWithExt,
-            "deadline"=>$endDate->format('Y-m-d H:i:s'),
+            // "deadline"=>$endDate->format('Y-m-d H:i:s'),
             "subj_code"=>$request->subj_code,
             "section_code"=>$request->section_code,
             "quarter_period"=>$quarter->quarter_code,
