@@ -154,12 +154,14 @@ class UtilDB extends Controller
 
             Log::info("file:".$file);
             // Log::info("Request:".$request->all());
+            $quarter = DB::table('quarters')->where('status','ACTIVE')->first();
 
             $lesson =DB::table("lesson")->insert([
                 'lesson'=>$request->lesson,
                 'subj_code'=>$request->subj_code,
                 'section_code'=>$request->section_code,
                 'file'=>$fileNameToStore,
+                'quarter'=>$quarter->quarter_code,
                 'uploadedBy'=>Auth::id()
             ]);
             return [
@@ -437,6 +439,38 @@ class UtilDB extends Controller
         ];
 
     }
+
+    public function getExamsBySectionAndSubject(Request $request,$sectionCode,$subjectCode){
+        $examsArray=[];
+        $exams = DB::table('assesment_header')
+                    ->where([
+                        ['assesment_type','=','exam'],
+                        ['subj_code','=',$subjectCode],
+                        ['section_code','=',$sectionCode],
+                        ['quarter_period','=',$request->quarterCode]
+                    ])->get();
+        foreach($exams as $exam){
+                $status = DB::table('student_assessment_answer_header')
+                        ->select('status','score')
+                        ->where([
+                            ['student_id','=',Auth::id()],
+                            ['assesment_id','=',$exam->assesment_id],
+                        ])->first();
+                $exam->isTaken =false;
+                $exam->score =0;
+                if($status!=null){
+                    $exam->isTaken =true;
+                    $exam->score =$status->score;
+
+                }
+                array_push($examsArray,$exam);
+        }
+        return [
+            "data"=>$examsArray
+        ];
+
+    }
+
     public function getActivityBySectionAndSubject($sectionCode,$subjectCode){
         $quizesArray=[];
         $quizes = DB::table('assesment_header')
@@ -473,7 +507,8 @@ class UtilDB extends Controller
             ->where([
                 ['student_id','=',Auth::id()],
                 ['assesment_id','=',$request->assesmentId],
-                ['number','=',$request->number]
+                ['number','=',$request->number],
+                ['test_type','=',$request->testType]
             ])->count();
 
         if($request->answer==null){
@@ -485,7 +520,8 @@ class UtilDB extends Controller
             ->where([
                 ['student_id','=',Auth::id()],
                 ['assesment_id','=',$request->assesmentId],
-                ['number','=',$request->number]
+                ['number','=',$request->number],
+                ['test_type','=',$request->testType]
             ])
             ->update([
                 'answer'=>$request->answer,
@@ -495,6 +531,7 @@ class UtilDB extends Controller
                 'student_id'=>Auth::id(),
                 'assesment_id'=>$request->assesmentId,
                 'number'=>$request->number,
+                'test_type'=>$request->testType,
                 'answer'=>$request->answer,
             ]);
         }

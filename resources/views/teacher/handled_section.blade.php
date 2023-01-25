@@ -258,6 +258,71 @@
       </div>
     </div>
   </div>
+
+
+  <div class="modal fade bd-example " id="uploadExamModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Upload Exam</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="uploadExamForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject" readonly>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Exam Description</label>
+            <input type="text" class="form-control" id="examDesc" name="examDesc" required>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
+            <div class="input-group">
+              <input type="file" class="form-control" id="exam_file" name="exam_file" aria-describedby="upload-exam" aria-label="upload" required>
+              
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Total Points</label>
+            <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
+          </div>
+          <div class="mb-3">
+            <label for="lesson" class="form-label">Points Each Item</label>
+            <input type="number" class="form-control" id="pointsEach" name="pointsEach" >
+          </div>
+          {{-- <div class="mb-3">
+            <label for="grade" class="form-label">Select Quiz Type</label>
+            <select type="text" class="form-control" id="quizType" name="quizType" >
+              <option value="multiple">Multiple Choice</option>
+              <option value="identify">Identification</option>
+              <option value="enumeration">Enumeration</option>
+            </select>
+          </div> --}}
+          
+          <div class="mb-3">
+            <label for="endDateInput" class="form-label">End Date</label>
+            <div class="input-group log-event" id="exam_endDate" data-td-target-input="nearest" data-td-target-toggle="nearest">
+              <input id="endDateInput" name="endDate" type="text" class="form-control" data-td-target="#exam_endDate" readonly required>
+              <span class="input-group-text" data-td-target="#exam_endDate" data-td-toggle="datetimepicker">
+                <i class="fas fa-calendar"></i>
+              </span>
+            </div>
+            {{-- <label for="lesson" class="form-label">Select End Date</label>
+            <input type="text" class="form-control" id="endDate" name="subject" readonly> --}}
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 <script>
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
@@ -403,6 +468,9 @@
     const picker= new datetimepicker(document.getElementById('endDate'));
     picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
+    const picker2= new datetimepicker(document.getElementById('exam_endDate'));
+    picker2.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
+
    
     $('#sectionSubjects tbody').on('click', '.quiz-btn', function(){
       var data = sectionSubjects.row($(this).parents('tr')).data();
@@ -412,6 +480,16 @@
       console.log($("#subject").data("subjectCode"));
       
       $("#uploadQuizModal").modal("show");
+    })
+
+    $('#sectionSubjects tbody').on('click', '.exam-btn', function(){
+      var data = sectionSubjects.row($(this).parents('tr')).data();
+     
+      $("#uploadExamForm #subject").data("subjectCode",data.subj_code);
+      $("#uploadExamForm #subject").val(data.subj_desc);
+      // console.log($("#subject").data("subjectCode"));
+      
+      $("#uploadExamModal").modal("show");
     })
 
 
@@ -566,6 +644,58 @@
       })
   });
 
+  $("#uploadExamForm").submit((e)=>{
+      e.preventDefault();
+      var subjCode =$("#uploadExamForm #subject").data("subjectCode");
+      var form = $("#uploadExamForm");
+      var formData = new FormData(form[0]);
+      formData.append("subj_code", subjCode);
+      formData.append("section_code", sectionCode);
+
+      swal.fire({
+        title: 'You are uploading new Exam?',
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url:baseUrl+"/api/teacher/upload/exam",
+            type:"POST",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data:formData,
+            success:(res)=>{
+              console.log(res);
+              if(res){
+                swal.fire({
+                  icon:'success',
+                  title: 'Upload Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                $("#uploadExamModal").modal("hide");
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      })
+  });
     
 
 });

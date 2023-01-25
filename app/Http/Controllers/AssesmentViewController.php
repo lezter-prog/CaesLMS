@@ -125,5 +125,82 @@ class AssesmentViewController extends Controller
         ->with("assessmentAnswers",$answers)
         ->with('assesmentDetails',$asessmentArray);
     }
+
+    public function assessment(Request $request){
+        $id =  Auth::id();
+        $asessmentMultiple=[];
+        $asessmentIdentification=[];
+        $answers=DB::table('assesment_details')
+                    ->select('answer')
+                    ->where([
+                        ['assesment_id',$request->assesmentId],
+                        ['test_type','=','identify']
+                    ])->inRandomOrder()->get();
+        $assesment =DB::table('assesment_details')
+                    ->where([
+                        ['assesment_id',$request->assesmentId]
+                    ])->get();
+                        
+        $assesmentHeader =DB::table('assesment_header')
+                    ->where('assesment_id',$request->assesmentId)->first();           
+
+        Log::info("Assesment:".json_encode($assesment));
+
+        foreach($assesment as $ass){
+           
+            if($ass->test_type == "multiple"){
+                $tempAnswer =DB::table('student_assessment_answer_tmp')
+                ->select('answer')
+                ->where([
+                    ['student_id','=',Auth::id()],
+                    ['assesment_id','=',$request->assesmentId],
+                    ['test_type','=','multiple'],
+                    ['number','=',$ass->number]
+                ])->first();
+                $ass->choiceAChecked="";
+                $ass->choiceBChecked="";
+                $ass->choiceCChecked="";
+                $ass->choiceDChecked="";
+                if($tempAnswer !=null){
+                    if($tempAnswer->answer == $ass->choice_A){
+                        $ass->choiceAChecked = "checked";
+                    }else if($tempAnswer->answer == $ass->choice_B){
+                        $ass->choiceBChecked = "checked";
+                    }else if($tempAnswer->answer == $ass->choice_C){
+                        $ass->choiceCChecked = "checked";
+                    }else if($tempAnswer->answer == $ass->choice_D){
+                        $ass->choiceDChecked = "checked";
+                    }
+                   
+                }
+                array_push($asessmentMultiple,$ass);
+
+            }else if($ass->test_type == "identify"){
+                $tempAnswer =DB::table('student_assessment_answer_tmp')
+                ->select('answer')
+                ->where([
+                    ['student_id','=',Auth::id()],
+                    ['assesment_id','=',$request->assesmentId],
+                    ['test_type','=','identify'],
+                    ['number','=',$ass->number]
+                ])->first();
+                $ass->initialAnswer="";
+                if($tempAnswer !=null){
+                    $ass->initialAnswer = $tempAnswer->answer;
+                }
+                array_push($asessmentIdentification,$ass);
+            }
+        Log::info("assessmentDetail:".json_encode($ass));
+        }
+        
+        return view('assesment/exam')
+        ->with('assesmentId',$request->assesmentId)
+        ->with('pointsEach',$assesmentHeader->points_each)
+        ->with("sectionCode",$assesmentHeader->section_code)
+        ->with("subjCode",$assesmentHeader->subj_code)
+        ->with("assessmentAnswers",$answers)
+        ->with("multipleChoice",$asessmentMultiple)
+        ->with('identification',$asessmentIdentification);
+    }
     
 }

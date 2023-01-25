@@ -32,6 +32,9 @@
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="true">Activity</button>
       </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="exam-tab" data-bs-toggle="tab" data-bs-target="#exam" type="button" role="tab" aria-controls="exam" aria-selected="true">Exam</button>
+      </li>
     </ul>
 
     <div class="tab-content" id="SubjectTabContent">
@@ -126,6 +129,37 @@
         </div>
     </div>
   </div>
+  <div class="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="exam-tab">
+    <div class="row">
+      <div class="col-lg-6 col-sm-12 pe-3">
+        <table id ="examTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
+          <thead>
+            <tr>
+                <th>Exams</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
+          <div class="card-header " style="background-color: #516a8a; color:white;">
+            Details
+          </div>
+          <div class="card-body">
+            <div class="row ">
+              <div class="col-12 text-center" id="chartExams">
+                
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
 
   </div>
 </div>
@@ -350,10 +384,84 @@
         },
     });
 
+
+    var examTable= $('#examTable').DataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+      "bFilter": true,
+      "ordering":false,
+      "searching": false,
+      "bInfo": false,
+      "bAutoWidth": false,
+      "sAjaxSource": baseUrl+"/api/exam/get/"+sectionCode+"/"+subjectCode,
+      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+        console.log("ajaxSRC: "+sSource);
+          oSettings.jqXHR = 
+          $.ajax({
+            "dataType": 'json',
+            "type": "GET",
+            "url": sSource,
+            "data":{
+              "quarterCode":currentQuarter
+            },
+            "beforeSend": function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+            "success": fnCallback
+          });
+        },
+        "columns":[
+        { "data":"assesment_desc",
+          "render":function(data, type, row, meta ){
+            console.log(row);
+            var quizType ='';
+            var disabled="";
+            var status='';
+            var takingStatus='';
+            if(row.isTaken){
+               disabled ="disabled";
+               takingStatus='<span class="badge text-bg-success">DONE</span> ';
+            }else{
+               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
+
+            }
+
+            if(row.status="ACTIVE")
+              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
+            else
+              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+            
+            if(row.test_type == "multiple"){
+              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+            }else if(row.test_type == "identify"){
+              quizType='<span class="badge text-bg-primary">Identification</span>';
+            }
+
+            
+
+                  var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
+                  var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
+                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
+                  var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
+                  return html+take+quiz+exam+'</div>';
+          }
+        }
+      ],
+      "columnDefs":[
+       
+
+      ],
+      "fnDrawCallback": function() {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+        },
+    });
+
     $('#quarter').on('change', function(){
       currentQuarter=$(this).val();
       studentLesson.ajax.reload();
       quizTable.ajax.reload();
+      examTable.ajax.reload();
 
     });
     
@@ -412,6 +520,26 @@
             window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
           }else if(data.test_type=="identify"){
             window.location.href = "/assesment/identify?assesmentId="+data.assesment_id;
+          }
+        }
+      });
+    });
+
+    $('#examTable tbody').on('click', '.take-btn', function(){
+      var data = examTable.row($(this).parents('tr')).data();
+      console.log(data);
+     
+      swal.fire({
+        icon:'warning',
+        title: 'Are you ready to take this exam?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.close();
+
+          if(data.test_type=="exam"){
+            window.location.href = "/assesment/exam?assesmentId="+data.assesment_id;
           }
         }
       });
