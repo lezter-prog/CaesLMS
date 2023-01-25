@@ -503,6 +503,8 @@ class UtilDB extends Controller
 
     public function tempAnswer(Request $request){
 
+        Log::info("Request:".json_encode($request->all()));
+
         $count=DB::table('student_assessment_answer_tmp')
             ->where([
                 ['student_id','=',Auth::id()],
@@ -563,7 +565,9 @@ class UtilDB extends Controller
                 'student_id'=>Auth::id(),
                 'assesment_id'=>$answer->assesment_id,
                 'number'=>$answer->number,
+                'test_type'=>$answer->test_type,
                 'answer'=>$answer->answer,
+                
             ]);
             if(!$exec){
                 DB::rollBack();
@@ -575,7 +579,8 @@ class UtilDB extends Controller
                 ->where([
                     ['assesment_id','=',$answer->assesment_id],
                     ['number','=',$answer->number],
-                    ['answer','=',$answer->answer]
+                    ['test_type','=',$answer->test_type],
+                    ['answer','=',$answer->answer],
                 ])->first();
             Log::info("answer: ".json_encode($answer));
             Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));

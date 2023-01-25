@@ -102,8 +102,7 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('subject/delete', 'deleteSubject');
     Route::post('section/delete', 'deleteSection');
     Route::get('exam/get/{sectionCode}/{subjCode}', 'getExamsBySectionAndSubject');
-
-
+    Route::post('exam/submit/answer', 'finalAnswer');
 });
 
 Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){
