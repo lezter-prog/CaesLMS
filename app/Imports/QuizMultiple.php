@@ -37,7 +37,7 @@ class QuizMultiple implements ToModel, WithHeadingRow
             'choice_B'=>$row['2nd_choice'],
             'choice_C'=>$row['3rd_choice'],
             'choice_D'=>$row['4th_choice'],
-            'answer'=>$row['key_answer'],
+            'answer'=>$row['key_answer'],   
             'test_type'=> $this->testType,
         ]);
 

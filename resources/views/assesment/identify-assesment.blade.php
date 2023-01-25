@@ -30,7 +30,7 @@
   <div class="row text-start pb-4">
     <h6>{{$ass->number}}. {{$ass->question}}</h6>
     <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-     <input type="text" class="form-control input-sm" name="question{{$ass->number}}" value="{{$ass->initialAnswer}}" data-number="{{$ass->number}}">
+     <input type="text" class="form-control input-sm" name="question{{$ass->number}}" value="{{$ass->initialAnswer}}" data-number="{{$ass->number}}" data-test-type="identify">
     </div>
   </div>
   @endforeach
@@ -92,6 +92,7 @@
             data:{
               "answer":$(this).val(),
               "number":$(this).data('number'),
+              "testType":$(this).data('test-type'),
               "assesmentId":assesmentId
             },
             success:(res)=>{

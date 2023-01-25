@@ -101,6 +101,8 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('student/delete', 'deleteStudent');
     Route::post('subject/delete', 'deleteSubject');
     Route::post('section/delete', 'deleteSection');
+    Route::get('exam/get/{sectionCode}/{subjCode}', 'getExamsBySectionAndSubject');
+
 
 });
 
@@ -112,6 +114,7 @@ Route::middleware('auth:sanctum')->controller(AssessmentController::class)->grou
 Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){
 
     Route::post('teacher/upload/quiz','uploadQuiz');
+    Route::post('teacher/upload/exam','uploadExam');
     Route::get('lesson/download/{lessonIdl}','downloadLesson');
 });
 

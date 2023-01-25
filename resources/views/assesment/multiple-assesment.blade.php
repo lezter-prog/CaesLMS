@@ -22,10 +22,10 @@
   <div class="row text-start">
     <h6>{{$ass->number}}. {{$ass->question}}</h6>
     <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-      <h6><input  type="radio" {{$ass->choiceAChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_A}}" > <span class="pointer" id="choiceA" >A.</span>  {{$ass->choice_A}} </h6>
-      <h6><input  type="radio" {{$ass->choiceBChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_B}}" > <span class="pointer" id="choiceB" >B.</span>  {{$ass->choice_B}} </h6>
-      <h6><input  type="radio" {{$ass->choiceCChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_C}}" > <span class="pointer" id="choiceC" >C.</span>   {{$ass->choice_C}} </h6>
-      <h6><input  type="radio" {{$ass->choiceDChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_D}}" > <span class="pointer" id="choiceD" >D.</span>   {{$ass->choice_D}} </h6>
+      <h6><input  type="radio" {{$ass->choiceAChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_A}}" > <span class="pointer" id="choiceA" >A.</span>  {{$ass->choice_A}} </h6>
+      <h6><input  type="radio" {{$ass->choiceBChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_B}}" > <span class="pointer" id="choiceB" >B.</span>  {{$ass->choice_B}} </h6>
+      <h6><input  type="radio" {{$ass->choiceCChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_C}}" > <span class="pointer" id="choiceC" >C.</span>   {{$ass->choice_C}} </h6>
+      <h6><input  type="radio" {{$ass->choiceDChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_D}}" > <span class="pointer" id="choiceD" >D.</span>   {{$ass->choice_D}} </h6>
     </div>
   </div>
   @endforeach

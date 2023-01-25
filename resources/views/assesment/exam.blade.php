@@ -15,50 +15,47 @@
   <h6>Quiz1-Subject</h6>
   <h6>2022-2023</h6>
 </div>
-@if ($testType === 'identify')
-    <div class="row" style="padding:5px; border:1px solid gray;border-radius:10px">
-    @foreach ($assessmentAnswers as $answers)
-    <div class="col-3 " style="margin-left: 15px;">
-        <h6>{{$answers->answer}}</h6>
-    </div>
-    @endforeach
 
-    </div>
-    
-    <div class="row text-start">
-        <h6> <strong>Identify the correct answer from above.</strong></h6>
-    </div>
-    @foreach ($assesmentDetails as $ass)
-    <div class="row text-start pb-4">
-        <h6>{{$ass->number}}. {{$ass->question}}</h6>
-        <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-        <input type="text" class="form-control input-sm" name="question{{$ass->number}}" value="{{$ass->initialAnswer}}" data-number="{{$ass->number}}">
-        </div>
-    </div>
-    @endforeach
-    <div class="row" style="margin-top:10px">
-        <div class="col-12 text-center">
-        <button class="btn btn-primary btn-sm" type="submit">Submit</button>
-        </div>
-    </div>
-@endIf
-@If($testType === 'multiple')
+  @if(count($multipleChoice) >0)
     <div class="row text-start">
       <h6> <strong>Choose the letter of the correct answer</strong></h6>
     </div>
-    @foreach ($assesmentDetails as $ass)
+    @foreach ($multipleChoice as $ass)
     <div class="row text-start">
       <h6>{{$ass->number}}. {{$ass->question}}</h6>
       <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-        <h6><input  type="radio" {{$ass->choiceAChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_A}}" > <span class="pointer" id="choiceA" >A.</span>  {{$ass->choice_A}} </h6>
-        <h6><input  type="radio" {{$ass->choiceBChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_B}}" > <span class="pointer" id="choiceB" >B.</span>  {{$ass->choice_B}} </h6>
-        <h6><input  type="radio" {{$ass->choiceCChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_C}}" > <span class="pointer" id="choiceC" >C.</span>   {{$ass->choice_C}} </h6>
-        <h6><input  type="radio" {{$ass->choiceDChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}"  value="{{$ass->choice_D}}" > <span class="pointer" id="choiceD" >D.</span>   {{$ass->choice_D}} </h6>
+        <h6><input  type="radio" {{$ass->choiceAChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_A}}" > <span class="pointer" id="choiceA" >A.</span>  {{$ass->choice_A}} </h6>
+        <h6><input  type="radio" {{$ass->choiceBChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_B}}" > <span class="pointer" id="choiceB" >B.</span>  {{$ass->choice_B}} </h6>
+        <h6><input  type="radio" {{$ass->choiceCChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_C}}" > <span class="pointer" id="choiceC" >C.</span>   {{$ass->choice_C}} </h6>
+        <h6><input  type="radio" {{$ass->choiceDChecked}} name="question{{$ass->number}}" data-number="{{$ass->number}}" data-test-type="multiple" value="{{$ass->choice_D}}" > <span class="pointer" id="choiceD" >D.</span>   {{$ass->choice_D}} </h6>
       </div>
     </div>
     @endforeach
+  @endif
+  
+  @if(count($identification) >0)
+    <div class="row" style="padding:5px; border:1px solid gray;border-radius:10px">
+      @foreach ($assessmentAnswers as $answers)
+      <div class="col-3 " style="margin-left: 15px;">
+          <h6>{{$answers->answer}}</h6>
+      </div>
+      @endforeach
+  
+    </div>
+      
+    <div class="row text-start">
+        <h6> <strong>Identify the correct answer from above.</strong></h6>
+    </div>
+      @foreach ($identification as $ass)
+      <div class="row text-start pb-4">
+          <h6>{{$ass->number}}. {{$ass->question}}</h6>
+          <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
+          <input type="text" class="form-control input-sm" name="question{{$ass->number}}" data-test-type="identify" value="{{$ass->initialAnswer}}" data-number="{{$ass->number}}">
+          </div>
+      </div>
+      @endforeach
+  @endif
    
-@endIf
   <div class="row">
     <div class="col-12 text-center">
       <button class="btn btn-primary btn-sm" type="submit">Submit</button>
@@ -105,6 +102,43 @@
 
   $(document).ready(function(){
     var assesmentId ={{ Js::from($assesmentId) }};
+
+    $('input').iCheck({
+      handle: 'radio',
+      radioClass: 'iradio_square-blue '
+    });
+
+    $('input').on('ifChecked', function(event){
+      console.log($(this).val())
+      console.log($(this).data('number'))
+      
+      $.ajax({
+            url:baseUrl+"/api/quiz/save/temp",
+            type:"POST",
+            data:{
+              "answer":$(this).val(),
+              "number":$(this).data('number'),
+              "testType":$(this).data('test-type'),
+              "assesmentId":assesmentId
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res){
+
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+      
+    });
     
     $('input').on('keyup', function(event){
       console.log($(this).val())
@@ -116,6 +150,7 @@
             data:{
               "answer":$(this).val(),
               "number":$(this).data('number'),
+              "testType":$(this).data('test-type'),
               "assesmentId":assesmentId
             },
             success:(res)=>{
@@ -137,7 +172,7 @@
       
     });
 
-    $("#identicationAssesment").submit(function(e){
+    $("#examForm").submit(function(e){
       e.preventDefault();
 
       swal.fire({

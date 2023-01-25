@@ -30,8 +30,8 @@ class ExamImport implements WithMultipleSheets, SkipsUnknownSheets
     public function sheets(): array
     {
         return [
-            'Multiple Choice' => new QuizMultiple(),
-            'Identification' => new SecondSheetImport(),
+            'Multiple Choice' => new QuizMultiple($this->assId,'multiple'),
+            'Identification' => new QuizIdentification($this->assId,'identify')
         ];
     }
     
