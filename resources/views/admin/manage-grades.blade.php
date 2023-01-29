@@ -18,7 +18,7 @@
         <tr>
             <th> Grade Code</th>
             <th> Grade Description</th>
-            <th>School Year</th>
+          
         </tr>
       </thead>
       <tbody>

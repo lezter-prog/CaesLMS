@@ -87,25 +87,25 @@
                         
 
                         <a href="/admin/home" class="{{ $adminHome }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-id-card fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-id-card fa-fw icon-bg-color fa-2x"></i></span> 
                                 <span>CAES Profile</span>
                         </a>
                         
 
                         <a href="/admin/teacher" class=" {{ $adminTeacher }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-user-tie fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-user-tie fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Teachers</span>
                         </a>
                         <a href="/admin/sections" class="{{ $adminSections }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-puzzle-piece fa-fw fa-lg icon-bg-color"></i></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-puzzle-piece fa-fw icon-bg-color fa-2x"></i></i></span> 
                                 <span>Sections</span>
                         </a>
                         <a href="/admin/subjects" class="{{ $adminSubjects }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-swatchbook fa-fw fa-lg icon-bg-color"></i></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-swatchbook fa-fw  icon-bg-color fa-2x"></i></i></span> 
                                 <span>Subjects</span>
                         </a>
                         <a href="/admin/students" class="{{ $adminStudent }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-user-group fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-user-group fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Students</span>
                         </a>
                         {{-- <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
@@ -113,19 +113,19 @@
                                 <span>Subjects / Grade</span>
                         </a> --}}
                         <a href="/admin/announcement" class="{{ $adminAnnouncement }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-bullhorn fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-bullhorn fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Announcement</span>
                         </a>
                         <a href="/admin/quarter" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-bars-progress fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Quarters</span>
                         </a>
                         <a href="/admin/grades" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-clipboard-user fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Grades</span>
                         </a>
                         <a href="/admin/icons" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-bars fa-fw fa-lg icon-bg-color"></i></span> 
+                            <span class ="me-3"><i class="fa-solid fa-icons  fa-fw icon-bg-color  fa-2x"></i></span> 
                                 <span>Icons</span>
                         </a>
                         
