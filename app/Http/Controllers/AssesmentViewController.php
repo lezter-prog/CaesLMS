@@ -79,6 +79,63 @@ class AssesmentViewController extends Controller
         ->with('assesmentDetails',$asessmentArray);
     }
 
+    public function assesmentEnumeration(Request $request){
+
+        $id =  Auth::id();
+        $asessmentArray=[];
+        $assesment =DB::table('assesment_details')
+                    ->where([
+                        ['assesment_id',$request->assesmentId]
+                    ])->get();  
+        $assesmentHeader =DB::table('assesment_header')
+                    ->where('assesment_id',$request->assesmentId)->first();           
+
+        Log::info("Assesment:".json_encode($assesment));
+
+        foreach($assesment as $ass){
+            $tempAnswer =DB::table('student_assessment_answer_tmp')
+                ->select('json_answer')
+                ->where([
+                    ['student_id','=',Auth::id()],
+                    ['assesment_id','=',$request->assesmentId],
+                    ['number','=',$ass->number]
+                ])->first();
+            
+            $curAnswer =[];
+            if($tempAnswer !=null){
+                Log::info("TempAnswer:".json_encode($tempAnswer));
+                $curAnswer= json_decode($tempAnswer->json_answer);
+                
+            }
+           
+            $ass->json_choices  =json_decode($ass->json_choices);
+            $arrayChoices = [];
+            foreach($ass->json_choices as $object){
+                $obj = (object)[];
+                if (in_array($object, $curAnswer)) {
+                    $obj->selected ="selected";
+                    $obj->value =$object;
+                }else{
+                    $obj->selected ="";
+                    $obj->value =$object;
+                }
+                array_push($arrayChoices,$obj);
+            }
+            $ass->json_choices =$arrayChoices;
+            
+        Log::info("Choices:".json_encode($arrayChoices));
+        Log::info("assessmentDetail:".json_encode($ass));
+        array_push($asessmentArray,$ass);
+        }
+        
+        return view('assesment/enumeration')
+        ->with('assesmentId',$request->assesmentId)
+        ->with('pointsEach',$assesmentHeader->points_each)
+        ->with("sectionCode",$assesmentHeader->section_code)
+        ->with("subjCode",$assesmentHeader->subj_code)
+        ->with('assesmentDetails',$asessmentArray);
+    }
+
     public function assessmentIdentify(Request $request){
         $id =  Auth::id();
         $asessmentArray=[];

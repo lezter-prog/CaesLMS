@@ -89,8 +89,10 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('teacher/section/subjects', 'saveTeacherSectionSubjects');
     Route::get('teacher/section/subjects', 'getTeacherHandledSubjects2');
     Route::get('quiz/get/{sectionCode}/{subjCode}', 'getQuizBySectionAndSubject');
+    Route::get('quiz/get/all', 'getAssessments');
     Route::get('quiz/get/temp/answers', 'getTempAnswer');
     Route::post('quiz/save/temp', 'tempAnswer');
+    Route::post('quiz/save/temp/enumerate', 'tempAnswerEnumeration');
     Route::post('quiz/submit/answer', 'finalAnswer');
     Route::get('activity/get/{sectionCode}/{subjCode}', 'getActivityBySectionAndSubject');
     Route::get('icons/get/select2', 'select2Icons');
@@ -103,6 +105,7 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('section/delete', 'deleteSection');
     Route::get('exam/get/{sectionCode}/{subjCode}', 'getExamsBySectionAndSubject');
     Route::post('exam/submit/answer', 'finalAnswer');
+    
 });
 
 Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){

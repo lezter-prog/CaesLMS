@@ -75,7 +75,7 @@
                 <!-- Notification dropdown -->
                
                 {{-- <li class="nav-item">{{ Auth::user() }}</li> --}}
-                <li class="nav-item dropdown">
+                {{-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
                         <span class="badge rounded-pill badge-notification bg-danger">1</span>
@@ -85,7 +85,7 @@
                       <li><a class="dropdown-item" href="#">Another action</a></li>
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <!-- Icon dropdown -->
                 <li class="nav-item dropdown">

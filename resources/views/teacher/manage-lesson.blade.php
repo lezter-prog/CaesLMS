@@ -4,7 +4,15 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
   <h1 class="h2">Lesson</h1>
   
+ 
   <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <select class="form-select js-data-example-ajax" id="quarter" aria-label="Default select example">
+        @foreach ($quarters as $quarter)
+        <option value="{{$quarter->quarter_code}}" @if ($quarter->status === 'ACTIVE') selected @endif >{{$quarter->quarter_desc}}</option>
+        @endforeach
+      </select>
+    </div>
     
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -41,12 +49,14 @@
 
   $(document).ready(function(){
    var sectionCode="";
+   var currentQuarter =$("#quarter").val();
    var lessonTable= $('#lessonTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
+      responsive: true,
       "sAjaxSource": baseUrl+"/api/lesson/get/all",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
@@ -56,6 +66,9 @@
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
+            "data":{
+              "quarter":currentQuarter
+            },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
             },
@@ -74,6 +87,12 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
 
         },
+    });
+
+    $('#quarter').on('change', function(){
+      currentQuarter=$(this).val();
+      lessonTable.ajax.reload();
+
     });
 
       

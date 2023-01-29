@@ -26,6 +26,7 @@ Route::get('/student/handled/subject', [App\Http\Controllers\StudentViewControll
 
 
 // Assesment
+Route::get('/assesment/enumeration', [App\Http\Controllers\AssesmentViewController::class, 'assesmentEnumeration'])->name('assesment/enumeration');
 Route::get('/assesment/multiple', [App\Http\Controllers\AssesmentViewController::class, 'assesmentMultiple'])->name('assesment/multiple');
 Route::get('/assesment/identify', [App\Http\Controllers\AssesmentViewController::class, 'assessmentIdentify'])->name('assesment/identify');
 Route::get('/assesment/exam', [App\Http\Controllers\AssesmentViewController::class, 'assessment'])->name('assesment/exam');
