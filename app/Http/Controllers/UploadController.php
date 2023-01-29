@@ -53,12 +53,12 @@ class UploadController extends Controller
         $user = DB::table("assesment_header")->insert([
             "assesment_id"=>"ASS".$assesmentId,
             "assesment_desc"=>$request->quizDesc,
-            "assesment_type"=>"quiz",
+            "assesment_type"=>$request->assessmentType,
             "test_type"=>$request->quizType,
             "total_points"=>$request->totalPoints,
             "points_each"=>$request->pointsEach,
             "filename"=>$filenameWithExt,
-            // "deadline"=>$endDate->format('Y-m-d H:i:s'),
+            "deadline"=>$endDate->format('Y-m-d H:i:s'),
             "subj_code"=>$request->subj_code,
             "section_code"=>$request->section_code,
             "quarter_period"=>$quarter->quarter_code,
@@ -144,8 +144,6 @@ class UploadController extends Controller
        $lesson= DB::table('lesson')->where('id',$lessonId)->first();
 
         return Storage::url('public/lessons/'.$lesson->file);
-
-
     }
     
 }

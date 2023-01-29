@@ -199,7 +199,7 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="grade" class="form-label">Select if Activity</label>
-            <select type="text" class="form-control" id="quizType" name="quizType" >
+            <select type="text" class="form-control" id="assessmentType" name="assessmentType" >
               <option  value="quiz">Quiz</option>
               <option value="activity">Activity</option>
             </select>

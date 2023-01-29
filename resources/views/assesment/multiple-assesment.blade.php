@@ -92,6 +92,7 @@
             data:{
               "answer":$(this).val(),
               "number":$(this).data('number'),
+              "testType":$(this).data('test-type'),
               "assesmentId":assesmentId
             },
             success:(res)=>{
