@@ -20,7 +20,8 @@ class AssesmentDetails extends Model
             'choice_B',
             'choice_C',
             'choice_D',
-            'answer'
+            'answer',
+            'test_type'
     ];
 
    
