@@ -38,6 +38,7 @@ class TeacherViewController extends Controller
         ->with('sectionCode', $request->s_code)
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
+        ->with('teacherActivity',"")
         ->with('sections', $section);
     }
 
@@ -48,6 +49,7 @@ class TeacherViewController extends Controller
         ->with('adminTeacher', "")
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
+        ->with('teacherActivity',"")
         ->with('adminSections', "active");
     }
     
@@ -60,6 +62,7 @@ class TeacherViewController extends Controller
         // ->with('sections', $section)
         ->with('teacherLesson',"")
         ->with('teacherQuiz',"")
+        ->with('teacherActivity',"")
         ->with('teacherAnnouncement',"active");
         }
 
@@ -70,7 +73,20 @@ class TeacherViewController extends Controller
             ->with('teacherDashboard',"")
             // ->with('sections', $section)
             ->with('teacherAnnouncement',"")
+            ->with('teacherActivity',"")
             ->with('teacherLesson',"active");
             }
+
+            public function manage_activity()
+            {
+               
+                return view('teacher/manage-activity')
+                ->with('teacherDashboard',"")
+                // ->with('sections', $section)
+                ->with('teacherAnnouncement',"")
+                ->with('teacherActivity',"activity")
+                ->with('teacherLesson',"");
+                }    
+
     
 }

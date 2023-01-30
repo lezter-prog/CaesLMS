@@ -53,6 +53,14 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Lessons</span>
                         </a>
+                        <a href="/teacher/lesson" class="{{$teacherActivity}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Activity</span>
+                        </a>
+                        <a href="/teacher/exam" class="{{$teacherExam}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Exam</span>
+                        </a>
                     @endif
 
                     @if ( Auth::user()->role == "R1")
@@ -158,17 +166,7 @@
                 <!-- Notification dropdown -->
                
                 {{-- <li class="nav-item">{{ Auth::user() }}</li> --}}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
+            
 
                 <!-- Icon dropdown -->
                 <li class="nav-item dropdown">
