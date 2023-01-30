@@ -15,26 +15,28 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 
 
-class QuizIdentification implements ToModel, WithHeadingRow
+class Enumeration implements ToModel, WithHeadingRow
 {
 
-    public function __construct($assId,$testType)
+    public function __construct($assId)
     {
         $this->assId = $assId; 
-        $this->testType = $testType; 
     }
     public function model(array $row)
     {
-        
-
         Log::info("rows :".print_r($row, true));
-       
+        $jsonChoices =explode(',',$row['choices']);
+        $jsonAnswer=explode(',',$row['key_answer']);
+
+        Log::info("jsonChoices :".print_r($jsonChoices, true));
+        Log::info("jsonAnswer :".print_r($jsonAnswer, true));
         $insert=AssesmentDetails::create([
             'assesment_id'=>"ASS".$this->assId,
             'number'=>$row['number'],
             'question'=>$row['question'],
-            'answer'=>$row['key_answer'],
-            'test_type'=> $this->testType,
+            'test_type'=> 'enumerate',
+            'json_choices'=>json_encode($jsonChoices),
+            'json_answer'=>json_encode($jsonAnswer),
             'points_each'=>$row['points_each']
         ]);
 

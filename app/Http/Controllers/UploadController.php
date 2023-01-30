@@ -8,6 +8,7 @@ use App\Repository\SubjectService;
 use App\Imports\QuizMultiple;
 use App\Imports\QuizIdentification;
 use App\Imports\ExamImport;
+use App\Imports\Enumeration;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -56,7 +57,6 @@ class UploadController extends Controller
             "assesment_type"=>$request->assessmentType,
             "test_type"=>$request->quizType,
             "total_points"=>$request->totalPoints,
-            "points_each"=>$request->pointsEach,
             "filename"=>$filenameWithExt,
             "deadline"=>$endDate->format('Y-m-d H:i:s'),
             "subj_code"=>$request->subj_code,
@@ -76,6 +76,11 @@ class UploadController extends Controller
                 }
             }else if($request->quizType=="identify"){
                 $excel = Excel::import(new QuizIdentification($assesmentId,$request->quizType), $file);
+                if(!$excel){
+                    DB::rollBack();
+                }
+            }else if($request->quizType=="enumerate"){
+                $excel = Excel::import(new Enumeration($assesmentId), $file);
                 if(!$excel){
                     DB::rollBack();
                 }

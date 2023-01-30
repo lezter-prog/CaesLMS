@@ -39,6 +39,7 @@ class QuizMultiple implements ToModel, WithHeadingRow
             'choice_D'=>$row['4th_choice'],
             'answer'=>$row['key_answer'],   
             'test_type'=> $this->testType,
+            'points_each'=>$row['points_each']
         ]);
 
         Log::info("insert status: ".$insert);

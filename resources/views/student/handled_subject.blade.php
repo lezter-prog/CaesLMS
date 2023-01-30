@@ -40,7 +40,7 @@
     <div class="tab-content" id="SubjectTabContent">
       <div class="tab-pane fade show active pt-10" id="lessons" role="tabpanel" aria-labelledby="lessons-tab" style="padding-top: 20px;">
         <div class="row">
-            <div class="col-6 pe-3">
+            <div class="col-12 pe-3">
               <table id ="studentLesson"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
                 <thead>
                   <tr>
@@ -52,24 +52,23 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-6">
+            {{-- <div class="col-6">
               <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
                 <div class="card-header " style="background-color: #516a8a; color:white">
                   Details
                 </div>
                 <div class="card-body">
-                  {{-- <h5 class="card-title">Special title treatment</h5>
+                  <h5 class="card-title">Special title treatment</h5>
                   <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
               </div>
-            </div>
+            </div> --}}
         </div>
-        
       </div>
       <div class="tab-pane fade" id="quiz" role="tabpanel" aria-labelledby="quiz-tab">
         <div class="row">
-          <div class="col-lg-6 col-sm-12 pe-3">
+          <div class="col-lg-12 col-sm-12 pe-3">
             <table id ="quizTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
               <thead>
                 <tr>
@@ -81,7 +80,7 @@
               </tbody>
             </table>
           </div>
-          <div class="col-lg-6 col-sm-12">
+          {{-- <div class="col-lg-6 col-sm-12">
             <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
               <div class="card-header " style="background-color: #516a8a; color:white;">
                 Details
@@ -95,12 +94,12 @@
                 
               </div>
             </div>
-          </div>
+          </div> --}}
       </div>
     </div>
     <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
       <div class="row">
-        <div class="col-lg-6 col-sm-12 pe-3">
+        <div class="col-lg-12 col-sm-12 pe-3">
           <table id ="activityTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
             <thead>
               <tr>
@@ -112,7 +111,7 @@
             </tbody>
           </table>
         </div>
-        <div class="col-lg-6 col-sm-12">
+        {{-- <div class="col-lg-6 col-sm-12">
           <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
             <div class="card-header " style="background-color: #516a8a; color:white;">
               Details
@@ -126,12 +125,12 @@
               
             </div>
           </div>
-        </div>
+        </div> --}}
     </div>
   </div>
   <div class="tab-pane fade" id="exam" role="tabpanel" aria-labelledby="exam-tab">
     <div class="row">
-      <div class="col-lg-6 col-sm-12 pe-3">
+      <div class="col-lg-12 col-sm-12 pe-3">
         <table id ="examTable"  class="table table-striped" style="width:100%;box-shadow: #4c4c4c 0px 4px 12px">
           <thead>
             <tr>
@@ -143,7 +142,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-6 col-sm-12">
+      {{-- <div class="col-lg-12 col-sm-12">
         <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
           <div class="card-header " style="background-color: #516a8a; color:white;">
             Details
@@ -157,7 +156,7 @@
             
           </div>
         </div>
-      </div>
+      </div> --}}
   </div>
 </div>
 
@@ -166,7 +165,28 @@
 
 {{-- Modals --}}
 
- 
+<div class="modal fade" id="scoreChartModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scoreChartTitle"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row ">
+          <div class="col-12 text-center" id="scoreChart">
+            
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -293,6 +313,8 @@
               quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
               quizType='<span class="badge text-bg-primary">Identification</span>';
+            }else if(row.test_type == "enumerate"){
+              quizType='<span class="badge text-bg-primary">Enumeration</span>';
             }
 
             
@@ -368,9 +390,8 @@
 
                   var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
                   var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
-                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
                   var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
-                  return html+take+quiz+exam+'</div>';
+                  return html+take+exam+'</div>';
           }
         }
       ],
@@ -441,9 +462,8 @@
 
                   var html ='<div class="row"><div class="col-9"><i class="fa-solid fa-pencil"></i> '+data+'<br> '+status+takingStatus+quizType+' <div style="font-size:9px;margin-left:0px;"><strong>Created Date:</strong> '+moment(row.created_at).format('MMM-DD-YYYY h:mm A')+' <strong>End Date:</strong> '+moment(row.deadline).format('MMM-DD-YYYY h:mm A')+'</div></div><div class="col-3 text-end">';
                   var take ='<button '+disabled+' class="btn btn-success btn-sm take-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Take the Quiz"><i class="fa-solid fa-square-pen"></i></button> ';
-                  var quiz ='<button class="btn btn-warning btn-sm quiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Lesson"><i class="fa-solid fa-eye"></i></button> ';
-                  var exam ='<button class="btn btn-info btn-sm view-quiz" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
-                  return html+take+quiz+exam+'</div>';
+                  var exam ='<button class="btn btn-info btn-sm view-exam" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz Details"><i class="fa-solid fa-list-check"></i></button> </div>';
+                  return html+take+exam+'</div>';
           }
         }
       ],
@@ -484,7 +504,8 @@
                             
                           },
                           value: {
-                            show:false
+                            show:false,
+                            fontWeight:5
                           },
                           total:{
                             show:true,
@@ -497,9 +518,11 @@
                   }
             };
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    var chart = new ApexCharts(document.querySelector("#scoreChart"), options);
+    var chartExams = new ApexCharts(document.querySelector("#chartExams"), options);
     
     chart.render();
+    chartExams.render();
     // const picker= new datetimepicker(document.getElementById('endDate'));
     // picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
@@ -520,6 +543,8 @@
             window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
           }else if(data.test_type=="identify"){
             window.location.href = "/assesment/identify?assesmentId="+data.assesment_id;
+          }else if(data.test_type=="enumerate"){
+            window.location.href = "/assesment/enumeration?assesmentId="+data.assesment_id;
           }
         }
       });
@@ -592,6 +617,44 @@
 
     $('#quizTable tbody').on('click', '.view-quiz', function(){
       var data = quizTable.row($(this).parents('tr')).data();
+      var wrongAnswer = (parseInt(data.total_points)-parseInt(data.score));
+      
+      chart.updateOptions({
+        series:[parseInt(data.score),wrongAnswer],
+        plotOptions: {
+                  pie: {
+                    donut: {
+                      labels: {
+                        show: true,
+                        name: {
+                          show:true,
+                          fontSize: "30"
+                        },
+                        value: {
+                          show:true,
+                          offsetY: 10
+                        },
+                        total:{
+                          show:true,
+                          showAlways:true,
+                          // fontSize: "1.050rem",
+                          label:"Total Score",
+                          formatter:function(w){
+                            return parseInt(data.score);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+      });
+      $('#scoreChartTitle').text(data.assesment_desc);
+
+      $('#scoreChartModal').modal('show');
+    });
+
+    $('#examTable tbody').on('click', '.view-exam', function(){
+      var data = examTable.row($(this).parents('tr')).data();
       console.log(data);
       var wrongAnswer = (parseInt(data.total_points)-parseInt(data.score));
       
@@ -603,22 +666,31 @@
                       labels: {
                         show: true,
                         name: {
+                          show:true,
                           fontSize: "30"
                         },
                         value: {
-                          show:false
+                          show:true,
+                          offsetY: 10
                         },
                         total:{
                           show:true,
                           showAlways:true,
-                          fontSize: "30",
-                          label:parseInt(data.score)+" Points",
+                          // fontSize: "1.050rem",
+                          label:"Total Score",
+                          formatter:function(w){
+                            return parseInt(data.score);
+                          }
                         }
                       }
                     }
                   }
                 }
       });
+
+      $('#scoreChartTitle').text(data.assesment_desc);
+
+      $('#scoreChartModal').modal('show');
     });
 
     $('#sectionsTable tbody').on( 'click', 'tr', function () {   

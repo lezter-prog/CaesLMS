@@ -174,14 +174,31 @@ class UtilDB extends Controller
         }
     }
 
-    public function getAllLesson()
+    public function getAllLesson(Request $request)
     {
         $lessons = DB::table('lesson')
         ->join('subjects', 'subjects.subj_code', '=', 'lesson.subj_code')
         ->join('school_sections', 'school_sections.s_code', '=', 'lesson.section_code')
+        ->where('lesson.quarter',$request->quarter)
         ->get();
         return [
             "data" =>  $lessons
+        ];
+    }
+
+    public function getAssessments(Request $request)
+    {
+        $quizez = DB::table('assesment_header')
+        ->join('subjects', 'subjects.subj_code', '=', 'assesment_header.subj_code')
+        ->join('school_sections', 'school_sections.s_code', '=', 'assesment_header.section_code')
+        ->where([
+            ['assesment_header.assesment_type','=',$request->type],
+            ['assesment_header.quarter_period','=',$request->quarter],
+            ['assesment_header.uploaded_by','=',Auth::id()]
+        ])
+        ->get();
+        return [
+            "data" =>  $quizez
         ];
     }
 
@@ -547,6 +564,52 @@ class UtilDB extends Controller
 
     }
 
+    public function tempAnswerEnumeration(Request $request){
+
+        Log::info("Request:".json_encode($request->all()));
+
+        $count=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+                ['number','=',$request->number],
+                ['test_type','=',$request->testType]
+            ])->count();
+
+        if($request->answer==null){
+            $request->answer="";
+        }
+
+        if($count>0){
+            $exec=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+                ['number','=',$request->number],
+                ['test_type','=',$request->testType]
+            ])
+            ->update([
+                'json_answer'=>json_encode($request->answer),
+            ]);
+        }else{
+            $exec=DB::table('student_assessment_answer_tmp')->insert([
+                'student_id'=>Auth::id(),
+                'assesment_id'=>$request->assesmentId,
+                'number'=>$request->number,
+                'test_type'=>$request->testType,
+                'json_answer'=>json_encode($request->answer),
+            ]);
+        }
+
+       
+        if($exec){
+            return true;
+        }else{
+            return null;
+        }
+
+    }
+
     public function finalAnswer(Request $request){
 
         $tempAnswer=DB::table('student_assessment_answer_tmp')
@@ -567,7 +630,7 @@ class UtilDB extends Controller
                 'number'=>$answer->number,
                 'test_type'=>$answer->test_type,
                 'answer'=>$answer->answer,
-                
+                'json_answer'=>$answer->json_answer
             ]);
             if(!$exec){
                 DB::rollBack();
@@ -575,19 +638,19 @@ class UtilDB extends Controller
             }
 
             $getCorrectAnswers =DB::table('assesment_details')
-                ->select('number','answer')
+                ->select('number','answer','points_each')
                 ->where([
                     ['assesment_id','=',$answer->assesment_id],
                     ['number','=',$answer->number],
                     ['test_type','=',$answer->test_type],
                     ['answer','=',$answer->answer],
+                    ['json_answer','=',$answer->json_answer]
                 ])->first();
             Log::info("answer: ".json_encode($answer));
             Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));
             if($getCorrectAnswers!=null){
-                $countScore=$countScore+$request->pointsEach;
-            }
-            
+                $countScore=$countScore+$getCorrectAnswers->points_each;
+            }     
 
        }
        Log::info("PointsEach: ".json_encode($request->pointsEach));
@@ -600,6 +663,17 @@ class UtilDB extends Controller
                         'score'=> $countScore
                     ]);
         if(!$insert){
+            DB::rollBack();
+            return false;
+        }
+
+        $delete=DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',Auth::id()],
+                ['assesment_id','=',$request->assesmentId],
+            ])->delete();
+
+        if(!$delete){
             DB::rollBack();
             return false;
         }

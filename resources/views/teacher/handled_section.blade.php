@@ -5,12 +5,6 @@
   <h1 class="h2">{{ $sections->s_desc}} - {{ $sections->g_code}}</h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
-    
-    
-    {{-- <div class="btn-group me-2">
-      <button type="button" id ="addSectionBtn" class="btn btn-sm btn-outline-primary">Upload</button>
-      <button type="button" id="updateSectionBtn"class="btn btn-sm btn-outline-primary">View</button>
-    </div> --}}
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
     </button>
@@ -225,15 +219,11 @@
             <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
           </div>
           <div class="mb-3">
-            <label for="lesson" class="form-label">Points Each Item</label>
-            <input type="number" class="form-control" id="pointsEach" name="pointsEach" >
-          </div>
-          <div class="mb-3">
             <label for="grade" class="form-label">Select Quiz Type</label>
             <select type="text" class="form-control" id="quizType" name="quizType" >
               <option value="multiple">Multiple Choice</option>
               <option value="identify">Identification</option>
-              <option value="enumeration">Enumeration</option>
+              <option value="enumerate">Enumeration</option>
             </select>
           </div>
           
@@ -288,10 +278,6 @@
           <div class="mb-3">
             <label for="lesson" class="form-label">Total Points</label>
             <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
-          </div>
-          <div class="mb-3">
-            <label for="lesson" class="form-label">Points Each Item</label>
-            <input type="number" class="form-control" id="pointsEach" name="pointsEach" >
           </div>
           {{-- <div class="mb-3">
             <label for="grade" class="form-label">Select Quiz Type</label>

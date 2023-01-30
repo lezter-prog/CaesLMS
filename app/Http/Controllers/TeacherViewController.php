@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SchoolSection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 
 class TeacherViewController extends Controller
@@ -39,6 +40,7 @@ class TeacherViewController extends Controller
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
         ->with('teacherActivity',"")
+        ->with('teacherQuiz',"")
         ->with('sections', $section);
     }
 
@@ -50,6 +52,7 @@ class TeacherViewController extends Controller
         ->with('adminStudent', "")
         ->with('adminSubjects', "")
         ->with('teacherActivity',"")
+        ->with('teacherQuiz',"")
         ->with('adminSections', "active");
     }
     
@@ -66,27 +69,38 @@ class TeacherViewController extends Controller
         ->with('teacherAnnouncement',"active");
         }
 
-        public function manage_lesson()
-        {
-           
-            return view('teacher/manage-lesson')
-            ->with('teacherDashboard',"")
-            // ->with('sections', $section)
-            ->with('teacherAnnouncement',"")
-            ->with('teacherActivity',"")
-            ->with('teacherLesson',"active");
-            }
+    public function manage_lesson()
+    {
+        $quarters = DB::table('quarters')->get();
+        return view('teacher/manage-lesson')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherLesson',"active");
+        }
 
-            public function manage_activity()
-            {
-               
-                return view('teacher/manage-activity')
-                ->with('teacherDashboard',"")
-                // ->with('sections', $section)
-                ->with('teacherAnnouncement',"")
-                ->with('teacherActivity',"activity")
-                ->with('teacherLesson',"");
-                }    
+    public function manage_quiz()
+    {
+        $quarters = DB::table('quarters')->get();
+        return view('teacher/manage-quiz')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"active")
+        ->with('teacherLesson',"");
+    }
 
-    
+    public function manage_activity()
+    {
+        $quarters = DB::table('quarters')->get();
+        return view('teacher/manage-quiz')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherActivity',"active")
+        ->with('teacherLesson',"");
+    }
+
 }

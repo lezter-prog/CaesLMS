@@ -53,13 +53,17 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Lessons</span>
                         </a>
-                        <a href="/teacher/lesson" class="{{$teacherActivity}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/teacher/activity" class="{{$teacherActivity}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Activity</span>
                         </a>
                         <a href="/teacher/exam" class="{{$teacherExam}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Exam</span>
+
+                        <a href="/teacher/quiz" class="{{$teacherQuiz}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
+                                <span>Quiz</span>
                         </a>
                     @endif
 
@@ -166,7 +170,21 @@
                 <!-- Notification dropdown -->
                
                 {{-- <li class="nav-item">{{ Auth::user() }}</li> --}}
+<<<<<<< HEAD
             
+=======
+                {{-- <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li> --}}
+>>>>>>> c6bed6bfe69273313fe3c02f911cbbb0a577ff3f
 
                 <!-- Icon dropdown -->
                 <li class="nav-item dropdown">
