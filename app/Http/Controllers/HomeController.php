@@ -63,6 +63,10 @@ class HomeController extends Controller
         ->with('teacherExam',"")
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherActivity',"")
+        ->with('teacherExam',"")
         ->with('sections',$sections);
     }
     public function adminIndex()

@@ -40,6 +40,8 @@ class TeacherViewController extends Controller
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
         ->with('teacherActivity',"")
+        ->with('teacherExam',"")
+        ->with('teacherTemplates',"")
         ->with('teacherQuiz',"")
         ->with('sections', $section);
     }
@@ -53,6 +55,7 @@ class TeacherViewController extends Controller
         ->with('adminSubjects', "")
         ->with('teacherActivity',"")
         ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
         ->with('teacherExam',"")
         ->with('adminSections', "active");
     }
@@ -67,6 +70,7 @@ class TeacherViewController extends Controller
         ->with('teacherLesson',"")
         ->with('teacherQuiz',"")
         ->with('teacherActivity',"")
+        ->with('teacherTemplates',"")
         ->with('teacherExam',"")
         ->with('teacherAnnouncement',"active");
         }
@@ -80,6 +84,8 @@ class TeacherViewController extends Controller
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherActivity',"")
         ->with('teacherLesson',"active");
         }
 
@@ -129,19 +135,50 @@ class TeacherViewController extends Controller
         ->with('teacherQuiz',$quizActive)
         ->with('teacherExam',$examActive)
         ->with('teacherActivity',$activityActive)
+        ->with('teacherExam',"")
+        ->with('teacherTemplates',"")
         ->with('teacherLesson',"");
     }
 
     public function manage_activity()
     {
         $quarters = DB::table('quarters')->get();
-        return view('teacher/manage-quiz')
+        return view('teacher/manage-activity')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"")
+        ->with('teacherTemplates',"")
         ->with('teacherActivity',"active")
+        ->with('teacherLesson',"");
+    }
+
+    public function manage_exam()
+    {
+        $quarters = DB::table('quarters')->get();
+        return view('teacher/manage-exam')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherExam',"active")
+        ->with('teacherTemplates',"")
+        ->with('teacherActivity',"")
+        ->with('teacherLesson',"");
+    }
+    public function manage_templates()
+    {
+        $quarters = DB::table('quarters')->get();
+        return view('teacher/manage-templates')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherTemplates',"active")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
         ->with('teacherLesson',"");
     }
 
