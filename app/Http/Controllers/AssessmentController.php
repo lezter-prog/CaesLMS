@@ -98,4 +98,8 @@ class AssessmentController extends Controller
         ];
 
     }
+
+    public function closeAssessment(){
+        DB::beginTransaction();
+    }
 }

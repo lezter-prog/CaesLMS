@@ -31,7 +31,16 @@ class AssesmentViewController extends Controller
      */
     public function assesmentMultiple(Request $request)
     {
+
         $id =  Auth::id();
+        $role =Auth::user()->role;
+        if($role == "R1"){
+            DB::table('student_assessment_answer_header')->insert([
+                        'student_id'=>Auth::id(),
+                        'assesment_id'=>$request->assesmentId,
+                        'status'=>'in-progress'
+                    ]);
+        }
         $asessmentArray=[];
         $assesment =DB::table('assesment_details')
                     ->where([
@@ -72,6 +81,7 @@ class AssesmentViewController extends Controller
         }
         
         return view('assesment/multiple-assesment')
+        ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
         ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)

@@ -32,6 +32,7 @@
             <th>Subject</th>
             <th>Total Points</th>
             <th>Status</th>
+            <th></th>
         
         </tr>
       </thead>
@@ -41,6 +42,86 @@
   
 
     </table>
+  </div>
+</div>
+
+<div class="modal fade bd-example " id="uploadQuizModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Quiz</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="uploadQuizForm">
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="grade" class="form-label">Select if Activity</label>
+          <select type="text" class="form-control" id="assessmentType" name="assessmentType" >
+            <option  value="quiz">Quiz</option>
+            <option value="activity">Activity</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="lesson" class="form-label">Section</label>
+          {{-- <input type="text" class="form-control" id="subject" name="subject" readonly> --}}
+          <select type="text" class="form-control" id="section" name="section_code" >
+            @foreach($sections as $section)
+            <option  value="{{$section->s_code}}">{{$section->s_desc}}</option>
+            @endforeach
+          </select>
+          {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+        </div>
+        <div class="mb-3">
+          <label for="lesson" class="form-label">Subject</label>
+          {{-- <input type="text" class="form-control" id="subject" name="subject" readonly> --}}
+          <select type="text" class="form-control" id="subject" name="subj_code" >
+            
+          </select>
+          {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+        </div>
+        <div class="mb-3">
+          <label for="lesson" class="form-label">Quiz Description</label>
+          <input type="text" class="form-control" id="quizDesc" name="quizDesc" required>
+          {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+        </div>
+        <div class="mb-3">
+          <div class="input-group">
+            <input type="file" class="form-control" id="quiz_file" name="quiz_file" aria-describedby="upload-quiz" aria-label="upload" required>
+            
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="lesson" class="form-label">Total Points</label>
+          <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
+        </div>
+        <div class="mb-3">
+          <label for="grade" class="form-label">Select Quiz Type</label>
+          <select type="text" class="form-control" id="quizType" name="quizType" >
+            <option value="multiple">Multiple Choice</option>
+            <option value="identify">Identification</option>
+            <option value="enumerate">Enumeration</option>
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="endDateInput" class="form-label">End Date</label>
+          <div class="input-group log-event" id="endDate" data-td-target-input="nearest" data-td-target-toggle="nearest">
+            <input id="endDateInput" name="endDate" type="text" class="form-control" data-td-target="#endDate" readonly required>
+            <span class="input-group-text" data-td-target="#endDate" data-td-toggle="datetimepicker">
+              <i class="fas fa-calendar"></i>
+            </span>
+          </div>
+          {{-- <label for="lesson" class="form-label">Select End Date</label>
+          <input type="text" class="form-control" id="endDate" name="subject" readonly> --}}
+          {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -92,17 +173,27 @@
         { "data":"subj_desc"},
         { "data":"total_points" },
         {"data":"status",
-            "render":function(data, type, row, meta ){
+             "render":function(data, type, row, meta ){
                   var status ="";
                   
                     if(row.status == "ACTIVE"){
                       status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
+                    }else{
+                      status =' <span class="badge text-bg-danger">'+row.status+'</span> ';
                     }
+                     
+                    return status;
+                  }
+        },
+        {"data":"status",
+            "render":function(data, type, row, meta ){
+                  
+                    var eye=' <button  class="btn btn-info btn-sm viewquiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View the quiz"><i class="fa-regular fa-eye"></i></button>'
                     var close=' <button  class="btn btn-warning btn-sm close-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close the Quiz"><i class="fa-regular fa-rectangle-xmark"></i></button>'
                     var edit=' <button  class="btn btn-success btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Re-Upload Quiz"><i class="fa-solid fa-pen-to-square"></i></button>'
-                    var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz"><i class="fa-solid fa-list-check"></i></button>'
+                    var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Score Sheet"><i class="fa-solid fa-list-check"></i></button>'
 
-                    return status+edit+close+view;
+                    return eye+edit+close+view;
                   }
         }
       ],
@@ -122,10 +213,15 @@
         {
           "targets":3,
           "width":"10%",
-          "className":"text-end"
+          "className":"text-center"
         },
         {
           "targets":4,
+          "width":"10%",
+          "className":"text-center"
+        },
+        {
+          "targets":5,
           "width":"15%",
           "className":"text-center"
         }
@@ -136,11 +232,100 @@
 
         },
     });
+    const picker= new datetimepicker(document.getElementById('endDate'));
+    picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
+
     $('#quarter').on('change', function(){
       currentQuarter=$(this).val();
       quizTable.ajax.reload();
 
     });
+
+    $('#importBtn').on('click', function(){
+      var sectionCode=$("#section").val();
+      $.ajax({
+          url:baseUrl+"/api/teacher/section/subjects/",
+          type:"GET",
+          data:{
+            sectionCode:sectionCode
+          },
+          success:(res)=>{
+            // console.log(res);
+            if(res.data){
+              res.data.forEach(data=>{
+                $("#subject").append('<option value="'+data.subj_code+'">'+data.subj_desc+'<option>')
+              })
+            }
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr);
+            alert(xhr.status);
+            alert(thrownError);
+          },
+          beforeSend: function (request) {
+            request.setRequestHeader("Authorization", "Bearer "+token);
+          },
+        })
+     
+      // $("#uploadQuizForm #subject").data("subjectCode",data.subj_code);
+      // $("#uploadQuizForm #subject").val(data.subj_desc);
+      // console.log($("#subject").data("subjectCode"));
+      
+      $("#uploadQuizModal").modal("show");
+    })
+
+    $("#uploadQuizForm").submit((e)=>{
+      e.preventDefault();
+      // var subjCode =$("#uploadQuizForm #subject").data("subjectCode");
+      var form = $("#uploadQuizForm");
+      var formData = new FormData(form[0]);
+
+      swal.fire({
+        title: 'You are uploading new Quiz?',
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.showLoading();
+          $.ajax({
+            url:baseUrl+"/api/teacher/upload/quiz",
+            type:"POST",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data:formData,
+            success:(res)=>{
+              console.log(res);
+              if(res){
+                swal.fire({
+                  icon:'success',
+                  title: 'Upload Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  quizTable.ajax.reload();
+                $("#uploadQuizModal").modal("hide");
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      })
+  });
 
       
           $('#lessonTable tbody').on( 'click', '#updateStatusBtn', function () {

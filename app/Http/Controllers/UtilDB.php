@@ -329,6 +329,8 @@ class UtilDB extends Controller
         ];
 
     }
+    
+
 
     public function getTeacherHandledSections(Request $request){
         $handledSection = DB::table('teachers_subjects_section')
@@ -656,12 +658,12 @@ class UtilDB extends Controller
        Log::info("PointsEach: ".json_encode($request->pointsEach));
        Log::info("CorrectAnswer: ".json_encode($countScore));
 
-       $insert=DB::table('student_assessment_answer_header')->insert([
-                        'student_id'=>Auth::id(),
-                        'assesment_id'=>$request->assesmentId,
-                        'status'=>'submitted',
-                        'score'=> $countScore
-                    ]);
+       $insert=DB::table('student_assessment_answer_header')
+       ->where('assesment_id', $request->assesmentId)
+       ->update([
+                'status'=>'submitted',
+                'score'=> $countScore
+            ]);
         if(!$insert){
             DB::rollBack();
             return false;

@@ -37,7 +37,7 @@
                     @if ( Auth::user()->role == "R2")
                         <a href="/teacher/home" class="{{$teacherDashboard}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                            <span class ="me-3"><i class="fas fa-tachometer-alt fa-fw  icon-bg-color fa-2x"></i></span> 
-                                <span>Teacher dashboard</span>
+                                <span>Dashboard</span>
                                 
                         </a>
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\SchoolSection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 
 class TeacherViewController extends Controller
@@ -91,13 +93,19 @@ class TeacherViewController extends Controller
 
     public function manage_quiz()
     {
+        $sec = new SchoolSection();
         $quarters = DB::table('quarters')->get();
+        $id =  Auth::id();
+
+        $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-quiz')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
+        ->with('sections',$sections)
         ->with('teacherAnnouncement',"")
         ->with('teacherExam',"")
         ->with('teacherQuiz',"active")
+        ->with('teacherTemplates',"")
         ->with('teacherActivity',"")
         ->with('teacherLesson',"");
     }
@@ -175,7 +183,6 @@ class TeacherViewController extends Controller
         ->with('quarters',$quarters)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
-        ->with('teacherTemplates',"")
         ->with('teacherTemplates',"active")
         ->with('teacherExam',"")
         ->with('teacherActivity',"")

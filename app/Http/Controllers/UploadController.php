@@ -11,6 +11,7 @@ use App\Imports\ExamImport;
 use App\Imports\Enumeration;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -62,6 +63,7 @@ class UploadController extends Controller
             "subj_code"=>$request->subj_code,
             "section_code"=>$request->section_code,
             "quarter_period"=>$quarter->quarter_code,
+            "uploaded_by"=>Auth::id(),
             "status"=>"ACTIVE",
             "sy"=>"2022-2023"
         ]);
@@ -125,6 +127,7 @@ class UploadController extends Controller
             "subj_code"=>$request->subj_code,
             "section_code"=>$request->section_code,
             "quarter_period"=>$quarter->quarter_code,
+            "uploaded_by"=>Auth::id(),
             "status"=>"ACTIVE",
             "sy"=>"2022-2023"
         ]);
