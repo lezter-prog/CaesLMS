@@ -119,10 +119,10 @@
                             <span class ="me-3"><i class="fa-solid fa-book-open fa-fw fa-lg icon-bg-color"></i></span> 
                                 <span>Subjects / Grade</span>
                         </a> --}}
-                        <a href="/admin/announcement" class="{{ $adminAnnouncement }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        {{-- <a href="/admin/announcement" class="{{ $adminAnnouncement }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-bullhorn fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Announcement</span>
-                        </a>
+                        </a> --}}
                         <a href="/admin/quarter" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-bars-progress fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Quarters</span>
@@ -170,9 +170,6 @@
                 <!-- Notification dropdown -->
                
                 {{-- <li class="nav-item">{{ Auth::user() }}</li> --}}
-<<<<<<< HEAD
-            
-=======
                 {{-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-bell"></i>
@@ -184,7 +181,6 @@
                       <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li> --}}
->>>>>>> c6bed6bfe69273313fe3c02f911cbbb0a577ff3f
 
                 <!-- Icon dropdown -->
                 <li class="nav-item dropdown">

@@ -111,6 +111,8 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
 Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){
     Route::get('assessment/get/quiz', 'getAllQuiz');
     Route::get('assessment/get/answer', 'getStudentAnswer');
+    Route::get('assessment/get/scores', 'getAllStudentAnswer');
+    
 });
 
 Route::middleware('auth:sanctum')->controller(UploadController::class)->group(function(){

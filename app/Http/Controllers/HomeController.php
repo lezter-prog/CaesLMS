@@ -58,6 +58,9 @@ class HomeController extends Controller
         Log::info("Sections: ".json_encode($sections));
         return view('teacher/home')
         ->with('teacherDashboard',"active")
+        ->with('teacherActivity',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherExam',"")
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
         ->with('sections',$sections);

@@ -37,6 +37,7 @@ Route::get('/teacher/announcement', [App\Http\Controllers\TeacherViewController:
 Route::get('/teacher/quiz', [App\Http\Controllers\TeacherViewController::class, 'manage_quiz'])->name('teacher/quiz');
 Route::get('/teacher/lesson', [App\Http\Controllers\TeacherViewController::class, 'manage_lesson'])->name('teacher/lesson');
 Route::get('/teacher/activity', [App\Http\Controllers\TeacherViewController::class, 'manage_activity'])->name('teacher/activity');
+Route::get('/teacher/view/assessment', [App\Http\Controllers\TeacherViewController::class, 'view_students_assessment'])->name('teacher/view/assessment');
 
 
 Route::get('/admin/home', [App\Http\Controllers\HomeController::class, 'adminIndex'])->name('admin/home');

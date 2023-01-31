@@ -2,44 +2,52 @@
 @section('title', 'Quiz')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">Quiz</h1>
+  <div class="row">
+    <h1 class="h2">{{$assessmentDesc}}</h1> 
+    
+  </div>
   
   <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group me-2">
+    {{-- <div class="btn-group me-2">
       <select class="form-select js-data-example-ajax" id="quarter" aria-label="Default select example">
         @foreach ($quarters as $quarter)
         <option value="{{$quarter->quarter_code}}" @if ($quarter->status === 'ACTIVE') selected @endif >{{$quarter->quarter_desc}}</option>
         @endforeach
       </select>
-    </div>
+    </div> --}}
     <div class="btn-group me-2">
       <button type="button" id ="importBtn" class="btn btn-sm btn-outline-primary">Upload Quiz</button>
-      
+      @if($assessment->status =="CLOSED")
+      <button type="button" id ="downloadScoreSheet" class="btn btn-sm btn-outline-primary">Download Score Sheet</button>
+      @endif
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
+    </button>
   </div>
   
 </div>
 <div class="" style="padding:0px 10px">
-  <div class="col-12">
-    <table id ="quizTable"  class="table table-striped" style="width:100%">
-      <thead>
-        <tr>
-            {{-- <th>Quiz Id</th> --}}
-            <th>Quiz Description</th>
-            <th>Section</th>
-            <th>Subject</th>
-            <th>Total Points</th>
-            <th>Status</th>
-        
-        </tr>
-      </thead>
-      <tbody>
-       
-      </tbody>
-  
+  <span><span class="badge text-bg-success">Section</span> {{$assessment->s_desc}} </span> |
+  <span> <span class="badge text-bg-success">Subject</span> {{$assessment->subj_desc}}</span> |
+  <span> <span class="badge text-bg-{{$assessment->statusColor}}">{{$assessment->status}} </span> </span>
 
+  <div class="row ">
+   </div>
+  
+  <div class="col-12 ">
+    
+    <table id ="scoreSheetTable"  class="table table-striped" style="width:100%">
+        <thead>
+          <tr>
+              <th>Student Name</th>
+              <th>Section</th>
+              <th>Score</th>   
+              <th></th>     
+          </tr>
+        </thead>
+      <tbody>
+      </tbody>
     </table>
   </div>
 </div>
@@ -50,15 +58,16 @@
   var token ={{ Js::from(session('token')) }};
 
   $(document).ready(function(){
-   var sectionCode="";
+   var sectionCode={{ Js::from($assessment->section_code) }};
    var currentQuarter =$("#quarter").val();
-   var quizTable= $('#quizTable').DataTable({
+   var assessmentId ={{ Js::from($assessment->assesment_id) }};
+   var scoreSheetTable= $('#scoreSheetTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
       "bFilter": true,
       "bInfo": false,
       "bAutoWidth": false,
-      "sAjaxSource": baseUrl+"/api/quiz/get/all",
+      "sAjaxSource": baseUrl+"/api/assessment/get/scores",
       "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
@@ -69,7 +78,8 @@
             "url": sSource,
             "data":{
               "quarter":currentQuarter,
-              "type":"quiz"
+              "assessmentId":assessmentId,
+              "sectionCode":sectionCode
             },
             "beforeSend": function (request) {
               request.setRequestHeader("Authorization", "Bearer "+token);
@@ -78,19 +88,25 @@
           });
         },
       "columns":[
-        { "data":"assesment_desc",
-            // "render":function(data, type, row, meta ){
-            //   var status ="";
-              
-            //     if(row.status == "ACTIVE"){
-            //       status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
-            //     }
-            //     return data+status;
-            //   }
+        { "data":"first_name",
+          "render":function(data,settings,row){
+
+            return data+" "+row.last_name;
+
+          }
         }, 
         { "data":"s_desc"},
-        { "data":"subj_desc"},
-        { "data":"total_points" },
+        { "data":"score",
+          "className":"text-center",
+          "render":function(data, type, row, meta ){
+                  var score =' <span class="badge text-bg-primary">'+data+' pts</span> ';
+                  if(data == ""){
+                    score ='<span class="badge text-bg-warning"> Not yet taken</span>';
+                  }
+                    return score;
+                  }
+
+        },
         {"data":"status",
             "render":function(data, type, row, meta ){
                   var status ="";
@@ -98,11 +114,12 @@
                     if(row.status == "ACTIVE"){
                       status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
                     }
-                    var close=' <button  class="btn btn-warning btn-sm close-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close the Quiz"><i class="fa-regular fa-rectangle-xmark"></i></button>'
-                    var edit=' <button  class="btn btn-success btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Re-Upload Quiz"><i class="fa-solid fa-pen-to-square"></i></button>'
-                    var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Quiz"><i class="fa-solid fa-list-check"></i></button>'
+                    var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Answers"><i class="fa-solid fa-list-check"></i></button>'
 
-                    return status+edit+close+view;
+                    if(row.score==""){
+                        view="";
+                    }
+                    return view;
                   }
         }
       ],
@@ -119,14 +136,10 @@
           "targets":2,
           "width":"15%"
         },
+       
         {
           "targets":3,
           "width":"10%",
-          "className":"text-end"
-        },
-        {
-          "targets":4,
-          "width":"15%",
           "className":"text-center"
         }
         
@@ -138,7 +151,7 @@
     });
     $('#quarter').on('change', function(){
       currentQuarter=$(this).val();
-      quizTable.ajax.reload();
+      scoreSheetTable.ajax.reload();
 
     });
 
@@ -181,15 +194,6 @@
               }
             })
                
-          } );
-
-          $('#quizTable tbody').on( 'click', '.view-btn', function () {
-            var data = quizTable.row( $(this).closest('tr') ).data();
-
-            console.log(data);
-
-            location.href="/teacher/view/assessment?assessmentId="+data.assesment_id+"&assessmentType=quiz";
-
           } );
 
 });
