@@ -37,8 +37,13 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
     <script src="{{ URL::asset('js/jquery.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js');}} "></script>
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link href="{{ URL::asset('js/bootstrap-5.1.3-dist/css/bootstrap.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/fontawesome/css/all.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/swal2/dist/sweetalert2.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/datimepicker/dist/css/tempus-dominus.min.css'); }} " rel="stylesheet">
+
     {{-- <link href="{{ URL::asset('css/app.css'); }} " rel="stylesheet"> --}}
     <link href="{{ URL::asset('js/DataTables/datatables.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/DataTables/datatables.select.min.css'); }} " rel="stylesheet">
@@ -58,6 +63,14 @@
         </main>
     </div>
     
+    <script src="{{ URL::asset('js/fontawesome/js/all.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/swal2/dist/sweetalert2.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/popperjs/dist/umd/popper.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/moment/min/moment.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/datimepicker/dist/js/tempus-dominus.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/apexchart/dist/apexcharts.min.js'); }}"></script>
+
+
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
     <script src="{{ URL::asset('js/icheck-1.0.3/icheck.min.js'); }}"></script>
     <script src="{{ URL::asset('js/DataTables/datatables.select.min.js'); }}"></script>

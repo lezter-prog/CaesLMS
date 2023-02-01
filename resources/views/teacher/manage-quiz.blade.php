@@ -177,9 +177,9 @@
                   var status ="";
                   
                     if(row.status == "ACTIVE"){
-                      status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
+                      status =' <span class="badge bg-primary">'+row.status+'</span> ';
                     }else{
-                      status =' <span class="badge text-bg-danger">'+row.status+'</span> ';
+                      status =' <span class="badge bg-danger">'+row.status+'</span> ';
                     }
                      
                     return status;

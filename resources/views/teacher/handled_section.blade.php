@@ -451,10 +451,10 @@
 
     });
 
-    const picker= new datetimepicker(document.getElementById('endDate'));
+    const picker= new tempusDominus.TempusDominus(document.getElementById('endDate'));
     picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
-    const picker2= new datetimepicker(document.getElementById('exam_endDate'));
+    const picker2= new tempusDominus.TempusDominus(document.getElementById('exam_endDate'));
     picker2.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
    
