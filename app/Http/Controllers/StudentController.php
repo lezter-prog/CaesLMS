@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as FORMAT;
 use App\Repository\StudentService;
 use App\Imports\StudentsImport;
 
@@ -73,7 +74,7 @@ class StudentController extends Controller
             $file= $request->file("studentFile")->getRealPath();
             Log::info("path:".$file);
             
-            $excel = Excel::import(new StudentsImport, $file);
+            $excel = Excel::import(new StudentsImport, $file,FORMAT::XLSX);
             
             return [
                 "result"=>true

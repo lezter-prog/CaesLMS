@@ -35,11 +35,15 @@ class AssesmentViewController extends Controller
         $id =  Auth::id();
         $role =Auth::user()->role;
         if($role == "R1"){
-            DB::table('student_assessment_answer_header')->insert([
-                        'student_id'=>Auth::id(),
-                        'assesment_id'=>$request->assesmentId,
-                        'status'=>'in-progress'
-                    ]);
+            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            if($count==0){
+                DB::table('student_assessment_answer_header')->insert([
+                    'student_id'=>Auth::id(),
+                    'assesment_id'=>$request->assesmentId,
+                    'status'=>'in-progress'
+                ]);
+            }
+            
         }
         $asessmentArray=[];
         $assesment =DB::table('assesment_details')
@@ -83,7 +87,6 @@ class AssesmentViewController extends Controller
         return view('assesment/multiple-assesment')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
@@ -92,6 +95,18 @@ class AssesmentViewController extends Controller
     public function assesmentEnumeration(Request $request){
 
         $id =  Auth::id();
+        $role =Auth::user()->role;
+        if($role == "R1"){
+            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            if($count==0){
+                DB::table('student_assessment_answer_header')->insert([
+                    'student_id'=>Auth::id(),
+                    'assesment_id'=>$request->assesmentId,
+                    'status'=>'in-progress'
+                ]);
+            }
+            
+        }
         $asessmentArray=[];
         $assesment =DB::table('assesment_details')
                     ->where([
@@ -139,6 +154,7 @@ class AssesmentViewController extends Controller
         }
         
         return view('assesment/enumeration')
+        ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
         ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
@@ -148,6 +164,18 @@ class AssesmentViewController extends Controller
 
     public function assessmentIdentify(Request $request){
         $id =  Auth::id();
+        $role =Auth::user()->role;
+        if($role == "R1"){
+            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            if($count==0){
+                DB::table('student_assessment_answer_header')->insert([
+                    'student_id'=>Auth::id(),
+                    'assesment_id'=>$request->assesmentId,
+                    'status'=>'in-progress'
+                ]);
+            }
+            
+        }
         $asessmentArray=[];
         $answers=DB::table('assesment_details')
                     ->select('answer')
@@ -185,8 +213,8 @@ class AssesmentViewController extends Controller
         }
         
         return view('assesment/identify-assesment')
+        ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)
@@ -195,6 +223,18 @@ class AssesmentViewController extends Controller
 
     public function assessment(Request $request){
         $id =  Auth::id();
+        $role =Auth::user()->role;
+        if($role == "R1"){
+            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            if($count==0){
+                DB::table('student_assessment_answer_header')->insert([
+                    'student_id'=>Auth::id(),
+                    'assesment_id'=>$request->assesmentId,
+                    'status'=>'in-progress'
+                ]);
+            }
+            
+        }
         $asessmentMultiple=[];
         $asessmentIdentification=[];
         $answers=DB::table('assesment_details')
@@ -261,8 +301,8 @@ class AssesmentViewController extends Controller
         }
         
         return view('assesment/exam')
+        ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-        ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)

@@ -299,15 +299,19 @@
             if(row.isTaken){
                disabled ="disabled";
                takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 
-            if(row.status="ACTIVE")
+            if(row.status=="ACTIVE")
               status ='<span class="badge bg-primary">'+row.status+'</span> ';
-            else
+            else{
               status ='<span class="badge bg-danger">'+row.status+'</span> ';
+              disabled ="disabled";
+            }
             
             if(row.test_type == "multiple"){
               quizType='<span class="badge bg-primary">Multiple Choice</span>';
@@ -370,8 +374,10 @@
             if(row.isTaken){
                disabled ="disabled";
                takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 
@@ -442,8 +448,10 @@
             if(row.isTaken){
                disabled ="disabled";
                takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 

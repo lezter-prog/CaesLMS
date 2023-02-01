@@ -9,6 +9,11 @@
       alert(arg1);
     }
 </script> --}}
+@If($role =="R2")
+<div class="row text-center">
+  <h6 style="color: red">TEACHERS VIEW ------- NOT ALLOWED TO SUBMIT</h6>
+</div>
+@endIf
 <form id="examForm" style="margin-top:10px">
 <div class="row text-center">
   <h6>Calamba Adventist Elementary School</h6>
@@ -58,7 +63,7 @@
    
   <div class="row">
     <div class="col-12 text-center">
-      <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+      <button class="btn btn-primary btn-sm"  @if($role=="R2") disabled @endIf type="submit">Submit</button>
     </div>
   </div>
 </form>
@@ -70,7 +75,6 @@
   var token ={{ Js::from(session('token')) }};
   var sectionCode ={{ Js::from($sectionCode) }};
   var subjCode ={{ Js::from($subjCode) }};
-  var pointsEach ={{ Js::from($pointsEach) }};
   var annotation =[];
   var numbers =[];
   // import { annotate } from 'https://unpkg.com/rough-notation?module';
@@ -102,7 +106,7 @@
 
   $(document).ready(function(){
     var assesmentId ={{ Js::from($assesmentId) }};
-
+    var role ={{ Js::from($role) }};
     $('input').iCheck({
       handle: 'radio',
       radioClass: 'iradio_square-blue '
@@ -111,7 +115,9 @@
     $('input').on('ifChecked', function(event){
       console.log($(this).val())
       console.log($(this).data('number'))
-      
+      if(role=="R2"){
+          return
+      }
       $.ajax({
             url:baseUrl+"/api/quiz/save/temp",
             type:"POST",
@@ -143,7 +149,9 @@
     $('input').on('keyup', function(event){
       console.log($(this).val())
       console.log($(this).data('number'))
-      
+      if(role=="R2"){
+          return
+      }
       $.ajax({
             url:baseUrl+"/api/quiz/save/temp",
             type:"POST",
@@ -172,9 +180,57 @@
       
     });
 
+    $('select').select2({
+      theme: 'bootstrap-5'
+    });
+
+    $('select').on('select2:select', function (e) {
+        var currentAnswer =[];
+        var data = $(this).select2('data');
+        console.log(data);
+
+        if(role=="R2"){
+            return
+        }
+        data.forEach((d)=>{
+            currentAnswer.push(d.id);
+        });
+        console.log($(this).data('number'));
+
+        $.ajax({
+            url:baseUrl+"/api/quiz/save/temp/enumerate",
+            type:"POST",
+            data:{
+              "answer":currentAnswer,
+              "number":$(this).data('number'),
+              "testType":"enumerate",
+              "assesmentId":assesmentId
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res){
+
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+
+
+    });
+
     $("#examForm").submit(function(e){
       e.preventDefault();
-
+      if(role=="R2"){
+          return
+      }
       swal.fire({
         title: 'Are you sure?',
         text:'You will be submitting all your answers',
@@ -188,8 +244,7 @@
             url:baseUrl+"/api/quiz/submit/answer",
             type:"POST",
             data:{
-              "assesmentId":assesmentId,
-              "pointsEach":pointsEach
+              "assesmentId":assesmentId
             },
             success:(res)=>{
               console.log(res);
