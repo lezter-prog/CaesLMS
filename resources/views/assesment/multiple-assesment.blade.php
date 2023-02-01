@@ -44,7 +44,7 @@
   var token ={{ Js::from(session('token')) }};
   var sectionCode ={{ Js::from($sectionCode) }};
   var subjCode ={{ Js::from($subjCode) }};
-  var pointsEach ={{ Js::from($pointsEach) }};
+  // var pointsEach ={{ Js::from($pointsEach) }};
   var annotation =[];
   var numbers =[];
   // import { annotate } from 'https://unpkg.com/rough-notation?module';

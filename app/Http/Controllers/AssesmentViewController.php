@@ -83,7 +83,7 @@ class AssesmentViewController extends Controller
         return view('assesment/multiple-assesment')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-        ->with('pointsEach',$assesmentHeader->points_each)
+        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
@@ -140,7 +140,7 @@ class AssesmentViewController extends Controller
         
         return view('assesment/enumeration')
         ->with('assesmentId',$request->assesmentId)
-        ->with('pointsEach',$assesmentHeader->points_each)
+        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
@@ -186,7 +186,7 @@ class AssesmentViewController extends Controller
         
         return view('assesment/identify-assesment')
         ->with('assesmentId',$request->assesmentId)
-        ->with('pointsEach',$assesmentHeader->points_each)
+        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)
@@ -262,7 +262,7 @@ class AssesmentViewController extends Controller
         
         return view('assesment/exam')
         ->with('assesmentId',$request->assesmentId)
-        ->with('pointsEach',$assesmentHeader->points_each)
+        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)
