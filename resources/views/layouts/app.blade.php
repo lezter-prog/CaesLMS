@@ -14,14 +14,21 @@
     
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <script src="{{ URL::asset('js/jquery.min.js'); }}"></script>
+    
 
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
-    <link href="{{ URL::asset('css/app.css'); }} " rel="stylesheet">
+    {{-- @vite(['resources/sass/app.scss', 'resources/js/app.js']) --}}
+    <link href="{{ URL::asset('js/bootstrap-5.1.3-dist/css/bootstrap.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/fontawesome/css/all.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/swal2/dist/sweetalert2.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('js/datimepicker/dist/css/tempus-dominus.min.css'); }} " rel="stylesheet">
+    {{-- <link href="{{ URL::asset('js/apexcharts/dist/tempus-dominus.min.css'); }} " rel="stylesheet"> --}}
+
     <link href="{{ URL::asset('js/DataTables/datatables.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/DataTables/datatables.select.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/select2-4.0.13/dist/css/select2.min.css'); }} " rel="stylesheet">
     <link href="{{ URL::asset('js/select2/select2-bootstrap-5-theme.min.css'); }} " rel="stylesheet">
+    <link href="{{ URL::asset('css/app.css'); }} " rel="stylesheet">
+
 
     @yield('style')
 
@@ -216,8 +223,6 @@
                         </form>
                     </div>
                 </li>
-
-                
             </ul>
             </div>
             <!-- Container wrapper -->
@@ -225,13 +230,27 @@
         @endauth
 
        
+        <script src="{{ URL::asset('js/jquery.min.js'); }}"></script>
+        <script src="{{ URL::asset('js/bootstrap-5.1.3-dist/js/bootstrap.bundle.min.js');}} "></script>
 
         <main class ="main-content" style="padding-top:70px !important">
             
             @yield('content')
         </main>
     </div>
+    
     @yield('script')
+    
+    {{-- <script href="{{ URL::asset('js/bootstrap-5.1.3-dist/css/bootstrap.min.js'); }} "></script> --}}
+    <script src="{{ URL::asset('js/fontawesome/js/all.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/swal2/dist/sweetalert2.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/popperjs/dist/umd/popper.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/moment/min/moment.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/datimepicker/dist/js/tempus-dominus.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/apexchart/dist/apexcharts.min.js'); }}"></script>
+
+
+
     <script src="{{ URL::asset('js/DataTables/datatables.min.js'); }}"></script>
     <script src="{{ URL::asset('js/DataTables/datatables.select.min.js'); }}"></script>
     <script src="{{ URL::asset('js/select2-4.0.13/dist/js/select2.min.js'); }}"></script>

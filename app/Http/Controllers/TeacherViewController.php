@@ -125,6 +125,7 @@ class TeacherViewController extends Controller
 
         Log::info("AssessmentId:".$request->assessmentId);
         $assessment = DB::table('assesment_header')
+            ->select('assesment_header.*','subjects.subj_desc','school_sections.s_desc')
             ->join('subjects', 'subjects.subj_code', '=', 'assesment_header.subj_code')
             ->join('school_sections', 'school_sections.s_code', '=', 'assesment_header.section_code')
             ->where('assesment_header.assesment_id',$request->assessmentId)
@@ -150,10 +151,15 @@ class TeacherViewController extends Controller
 
     public function manage_activity()
     {
+        $sec = new SchoolSection();
         $quarters = DB::table('quarters')->get();
+        $id =  Auth::id();
+
+        $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-activity')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
+        ->with('sections',$sections)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"")
@@ -164,10 +170,15 @@ class TeacherViewController extends Controller
 
     public function manage_exam()
     {
+        $sec = new SchoolSection();
         $quarters = DB::table('quarters')->get();
+        $id =  Auth::id();
+
+        $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-exam')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
+        ->with('sections',$sections)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"active")

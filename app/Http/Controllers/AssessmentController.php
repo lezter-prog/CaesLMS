@@ -50,23 +50,23 @@ class AssessmentController extends Controller
 
     public function getAllStudentAnswer(Request $request){
 
-        $StudentScore = DB::table('student_assessment_answer_header')
-                        ->join('assesment_header','assesment_header.assesment_id','=','student_assessment_answer_header.assesment_id')
-                        ->join('sy_students','sy_students.id_number','=','student_assessment_answer_header.student_id')
-                        ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
-                        ->join('subjects','subjects.subj_code','=','assesment_header.subj_code')
-                        ->where([
-                            ['student_assessment_answer_header.assesment_id','=',$request->assessmentId]
-                        ])->get();
-        $scores =  DB::table('sy_students')
-                    ->join('student_assessment_answer_header','student_assessment_answer_header.student_id','=','sy_students.id_number')
-                    ->join('assesment_header','assesment_header.assesment_id','=','student_assessment_answer_header.assesment_id')
-                    ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
-                    ->join('subjects','subjects.subj_code','=','assesment_header.subj_code')
-                    ->where([
-                        ['student_assessment_answer_header.assesment_id','=',$request->assessmentId],
-                        ['sy_students.s_code','=','S3']
-                    ])->get();
+        // $StudentScore = DB::table('student_assessment_answer_header')
+        //                 ->join('assesment_header','assesment_header.assesment_id','=','student_assessment_answer_header.assesment_id')
+        //                 ->join('sy_students','sy_students.id_number','=','student_assessment_answer_header.student_id')
+        //                 ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
+        //                 ->join('subjects','subjects.subj_code','=','assesment_header.subj_code')
+        //                 ->where([
+        //                     ['student_assessment_answer_header.assesment_id','=',$request->assessmentId]
+        //                 ])->get();
+        // $scores =  DB::table('sy_students')
+        //             ->join('student_assessment_answer_header','student_assessment_answer_header.student_id','=','sy_students.id_number')
+        //             ->join('assesment_header','assesment_header.assesment_id','=','student_assessment_answer_header.assesment_id')
+        //             ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
+        //             ->join('subjects','subjects.subj_code','=','assesment_header.subj_code')
+        //             ->where([
+        //                 ['student_assessment_answer_header.assesment_id','=',$request->assessmentId],
+        //                 ['sy_students.s_code','=','S3']
+        //             ])->get();
 
         $students = DB::table('sy_students')
                     ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
@@ -77,6 +77,7 @@ class AssessmentController extends Controller
         $scoreArray =[];
         foreach($students as $student){
             $score =DB::table('student_assessment_answer_header')
+                    ->select('student_assessment_answer_header.score','student_assessment_answer_header.status','subjects.subj_desc')
                     ->join('assesment_header','assesment_header.assesment_id','=','student_assessment_answer_header.assesment_id')
                     ->join('subjects','subjects.subj_code','=','assesment_header.subj_code')
                     ->where([
@@ -85,6 +86,7 @@ class AssessmentController extends Controller
                     ])->first();
             if($score !=null){
                 $student->score =$score->score;
+                $student->studentStatus=$score->status;
                 $student->subj_desc =$score->subj_desc;
             }else{
                 $student->score ="";
@@ -99,7 +101,84 @@ class AssessmentController extends Controller
 
     }
 
-    public function closeAssessment(){
+    public function closeAssessment(Request $request){
+        $assessmentId = $request->assessmentId;
         DB::beginTransaction();
+
+        $inProgressStudents = DB::table('student_assessment_answer_header')
+                ->where([
+                    ['assesment_id','=',$assessmentId],
+                    ['status','=','in-progress']
+                ])->get();
+
+        foreach($inProgressStudents as $student){
+            $answers =  DB::tables('student_assessment_answer_tmp')
+                        ->where([
+                            ['student_id','=',$student->student_id],
+                            ['assesment_id','=',$assessmentId]
+                        ])->get();
+            $countScore=0;
+            foreach($answers as $answer){
+                    $exec=DB::table('student_assessment_answer')->insert([
+                        'student_id'=>$answer->student_id,
+                        'assesment_id'=>$answer->assesment_id,
+                        'number'=>$answer->number,
+                        'test_type'=>$answer->test_type,
+                        'answer'=>$answer->answer,
+                        'json_answer'=>$answer->json_answer
+                    ]);
+                    if(!$exec){
+                        DB::rollBack();
+                        return false;
+                    }
+                    $getCorrectAnswers =DB::table('assesment_details')
+                        ->select('number','answer','points_each')
+                        ->where([
+                            ['assesment_id','=',$answer->assesment_id],
+                            ['number','=',$answer->number],
+                            ['test_type','=',$answer->test_type],
+                            ['answer','=',$answer->answer],
+                            ['json_answer','=',$answer->json_answer]
+                        ])->first();
+                    Log::info("answer: ".json_encode($answer));
+                    Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));
+                    if($getCorrectAnswers!=null){
+                        $countScore=$countScore+$getCorrectAnswers->points_each;
+                    }     
+
+            }
+
+            $updateStatus= DB::table('student_assessment_answer_header')
+            ->where([
+                ['student_id','=',$student->student_id],
+                ['assesment_id','=',$assessmentId]
+            ])->update([
+                'status'=>'unfinished',
+                'score'=> $countScore
+            ]);
+
+            if(!$updateStatus){
+                DB::rollBack();
+                return [
+                    "message"=>"Updating Students Status Failed"
+                ];
+            }
+        }
+        $updateQuizStatus =DB::table('assesment_header')
+        ->where('assesment_id',$assessmentId)
+        ->update(['status'=>'CLOSED']);
+        if(!$updateQuizStatus){
+            DB::rollBack();
+                return [
+                    "message"=>"Closing Status Failed"
+                ];
+        }
+
+
+        DB::commit();
+        return [
+            "result"=>true,
+            "message"=>"Successful"
+        ];
     }
 }

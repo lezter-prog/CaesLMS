@@ -189,6 +189,7 @@ class UtilDB extends Controller
     public function getAssessments(Request $request)
     {
         $quizez = DB::table('assesment_header')
+        ->select('assesment_header.*','subjects.subj_desc','school_sections.s_desc')
         ->join('subjects', 'subjects.subj_code', '=', 'assesment_header.subj_code')
         ->join('school_sections', 'school_sections.s_code', '=', 'assesment_header.section_code')
         ->where([
@@ -447,10 +448,17 @@ class UtilDB extends Controller
                 $quiz->isTaken =false;
                 $quiz->score =0;
                 if($status!=null){
-                    $quiz->isTaken =true;
-                    $quiz->score =$status->score;
-
+                    if($status->status=="submitted"){
+                        $quiz->isTaken =true;
+                        $quiz->studentStatus=$status->status;
+                        $quiz->score =$status->score;
+                    }else if($status->status=="in-progress"){
+                        $quiz->isTaken =false;
+                        $quiz->studentStatus =$status->status;
+                        $quiz->score =$status->score;
+                    }
                 }
+                
                 array_push($quizesArray,$quiz);
         }
         return [
@@ -478,9 +486,15 @@ class UtilDB extends Controller
                 $exam->isTaken =false;
                 $exam->score =0;
                 if($status!=null){
-                    $exam->isTaken =true;
-                    $exam->score =$status->score;
-
+                    if($status->status=="submitted"){
+                        $quiz->isTaken =true;
+                        $quiz->studentStatus=$status->status;
+                        $quiz->score =$status->score;
+                    }else if($status->status=="in-progress"){
+                        $quiz->isTaken =false;
+                        $quiz->studentStatus =$status->status;
+                        $quiz->score =$status->score;
+                    }
                 }
                 array_push($examsArray,$exam);
         }
@@ -508,9 +522,15 @@ class UtilDB extends Controller
                 $quiz->isTaken =false;
                 $quiz->score =0;
                 if($status!=null){
-                    $quiz->isTaken =true;
-                    $quiz->score =$status->score;
-
+                    if($status->status=="submitted"){
+                        $quiz->isTaken =true;
+                        $quiz->studentStatus=$status->status;
+                        $quiz->score =$status->score;
+                    }else if($status->status=="in-progress"){
+                        $quiz->isTaken =false;
+                        $quiz->studentStatus =$status->status;
+                        $quiz->score =$status->score;
+                    }
                 }
                 array_push($quizesArray,$quiz);
         }

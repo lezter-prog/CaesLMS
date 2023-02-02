@@ -2,7 +2,7 @@
 @section('title', 'Quiz')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">Quiz</h1>
+  <h1 class="h2">Quizes</h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group me-2">
@@ -177,9 +177,9 @@
                   var status ="";
                   
                     if(row.status == "ACTIVE"){
-                      status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
+                      status =' <span class="badge bg-primary">'+row.status+'</span> ';
                     }else{
-                      status =' <span class="badge text-bg-danger">'+row.status+'</span> ';
+                      status =' <span class="badge bg-danger">'+row.status+'</span> ';
                     }
                      
                     return status;
@@ -187,20 +187,24 @@
         },
         {"data":"status",
             "render":function(data, type, row, meta ){
+              var disabled="";
+              if(row.status=="CLOSED"){   
+                disabled="disabled"
+              }
                   
                     var eye=' <button  class="btn btn-info btn-sm viewquiz-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View the quiz"><i class="fa-regular fa-eye"></i></button>'
-                    var close=' <button  class="btn btn-warning btn-sm close-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close the Quiz"><i class="fa-regular fa-rectangle-xmark"></i></button>'
-                    var edit=' <button  class="btn btn-success btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Re-Upload Quiz"><i class="fa-solid fa-pen-to-square"></i></button>'
+                    // var close=' <button  class="btn btn-warning btn-sm close-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close the Quiz"><i class="fa-regular fa-rectangle-xmark"></i></button>'
+                    var edit=' <button '+disabled+' class="btn btn-success btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Re-Upload Quiz"><i class="fa-solid fa-pen-to-square"></i></button>'
                     var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Score Sheet"><i class="fa-solid fa-list-check"></i></button>'
 
-                    return eye+edit+close+view;
+                    return eye+edit+view;
                   }
         }
       ],
       "columnDefs":[
         {
           "targets":0,
-          "width":"30%"
+          "width":"25%"
         },
         {
           "targets":1,
@@ -217,7 +221,7 @@
         },
         {
           "targets":4,
-          "width":"10%",
+          "width":"15%",
           "className":"text-center"
         },
         {
@@ -232,7 +236,7 @@
 
         },
     });
-    const picker= new datetimepicker(document.getElementById('endDate'));
+    const picker= new tempusDominus.TempusDominus(document.getElementById('endDate'));
     picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 
     $('#quarter').on('change', function(){
@@ -273,6 +277,20 @@
       
       $("#uploadQuizModal").modal("show");
     })
+
+    $('#quizTable tbody').on('click', '.viewquiz-btn', function(){
+      var data = quizTable.row($(this).parents('tr')).data();
+      console.log(data);
+
+      if(data.test_type=="multiple"){
+        window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+      }else if(data.test_type=="identify"){
+        window.location.href = "/assesment/identify?assesmentId="+data.assesment_id;
+      }else if(data.test_type=="enumerate"){
+        window.location.href = "/assesment/enumeration?assesmentId="+data.assesment_id;
+      }
+        
+    });
 
     $("#uploadQuizForm").submit((e)=>{
       e.preventDefault();

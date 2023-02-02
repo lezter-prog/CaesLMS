@@ -16,9 +16,10 @@
       </select>
     </div> --}}
     <div class="btn-group me-2">
-      <button type="button" id ="importBtn" class="btn btn-sm btn-outline-primary">Upload Quiz</button>
       @if($assessment->status =="CLOSED")
-      <button type="button" id ="downloadScoreSheet" class="btn btn-sm btn-outline-primary">Download Score Sheet</button>
+      <button type="button" id ="downloadScoreSheet" disabled class="btn btn-sm btn-outline-primary">Download Score Sheet</button>
+      @else
+      <button type="button" id ="quizCloseBtn" class="btn btn-sm btn-outline-warning">Close This Quiz</button>
       @endif
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
@@ -28,9 +29,9 @@
   
 </div>
 <div class="" style="padding:0px 10px">
-  <span><span class="badge text-bg-success">Section</span> {{$assessment->s_desc}} </span> |
-  <span> <span class="badge text-bg-success">Subject</span> {{$assessment->subj_desc}}</span> |
-  <span> <span class="badge text-bg-{{$assessment->statusColor}}">{{$assessment->status}} </span> </span>
+  <span><span class="badge bg-success">Section</span> {{$assessment->s_desc}} </span> |
+  <span> <span class="badge bg-success">Subject</span> {{$assessment->subj_desc}}</span> |
+  <span> <span class="badge bg-{{$assessment->statusColor}}">{{$assessment->status}} </span> </span>
 
   <div class="row ">
    </div>
@@ -99,12 +100,16 @@
         { "data":"score",
           "className":"text-center",
           "render":function(data, type, row, meta ){
-                  var score =' <span class="badge text-bg-primary">'+data+' pts</span> ';
-                  if(data == ""){
-                    score ='<span class="badge text-bg-warning"> Not yet taken</span>';
-                  }
+                console.log(row);
+                var score ='<span class="badge bg-primary">'+data+' pts </span>';
+
+                if(row.studentStatus ==null){
+                    score ='<span class="badge bg-warning"> Not yet taken</span>';
+                }else if(row.studentStatus=="in-progress"){
+                    score ='<span class="badge bg-info"> In Progress</span>';
+                }
                     return score;
-                  }
+              }
 
         },
         {"data":"status",
@@ -112,11 +117,11 @@
                   var status ="";
                   
                     if(row.status == "ACTIVE"){
-                      status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
+                      status =' <span class="badge bg-primary">'+row.status+'</span> ';
                     }
                     var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View Answers"><i class="fa-solid fa-list-check"></i></button>'
 
-                    if(row.score==""){
+                    if(row.score=="" || row.score==null){
                         view="";
                     }
                     return view;
@@ -154,6 +159,63 @@
       scoreSheetTable.ajax.reload();
 
     });
+
+    $("#quizCloseBtn").on('click',function(){
+      swal.fire({
+        title: 'Are you sure you want to close this quiz?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.showLoading();
+          $.ajax({
+            url:baseUrl+"/api/assessment/close",
+            type:"POST",
+            data:{
+              "assessmentId":assessmentId
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res.result){  
+                swal.fire({
+                  icon:'success',
+                  title: 'Closing Quiz Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  location.reload();
+                });
+              }else{
+                swal.fire({
+                  icon:'error',
+                  title: res.message,
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  // location.reload();
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+         
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      });
+
+    })
 
       
           $('#lessonTable tbody').on( 'click', '#updateStatusBtn', function () {

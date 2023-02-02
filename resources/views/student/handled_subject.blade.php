@@ -298,23 +298,27 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge text-bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 
-            if(row.status="ACTIVE")
-              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
-            else
-              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+            if(row.status=="ACTIVE")
+              status ='<span class="badge bg-primary">'+row.status+'</span> ';
+            else{
+              status ='<span class="badge bg-danger">'+row.status+'</span> ';
+              disabled ="disabled";
+            }
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge text-bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary">Identification</span>';
             }else if(row.test_type == "enumerate"){
-              quizType='<span class="badge text-bg-primary">Enumeration</span>';
+              quizType='<span class="badge bg-primary">Enumeration</span>';
             }
 
             
@@ -369,21 +373,23 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge text-bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 
             if(row.status="ACTIVE")
-              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
+              status ='<span class="badge bg-primary">'+row.status+'</span> ';
             else
-              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+              status ='<span class="badge bg-danger">'+row.status+'</span> ';
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge text-bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary">Identification</span>';
             }
 
             
@@ -441,21 +447,23 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge text-bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success">DONE</span> ';
+            }else if(row.studentStatus=='in-progress'){
+               takingStatus='<span class="badge bg-info">In Progress</span> ';
             }else{
-               takingStatus='<span class="badge text-bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
 
             }
 
             if(row.status="ACTIVE")
-              status ='<span class="badge text-bg-primary">'+row.status+'</span> ';
+              status ='<span class="badge bg-primary">'+row.status+'</span> ';
             else
-              status ='<span class="badge text-bg-danger">'+row.status+'</span> ';
+              status ='<span class="badge bg-danger">'+row.status+'</span> ';
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge text-bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge text-bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary">Identification</span>';
             }
 
             
@@ -519,10 +527,10 @@
             };
 
     var chart = new ApexCharts(document.querySelector("#scoreChart"), options);
-    var chartExams = new ApexCharts(document.querySelector("#chartExams"), options);
+    // var chartExams = new ApexCharts(document.querySelector("#chartExams"), options);
     
     chart.render();
-    chartExams.render();
+    // chartExams.render();
     // const picker= new datetimepicker(document.getElementById('endDate'));
     // picker.dates.formatInput = date => moment(date).format('YYYY-MM-DD hh:mm A');
 

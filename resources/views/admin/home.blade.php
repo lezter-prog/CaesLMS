@@ -134,9 +134,9 @@ $(document).ready(function(){
 
 
 
-    particlesJS.load('particle-js', '../json/particles-config.json', function() {
-        console.log('callback - particles.js config loaded');
-    });
+    // particlesJS.load('particle-js', '../json/particles-config.json', function() {
+    //     console.log('callback - particles.js config loaded');
+    // });
 
     
 

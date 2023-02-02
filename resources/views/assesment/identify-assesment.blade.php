@@ -9,6 +9,11 @@
       alert(arg1);
     }
 </script> --}}
+@If($role =="R2")
+<div class="row text-center">
+  <h6 style="color: red">TEACHERS VIEW ------- NOT ALLOWED TO SUBMIT</h6>
+</div>
+@endIf
 <div class="row text-center">
   <h6>Calamba Adventist Elementary School</h6>
   <h6>Quiz1-Subject</h6>
@@ -36,7 +41,7 @@
   @endforeach
   <div class="row" style="margin-top:10px">
     <div class="col-12 text-center">
-      <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+      <button class="btn btn-primary btn-sm" @if($role=="R2") disabled @endIf type="submit">Submit</button>
     </div>
   </div>
 </form>
@@ -49,7 +54,11 @@
   var token ={{ Js::from(session('token')) }};
   var sectionCode ={{ Js::from($sectionCode) }};
   var subjCode ={{ Js::from($subjCode) }};
+<<<<<<< HEAD
   // var pointsEach ={{ Js::from($pointsEach) }};
+=======
+
+>>>>>>> 251f7394767d87ffb296ade2c51e6297262a45a2
   var annotation =[];
   var numbers =[];
   // import { annotate } from 'https://unpkg.com/rough-notation?module';
@@ -81,10 +90,14 @@
 
   $(document).ready(function(){
     var assesmentId ={{ Js::from($assesmentId) }};
-    
+    var role ={{ Js::from($role) }};
     $('input').on('keyup', function(event){
       console.log($(this).val())
       console.log($(this).data('number'))
+
+      if(role=="R2"){
+          return
+      }
       
       $.ajax({
             url:baseUrl+"/api/quiz/save/temp",
@@ -116,6 +129,9 @@
 
     $("#identicationAssesment").submit(function(e){
       e.preventDefault();
+      if(role=="R2"){
+          return
+      }
 
       swal.fire({
         title: 'Are you sure?',
