@@ -99,6 +99,16 @@
         <form id="importStudentForm">
         <div class="modal-body">
           <div class="mb-3">
+            <label for="lesson" class="form-label">Section</label>
+            {{-- <input type="text" class="form-control" id="subject" name="subject" readonly> --}}
+            <select type="text" class="form-control" id="section" name="section_code" >
+              @foreach($sections as $section)
+              <option  value="{{$section->s_code}}">{{$section->s_desc}}</option>
+              @endforeach
+            </select>
+            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
+          </div>
+          <div class="mb-3">
             <div class="input-group">
               <input type="file" class="form-control" id="studentFile" name="studentFile" aria-describedby="importStudentsBtn" aria-label="Upload">
               <button class="btn btn-outline-secondary" type="submit" id="importStudentsBtn">Import</button>

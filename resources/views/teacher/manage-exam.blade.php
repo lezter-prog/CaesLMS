@@ -281,10 +281,15 @@
         
     });
 
-      
-          $('#examTable tbody').on( 'click', '#updateStatusBtn', function () {
-            var data = examTable.row( $(this).closest('tr') ).data();
+    $('#examTable tbody').on( 'click', '.view-btn', function () {
+      var data = examTable.row( $(this).closest('tr') ).data();
+      location.href="/teacher/view/assessment?assessmentId="+data.assesment_id+"&assessmentType=exam";
 
+    });
+
+      
+    $('#examTable tbody').on( 'click', '#updateStatusBtn', function () {
+      var data = examTable.row( $(this).closest('tr') ).data();
             swal.fire({
               title: 'Are you sure to use this Quarter?',
               showCancelButton: true,
@@ -321,6 +326,57 @@
             })
                
           } );
+
+
+  $("#uploadExamForm").submit((e)=>{
+      e.preventDefault();
+      var subjCode =$("#uploadExamForm #subject").data("subjectCode");
+      var form = $("#uploadExamForm");
+      var formData = new FormData(form[0]);
+      swal.fire({
+        title: 'You are uploading new Exam?',
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url:baseUrl+"/api/teacher/upload/exam",
+            type:"POST",
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            data:formData,
+            success:(res)=>{
+              console.log(res);
+              if(res){
+                swal.fire({
+                  icon:'success',
+                  title: 'Upload Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                $("#uploadExamModal").modal("hide");
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      })
+  });
 
 });
 </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SchoolSection;
 use App\Models\Subjects;
+use App\Models\SyStudents;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -52,24 +53,27 @@ class StudentViewController extends Controller
         ->with('subjects',$subjects);
     }
 
-    public function manage_sections()
+    public function studentProfile()
     {
-        return view('admin/manage-sections')
-        ->with('adminHome', "")
-        ->with('adminTeacher', "")
-        ->with('adminStudent', "")
-        ->with('adminSubjects', "")
-        ->with('adminSections', "active");
-    }
+       $syStudents = new SyStudents();
 
-    public function manage_announcement()
-    {
-       
+       $student =$syStudents::where('id_number',Auth::id())->first();
+
+       $profile = DB::table('students_profile')->where('student_id',Auth::id())->first();
+       if($profile==null){
+        $profile->age ="";
+        $profile->birthdate ="";
+        $profile->contact_no ="";
+        $profile->guardian ="";
+        $profile->guardian_contact_no ="";
+        $profile->address ="";
+       }
         
-        return view('teacher/manage-announcement')
-        ->with('teacherDashboard',"")
-        // ->with('sections', $section)
-        ->with('teacherAnnouncement',"active");
-        }
+        return view('student/student_profile')
+        ->with('student',$student)
+        ->with('profile',$profile)
+        ->with('studentHome',"")
+        ->with('studentProfile',"active");
+    }
     
 }

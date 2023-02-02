@@ -749,4 +749,24 @@ class UtilDB extends Controller
         ];
     }
 
+    public function updateStudentProfile(Request $request){
+        $check = DB::table('students_profile')->where("student_id",Auth::id())->count();
+        if($check>0){
+            $update =DB::table('students_profile')->where("student_id",Auth::id())->update($request->all());
+            return $update;
+        }else{
+            $insert = DB::table('students_profile')->insert([
+                "student_id"=>Auth::id(),
+                "age"=>$request->age,
+                "birthdate"=>$request->birthdate,
+                "address"=>$request->address,
+                "contact_no"=>$request->contact_no,
+                "guardian"=>$request->guardian,
+                "guardian_contact_no"=>$request->guardian_contact_no
+            ]);
+            return $insert;
+        }
+
+    }
+
 }

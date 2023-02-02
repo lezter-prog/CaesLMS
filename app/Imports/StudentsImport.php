@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentsImport implements ToModel, WithHeadingRow
 {
+    public function __construct($sectionCode)
+    {
+        $this->sectionCode = $sectionCode; 
+    }
     public function model(array $row)
     {
         
@@ -24,7 +28,8 @@ class StudentsImport implements ToModel, WithHeadingRow
         Log::info("rows :".print_r($row, true));
         $pwd =Str::random(8);
         $fullName =$row['first_name']." ".$row['middle_name']."".$row['last_name'];
-        $username =Str::lower($row['first_name']).".".Str::lower($row['last_name']);
+        $username =Str::lower(Str::replace(' ','.',$row['first_name'])).".".Str::lower(Str::replace(' ','.',$row['last_name']));
+        $section = DB::table('school_sections')->where('s_code',$this->sectionCode)->first();
 
         DB::beginTransaction();
         $user = User::create([
@@ -46,8 +51,8 @@ class StudentsImport implements ToModel, WithHeadingRow
             'middle_name' => $row['middle_name'],
             'last_name' => $row['last_name'],
             'email' => '',
-            's_code'=> $row['section_code'],
-            'g_code'=> $row['grade_code'],
+            's_code'=> $this->sectionCode,
+            'g_code'=> $section->g_code,
             'sy'=> '2022-2023',
             'added_by' => 'admin'
         ]);

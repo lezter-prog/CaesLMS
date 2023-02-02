@@ -75,7 +75,7 @@ class StudentController extends Controller
             // $file= $request->file("studentFile")->getRealPath();
             // Log::info("path:".$file);
             
-            $excel = Excel::import(new StudentsImport, $request->file('studentFile'));
+            $excel = Excel::import(new StudentsImport($request->section_code), $request->file('studentFile'));
             
             return [
                 "result"=>true

@@ -82,23 +82,14 @@
                     @if ( Auth::user()->role == "R1")
                         <a href="/student/home" class="{{ $studentHome }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <h6><i class="fas fa-tachometer-alt fa-fw me-1 fa-lg icon-bg-color"></i>
-                                <span>Students Dashboard</span></h6>
+                                <span>Dashboard</span></h6>
                             {{-- <h4><i class="{{$subj->icon}} fa-fw me-3 fa-fw fa-sm" style="background:white;padding:2px 2px;border-radius:10px;color:{{$subj->color}}"></i>
                                 <span>{{$subj->subj_code}}</span></h4> --}}
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                        <a href="/student/profile" class="{{$studentProfile }} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <h6><i class="fa-solid fa-id-card me-1 fa-fw fa-lg icon-bg-color"></i>
                                 <span>Students Profile</span></h6>
                                 
-                        </a>
-
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <h6><i class="fa-solid fa-book-open  me-1 fa-fw fa-lg icon-bg-color"></i>
-                                <span>Subjects</span></h6>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <h6><i class="fa-solid fa-person-running me-1 fa-fw fa-lg icon-bg-color"></i>
-                                <span>School Activities</span></h6>
                         </a>
                     @endif
 
@@ -247,7 +238,8 @@
     <script src="{{ URL::asset('js/popperjs/dist/umd/popper.min.js'); }}"></script>
     <script src="{{ URL::asset('js/moment/min/moment.min.js'); }}"></script>
     <script src="{{ URL::asset('js/datimepicker/dist/js/tempus-dominus.min.js'); }}"></script>
-    <script src="{{ URL::asset('js/apexchart/dist/apexcharts.min.js'); }}"></script>
+    <script src="{{ URL::asset('js/datimepicker/dist/plugins/customDateFormat.js'); }}"></script>
+    <script src="{{ URL::asset('js/apexcharts/dist/apexcharts.min.js'); }}"></script>
 
 
 

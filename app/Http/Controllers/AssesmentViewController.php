@@ -87,10 +87,6 @@ class AssesmentViewController extends Controller
         return view('assesment/multiple-assesment')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-<<<<<<< HEAD
-        // ->with('pointsEach',$assesmentHeader->points_each)
-=======
->>>>>>> 251f7394767d87ffb296ade2c51e6297262a45a2
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
@@ -219,10 +215,6 @@ class AssesmentViewController extends Controller
         return view('assesment/identify-assesment')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-<<<<<<< HEAD
-        // ->with('pointsEach',$assesmentHeader->points_each)
-=======
->>>>>>> 251f7394767d87ffb296ade2c51e6297262a45a2
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)
@@ -311,10 +303,6 @@ class AssesmentViewController extends Controller
         return view('assesment/exam')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-<<<<<<< HEAD
-        // ->with('pointsEach',$assesmentHeader->points_each)
-=======
->>>>>>> 251f7394767d87ffb296ade2c51e6297262a45a2
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with("assessmentAnswers",$answers)

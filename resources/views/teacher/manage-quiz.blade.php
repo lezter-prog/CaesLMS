@@ -111,9 +111,6 @@
               <i class="fas fa-calendar"></i>
             </span>
           </div>
-          {{-- <label for="lesson" class="form-label">Select End Date</label>
-          <input type="text" class="form-control" id="endDate" name="subject" readonly> --}}
-          {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
         </div>
       </div>
       <div class="modal-footer">

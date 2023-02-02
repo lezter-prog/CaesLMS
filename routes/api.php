@@ -106,6 +106,8 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::get('exam/get/{sectionCode}/{subjCode}', 'getExamsBySectionAndSubject');
     Route::post('exam/submit/answer', 'finalAnswer');
     Route::post('generate/password', 'generatePassword');
+    Route::post('student/profile', 'updateStudentProfile');
+    
 });
 
 Route::middleware('auth:sanctum')->controller(AssessmentController::class)->group(function(){

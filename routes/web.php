@@ -23,6 +23,7 @@ Auth::routes();
 
 Route::get('/student/home', [App\Http\Controllers\HomeController::class, 'studentIndex'])->name('student/home');
 Route::get('/student/handled/subject', [App\Http\Controllers\StudentViewController::class, 'subject'])->name('student/handled/subject');
+Route::get('/student/profile', [App\Http\Controllers\StudentViewController::class, 'studentProfile'])->name('student/profile');
 
 
 // Assesment

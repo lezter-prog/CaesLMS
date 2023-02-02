@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Quiz')
+@section('title', 'Assessment View')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
   <div class="row">
@@ -19,7 +19,7 @@
       @if($assessment->status =="CLOSED")
       <button type="button" id ="downloadScoreSheet" disabled class="btn btn-sm btn-outline-primary">Download Score Sheet</button>
       @else
-      <button type="button" id ="quizCloseBtn" class="btn btn-sm btn-outline-warning">Close This Quiz</button>
+      <button type="button" id ="quizCloseBtn" class="btn btn-sm btn-outline-warning">Close This Assessment</button>
       @endif
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
@@ -208,8 +208,6 @@
               request.setRequestHeader("Authorization", "Bearer "+token);
             },
           })
-         
-        
         } else {
           swal.fire('Changes are not saved', '', 'info')
         }

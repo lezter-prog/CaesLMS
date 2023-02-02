@@ -31,7 +31,7 @@ class StudentService
         $request->fullname =Str::upper($request->first_name." ".$request->last_name);
         $request->password =Hash::make($pwd);
         $request->decrypted_pass =$pwd;
-        $request->username =Str::lower($request->first_name).".".Str::lower($request->last_name);
+        $request->username =Str::lower(Str::replace(' ','.',$request->first_name)).".".Str::lower(Str::replace(' ','.',$request->last_name));
         $request->role ="R1";
         return $this->student->createStudentAccount($request);
     }

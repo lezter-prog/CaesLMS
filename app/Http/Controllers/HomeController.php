@@ -46,7 +46,7 @@ class HomeController extends Controller
 
         return view('student/home') 
         ->with('studentHome',"active")
-        ->with('',"")
+        ->with('studentProfile',"")
         ->with('subjects',$subjects);
     }
     public function teacherIndex()

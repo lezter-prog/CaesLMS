@@ -121,7 +121,6 @@ class UploadController extends Controller
             "assesment_type"=>"exam",
             "test_type"=>"exam",
             "total_points"=>$request->totalPoints,
-            "points_each"=>$request->pointsEach,
             "filename"=>$filenameWithExt,
             "deadline"=>$endDate->format('Y-m-d H:i:s'),
             "subj_code"=>$request->subj_code,

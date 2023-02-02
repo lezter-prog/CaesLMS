@@ -12,6 +12,7 @@
         <option value="G4">Grade 4</option>
         <option value="G5">Grade 5</option>
         <option value="G6">Grade 6</option>
+        <option value="KD">Kinder</option>
       </select>
     </div>
       
