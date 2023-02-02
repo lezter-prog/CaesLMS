@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Subjects;
 
@@ -719,6 +720,33 @@ class UtilDB extends Controller
                 "results"=>$array
             ];
             
+    }
+
+    public function generatePassword(Request $request){
+        $userId = $request->userId;
+        $pwd =Str::random(8);
+        
+        DB::beginTransaction();
+        $updatePass = User::where('id',$userId)->update(['password'=>Hash::make($pwd),'isGeneratedPassword'=>1]);
+        if(!$updatePass){
+            DB::rollBack();
+            return [
+                "message"=>"Updating Password Failed"
+            ];
+        }
+        $updateHash = DB::table('hash_tables')->where('hash_id',$userId)->update(['value'=>$pwd]);
+        if(!$updateHash){
+            DB::rollBack();
+            return [
+                "message"=>"Updating Password Failed"
+            ];
+        }
+
+        DB::commit();
+        return [
+            "result"=>true,
+            "value"=> $pwd
+        ];
     }
 
 }

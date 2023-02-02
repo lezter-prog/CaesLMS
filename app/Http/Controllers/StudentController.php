@@ -65,16 +65,17 @@ class StudentController extends Controller
 
     public function importStudents(Request $request){
         if ($request->hasFile('studentFile')){
-            // $filenameWithExt = $request->file('studentFile')->getClientOriginalName();
+            $filenameWithExt = $request->file('studentFile')->getClientOriginalName();
 
             // Log::info("FileName:".$filenameWithExt);
             // $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             // $extension = $request->file('studentFile')->getClientOriginalExtension();
             // $fileNameToStore = $request->lesson.'_'.time().'.'.$extension;
-            $file= $request->file("studentFile")->getRealPath();
-            Log::info("path:".$file);
+            // $file= $request->file("studentFile")->storeAs('public/imported',$fileNameToStore);
+            // $file= $request->file("studentFile")->getRealPath();
+            // Log::info("path:".$file);
             
-            $excel = Excel::import(new StudentsImport, $file,FORMAT::XLSX);
+            $excel = Excel::import(new StudentsImport, $request->file('studentFile'));
             
             return [
                 "result"=>true

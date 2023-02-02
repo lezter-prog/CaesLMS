@@ -37,6 +37,7 @@ class SyStudents extends Model
         ->join('sy_students', 'users.id', '=', 'sy_students.id_number')
         ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
         ->join('school_grades','school_grades.grade_code','=','sy_students.g_code')
+        ->join('hash_tables','hash_tables.hash_id','=','users.id')
         ->where('role', $role)
         ->get();
     }

@@ -163,6 +163,34 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="generatedPwModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Student Generated Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="addStudentForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="first_name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="fullname" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="first_name" class="form-label">Generated Password</label>
+            <input type="text" class="form-control" id="generatedPassword" readonly>
+          </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 <script>
   var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
@@ -196,8 +224,15 @@ $(document).ready(function(){
         { "data":"grade_desc" },
         { "data":"",
             "render":function(row,settings,data){
-                console.log(data);
-                return "<button class='showpass btn btn-success btn-sm' data-bs-toggle='tooltip' data-bs-placement='top' title='Generate New Password' data-id='"+data.user_id+"'><i class='fa-solid fa-rotate'></i></button>";
+                // console.log(data);
+
+                var generate ='<button class="generate btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Generate New Password" data-id="'+data.user_id+'"><i class="fa-solid fa-rotate"></i></button>';
+                var profile =' <button class="profile btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Student Profile" data-id="'+data.user_id+'"><i class="fa-solid fa-list"></i></button>';
+                var viewCurrent ='';
+                if(data.isGeneratedPassword){
+                  var viewCurrent =' <button class="showpass btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View Generate Password" data-id="'+data.user_id+'"><i class="fa-solid fa-eye"></i></button>';
+                }
+                return generate+viewCurrent+profile;
             }
         }
       ],
@@ -217,13 +252,13 @@ $(document).ready(function(){
 
     // select row
     $('#studentsTable tbody').on( 'click', 'tr', function () {   
-      console.log($(this).hasClass('selected'));         
+      // console.log($(this).hasClass('selected'));         
         if ( $(this).hasClass('selected') ) { 
             $(this).removeClass('selected'); 
         } 
         else {                 
           studentsTable.$('tr.selected').removeClass('selected'); 
-            console.log($(this).text());
+            // console.log($(this).text());
             $(this).addClass('selected');                
         }  
 
@@ -365,6 +400,76 @@ $(document).ready(function(){
           swal.fire('Changes are not saved', '', 'info')
         }
       })
+  });
+
+  $("#studentsTable tbody").on('click','.showpass', function(){
+    var data = studentsTable.row($(this).parents('tr')).data();
+    console.log(data);
+
+    $("#fullname").val(data.first_name+" "+data.last_name);
+    $("#generatedPassword").val(data.value);
+    $("#generatedPwModal").modal('show');
+
+  });
+
+  $("#studentsTable tbody").on('click','.generate', function(){
+    var data = studentsTable.row($(this).parents('tr')).data();
+    console.log(data);
+
+    swal.fire({
+        title: 'You will be Generating password for selected Student?',
+        showCancelButton: true,
+        confirmButtonText: 'Contine'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.showLoading();
+          $.ajax({
+            url:baseUrl+"/api/generate/password",
+            type:"POST",
+            data:{
+              "userId":data.id_number
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res.result){  
+                swal.fire({
+                  icon:'success',
+                  title: data.first_name+" "+data.last_name+"'s Generated password is: "+res.value,
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  studentsTable.ajax.reload();
+                });
+              }else{
+                swal.fire({
+                  icon:'error',
+                  title: res.message,
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  // location.reload();
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+         
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+       
+      });
   });
 
   $("#importStudentForm").submit((e)=>{
