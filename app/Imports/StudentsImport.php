@@ -37,7 +37,8 @@ class StudentsImport implements ToModel, WithHeadingRow
             'email' => '',
             'username'=> $username,
             'password'=> Hash::make($pwd),
-            'role'=> "R1"
+            'role'=> "R1",
+            'isGeneratedPassword'=>1
         ]);
 
         $hashtable = HashTable::create([

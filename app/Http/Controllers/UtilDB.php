@@ -376,7 +376,8 @@ class UtilDB extends Controller
         
         DB::beginTransaction();
         $user= User::where('id',$idNumber)->update([
-            'password' => Hash::make($newPassword)
+            'password' => Hash::make($newPassword),
+            'isGeneratedPassword'=>0
         ]);
 
         $hash=DB::table('hash_tables')
