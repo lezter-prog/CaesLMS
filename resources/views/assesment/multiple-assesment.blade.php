@@ -50,6 +50,10 @@
   var token ={{ Js::from(session('token')) }};
   var sectionCode ={{ Js::from($sectionCode) }};
   var subjCode ={{ Js::from($subjCode) }};
+<<<<<<< HEAD
+  // var pointsEach ={{ Js::from($pointsEach) }};
+=======
+>>>>>>> 251f7394767d87ffb296ade2c51e6297262a45a2
   var annotation =[];
   var numbers =[];
   // import { annotate } from 'https://unpkg.com/rough-notation?module';

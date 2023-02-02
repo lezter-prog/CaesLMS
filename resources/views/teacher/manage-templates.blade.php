@@ -23,12 +23,10 @@
     <table id ="templatesTable"  class="table table-striped" style="width:100%">
       <thead>
         <tr>
-            {{-- <th>Quiz Id</th> --}}
             <th>Template  Description</th>
             <th>File</th>
             <th></th>
             
-        
         </tr>
       </thead>
       <tbody>
