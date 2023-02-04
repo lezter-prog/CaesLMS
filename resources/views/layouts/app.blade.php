@@ -233,7 +233,8 @@
     
 
     <script>
-        var role = {{Js::from(Auth::user()->role)}}
+        var role ="";
+        
         if(role!="R1"){
             var mobile = window.orientation > 1;
             if(mobile){
