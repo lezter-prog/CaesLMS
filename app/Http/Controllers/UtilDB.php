@@ -489,13 +489,13 @@ class UtilDB extends Controller
                 $exam->score =0;
                 if($status!=null){
                     if($status->status=="submitted"){
-                        $quiz->isTaken =true;
-                        $quiz->studentStatus=$status->status;
-                        $quiz->score =$status->score;
+                        $exam->isTaken =true;
+                        $exam->studentStatus=$status->status;
+                        $exam->score =$status->score;
                     }else if($status->status=="in-progress"){
-                        $quiz->isTaken =false;
-                        $quiz->studentStatus =$status->status;
-                        $quiz->score =$status->score;
+                        $exam->isTaken =false;
+                        $exam->studentStatus =$status->status;
+                        $exam->score =$status->score;
                     }
                 }
                 array_push($examsArray,$exam);

@@ -72,17 +72,17 @@ class UploadController extends Controller
             $file= $request->file("quiz_file")->getRealPath();
             Log::info("path:".$file);
             if($request->quizType=="multiple"){
-                $excel = Excel::import(new QuizMultiple($assesmentId,$request->quizType), $file);
+                $excel = Excel::import(new QuizMultiple($assesmentId,$request->quizType), $request->file("quiz_file"));
                 if(!$excel){
                     DB::rollBack();
                 }
             }else if($request->quizType=="identify"){
-                $excel = Excel::import(new QuizIdentification($assesmentId,$request->quizType), $file);
+                $excel = Excel::import(new QuizIdentification($assesmentId,$request->quizType), $request->file("quiz_file"));
                 if(!$excel){
                     DB::rollBack();
                 }
             }else if($request->quizType=="enumerate"){
-                $excel = Excel::import(new Enumeration($assesmentId), $file);
+                $excel = Excel::import(new Enumeration($assesmentId), $request->file("quiz_file"));
                 if(!$excel){
                     DB::rollBack();
                 }
@@ -150,7 +150,7 @@ class UploadController extends Controller
 
        $lesson= DB::table('lesson')->where('id',$lessonId)->first();
 
-        return Storage::url('public/lessons/'.$lesson->file);
+        return Storage::download('public/lessons/'.$lesson->file);
     }
     
 }

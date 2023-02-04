@@ -30,7 +30,10 @@ class PasswordChangeController extends Controller
      */
     public function changePassword()
     {     
+
+        
         return view('auth/change-password')
+        ->with('oldPass', "oldPass")
         ->with('teacherDashboard',"")
         ->with('sectionCode', "")
         ->with('teacherAnnouncement',"")
@@ -40,6 +43,7 @@ class PasswordChangeController extends Controller
         ->with('teacherActivity',"")
         ->with('teacherExam',"")
         ->with('studentHome',"")
+        ->with('studentProfile',"")
         ->with('adminHome',"")
         ->with('sections', "")
         ->with('adminSections', "")

@@ -142,21 +142,6 @@
           </tbody>
         </table>
       </div>
-      {{-- <div class="col-lg-12 col-sm-12">
-        <div class="card mt-6" style="margin-top:6px;box-shadow: #4c4c4c 0px 4px 12px">
-          <div class="card-header " style="background-color: #516a8a; color:white;">
-            Details
-          </div>
-          <div class="card-body">
-            <div class="row ">
-              <div class="col-12 text-center" id="chartExams">
-                
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div> --}}
   </div>
 </div>
 
@@ -175,14 +160,12 @@
       <div class="modal-body">
         <div class="row ">
           <div class="col-12 text-center" id="scoreChart">
-            
           </div>
         </div>
         
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
       </div>
     </div>
   </div>
@@ -298,27 +281,27 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success st-badge">DONE</span> ';
             }else if(row.studentStatus=='in-progress'){
-               takingStatus='<span class="badge bg-info">In Progress</span> ';
+               takingStatus='<span class="badge bg-info st-badge">In Progress</span> ';
             }else{
-              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning st-badge">Ready to Take</span> ';
 
             }
 
             if(row.status=="ACTIVE")
-              status ='<span class="badge bg-primary">'+row.status+'</span> ';
+              status ='<span class="badge bg-primary st-badge">'+row.status+'</span> ';
             else{
-              status ='<span class="badge bg-danger">'+row.status+'</span> ';
+              status ='<span class="badge bg-danger st-badge">'+row.status+'</span> ';
               disabled ="disabled";
             }
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary st-badge">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary st-badge">Identification</span>';
             }else if(row.test_type == "enumerate"){
-              quizType='<span class="badge bg-primary">Enumeration</span>';
+              quizType='<span class="badge bg-primary st-badge">Enumeration</span>';
             }
 
             
@@ -373,23 +356,23 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success st-badge">DONE</span> ';
             }else if(row.studentStatus=='in-progress'){
-               takingStatus='<span class="badge bg-info">In Progress</span> ';
+               takingStatus='<span class="badge bg-info st-badge">In Progress</span> ';
             }else{
-              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning st-badge">Ready to Take</span> ';
 
             }
 
             if(row.status="ACTIVE")
-              status ='<span class="badge bg-primary">'+row.status+'</span> ';
+              status ='<span class="badge bg-primary st-badge">'+row.status+'</span> ';
             else
-              status ='<span class="badge bg-danger">'+row.status+'</span> ';
+              status ='<span class="badge bg-danger st-badge">'+row.status+'</span> ';
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary st-badge">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary st-badge">Identification</span>';
             }
 
             
@@ -447,23 +430,23 @@
             var takingStatus='';
             if(row.isTaken){
                disabled ="disabled";
-               takingStatus='<span class="badge bg-success">DONE</span> ';
+               takingStatus='<span class="badge bg-success st-badge">DONE</span> ';
             }else if(row.studentStatus=='in-progress'){
-               takingStatus='<span class="badge bg-info">In Progress</span> ';
+               takingStatus='<span class="badge bg-info st-badge">In Progress</span> ';
             }else{
-              takingStatus='<span class="badge bg-warning">Ready to Take</span> ';
+              takingStatus='<span class="badge bg-warning st-badge">Ready to Take</span> ';
 
             }
 
             if(row.status="ACTIVE")
-              status ='<span class="badge bg-primary">'+row.status+'</span> ';
+              status ='<span class="badge bg-primary st-badge">'+row.status+'</span> ';
             else
-              status ='<span class="badge bg-danger">'+row.status+'</span> ';
+              status ='<span class="badge bg-danger st-badge">'+row.status+'</span> ';
             
             if(row.test_type == "multiple"){
-              quizType='<span class="badge bg-primary">Multiple Choice</span>';
+              quizType='<span class="badge bg-primary st-badge">Multiple Choice</span>';
             }else if(row.test_type == "identify"){
-              quizType='<span class="badge bg-primary">Identification</span>';
+              quizType='<span class="badge bg-primary st-badge">Identification</span>';
             }
 
             
@@ -578,6 +561,29 @@
       });
     });
 
+    $('#activityTable tbody').on('click', '.take-btn', function(){
+      var data = activityTable.row($(this).parents('tr')).data();
+      console.log(data);
+     
+      swal.fire({
+        icon:'warning',
+        title: 'Are you ready to take this activity?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.close();
+          if(data.test_type=="multiple"){
+            window.location.href = "/assesment/multiple?assesmentId="+data.assesment_id;
+          }else if(data.test_type=="identify"){
+            window.location.href = "/assesment/identify?assesmentId="+data.assesment_id;
+          }else if(data.test_type=="enumerate"){
+            window.location.href = "/assesment/enumeration?assesmentId="+data.assesment_id;
+          }
+        }
+      });
+    });
+
     $('#studentLesson tbody').on('click', '.download-btn', function(){
       var data = studentLesson.row($(this).parents('tr')).data();
      
@@ -585,29 +591,36 @@
         icon:'info',
         title: 'You are trying to download a lesson?',
         showCancelButton: true,
+        showLoaderOnConfirm: true,
         confirmButtonText: 'Yes',
       }).then((result) => {
         if (result.isConfirmed) {
-          swal.close();
           $.ajax({
             url:baseUrl+"/api/lesson/download/"+data.id,
             type:"GET",
-            success:(res)=>{
-              // console.log(res);
-              if(res){
-                // var blob = new Blob([res], { type: "application/octetstream"});
-                // const url = window.URL.createObjectURL(res);
-                console.log(res)
-                a = document.createElement('a');
-                a.href = res;
-                // Give filename you wish to download
+            xhr: function() {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 2) {
+                        if (xhr.status == 200) {
+                            xhr.responseType = "blob";
+                        } else {
+                            xhr.responseType = "text";
+                        }
+                    }
+                };
+                return xhr;
+            },
+            success:(b)=>{
+                const url = window.URL.createObjectURL(b);
+                console.log(url);
+                var a = document.createElement('a');
+                a.href = url;
                 a.download = data.lesson;
                 a.style.display = 'none';
                 document.body.appendChild(a);
                 a.click();
-
-               
-              }
+                swal.close();
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -640,12 +653,12 @@
                         },
                         value: {
                           show:true,
-                          offsetY: 10
+                          offsetY: 1
                         },
                         total:{
                           show:true,
                           showAlways:true,
-                          // fontSize: "1.050rem",
+                          fontSize: "10px",
                           label:"Total Score",
                           formatter:function(w){
                             return parseInt(data.score);
@@ -653,6 +666,60 @@
                         }
                       }
                     }
+                  }
+                },
+                  dataLabels: {
+                  enabled: true,
+                  formatter: function (val) {
+                    var p ="."+val;
+                    console.log(p);
+                    return parseFloat(data.total_points)*parseFloat(p);
+                  }
+                }
+      });
+      $('#scoreChartTitle').text(data.assesment_desc);
+
+      $('#scoreChartModal').modal('show');
+    });
+
+    $('#activityTable tbody').on('click', '.view-quiz', function(){
+      var data = activityTable.row($(this).parents('tr')).data();
+      var wrongAnswer = (parseInt(data.total_points)-parseInt(data.score));
+      
+      chart.updateOptions({
+        series:[parseInt(data.score),wrongAnswer],
+        plotOptions: {
+                  pie: {
+                    donut: {
+                      labels: {
+                        show: true,
+                        name: {
+                          show:true,
+                          fontSize: "30"
+                        },
+                        value: {
+                          show:true,
+                          offsetY: 1
+                        },
+                        total:{
+                          show:true,
+                          showAlways:true,
+                          fontSize: "10px",
+                          label:"Total Score",
+                          formatter:function(w){
+                            return parseInt(data.score);
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                  dataLabels: {
+                  enabled: true,
+                  formatter: function (val) {
+                    var p ="."+val;
+                    console.log(p);
+                    return parseFloat(data.total_points)*parseFloat(p);
                   }
                 }
       });
@@ -692,6 +759,14 @@
                         }
                       }
                     }
+                  }
+                },
+                  dataLabels: {
+                  enabled: true,
+                  formatter: function (val) {
+                    var p ="."+val;
+                    console.log(p);
+                    return parseFloat(data.total_points)*parseFloat(p);
                   }
                 }
       });

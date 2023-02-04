@@ -71,7 +71,7 @@
 
             <!-- Brand -->
             <a class="navbar-brand" href="/student/home">
-                <i class="fa-solid fa-globe fa-2x"></i> <span class="abre-font-size orange">C</span><span class="abre-font-size">A</span><span class="abre-font-size neon">E</span><span class="abre-font-size">S </span>
+                <img class="logo-class" src="{{Storage::url('public/logo/logo.png')}}" width="30" height="40" alt=""> <span class="abre-font-size orange">C</span><span class="abre-font-size">A</span><span class="abre-font-size neon">E</span><span class="abre-font-size">S </span>
                 <span class="abre-font-size orange">L</span><span class="abre-font-size">M</span><span class="abre-font-size neon">S</span>
             </a>
 
@@ -96,13 +96,7 @@
                 <li class="nav-item dropdown">
                     
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        <img
-                        src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
-                        class="rounded-circle"
-                        height="22"
-                        alt=""
-                        loading="lazy"
-                        /> {{ Auth::user()->name }}
+                        <i class="fa-solid fa-child"></i> {{ Auth::user()->name }}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">

@@ -35,7 +35,11 @@ class AssesmentViewController extends Controller
         $id =  Auth::id();
         $role =Auth::user()->role;
         if($role == "R1"){
-            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            $count =DB::table('student_assessment_answer_header')
+            ->where([
+                ['assesment_id','=',$request->assesmentId],
+                ['student_id','=',$id]
+                ])->count();
             if($count==0){
                 DB::table('student_assessment_answer_header')->insert([
                     'student_id'=>Auth::id(),
@@ -97,7 +101,11 @@ class AssesmentViewController extends Controller
         $id =  Auth::id();
         $role =Auth::user()->role;
         if($role == "R1"){
-            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            $count =DB::table('student_assessment_answer_header')
+            ->where([
+                ['assesment_id','=',$request->assesmentId],
+                ['student_id','=',$id]
+                ])->count();
             if($count==0){
                 DB::table('student_assessment_answer_header')->insert([
                     'student_id'=>Auth::id(),
@@ -156,7 +164,6 @@ class AssesmentViewController extends Controller
         return view('assesment/enumeration')
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
-        // ->with('pointsEach',$assesmentHeader->points_each)
         ->with("sectionCode",$assesmentHeader->section_code)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
@@ -166,7 +173,11 @@ class AssesmentViewController extends Controller
         $id =  Auth::id();
         $role =Auth::user()->role;
         if($role == "R1"){
-            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            $count =DB::table('student_assessment_answer_header')
+            ->where([
+                ['assesment_id','=',$request->assesmentId],
+                ['student_id','=',$id]
+                ])->count();
             if($count==0){
                 DB::table('student_assessment_answer_header')->insert([
                     'student_id'=>Auth::id(),
@@ -225,7 +236,11 @@ class AssesmentViewController extends Controller
         $id =  Auth::id();
         $role =Auth::user()->role;
         if($role == "R1"){
-            $count =DB::table('student_assessment_answer_header')->where('assesment_id',$request->assesmentId)->count();
+            $count =DB::table('student_assessment_answer_header')
+            ->where([
+                ['assesment_id','=',$request->assesmentId],
+                ['student_id','=',$id]
+                ])->count();
             if($count==0){
                 DB::table('student_assessment_answer_header')->insert([
                     'student_id'=>Auth::id(),

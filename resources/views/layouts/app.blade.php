@@ -45,17 +45,6 @@
                         <a href="/teacher/home" class="{{$teacherDashboard}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                            <span class ="me-3"><i class="fas fa-tachometer-alt fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Dashboard</span>
-                                
-                        </a>
-
-                        <a href="#" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-id-card fa-fw  icon-bg-color fa-2x"></i></span> 
-                                <span>Teacher Profile</span>
-                        </a>
-
-                        <a href="/teacher/announcement" class="{{$teacherAnnouncement}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
-                            <span class ="me-3"><i class="fa-solid fa-bullhorn  fa-fw  icon-bg-color fa-2x"></i></span> 
-                                <span>Announcement</span>
                         </a>
                         <a href="/teacher/lesson" class="{{$teacherLesson}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-person-chalkboard fa-fw  icon-bg-color fa-2x"></i></span> 
@@ -164,7 +153,7 @@
 
             <!-- Brand -->
             <a class="navbar-brand" href="#">
-                <i class="fa-solid fa-globe fa-2x"></i> <span class="abre-font-size orange">C</span><span class="abre-font-size">A</span><span class="abre-font-size neon">E</span><span class="abre-font-size">S </span>
+                <img class="logo-class" src="../uploads/logo.png" width="30" height="40" alt=""> <span class="abre-font-size orange">C</span><span class="abre-font-size">A</span><span class="abre-font-size neon">E</span><span class="abre-font-size">S </span>
                 <span class="abre-font-size orange">L</span><span class="abre-font-size">M</span><span class="abre-font-size neon">S</span>
             </a>
 
@@ -190,13 +179,7 @@
                 <li class="nav-item dropdown">
                     
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        <img
-                        src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
-                        class="rounded-circle"
-                        height="22"
-                        alt=""
-                        loading="lazy"
-                        /> {{ Auth::user()->name }}
+                        <i class="fa-solid fa-child"></i> {{ Auth::user()->name }}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">
@@ -250,7 +233,13 @@
     
 
     <script>
-
+        var role = {{Js::from(Auth::user()->role)}}
+        if(role!="R1"){
+            var mobile = window.orientation > 1;
+            if(mobile){
+                alert("Youre accounts is not the best in Mobile View");
+            }
+        }
         particlesJS.load('particle-js', '/json/particles-config.json', function() {
             console.log('callback - particles.js config loaded');
         });

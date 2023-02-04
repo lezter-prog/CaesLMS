@@ -1,6 +1,11 @@
 body {
     background-color: #fbfbfb;
   }
+@font-face {
+  font-family: blueberry;
+  src: url(Blueberry\ .ttf);
+}
+  
   @media (min-width: 576px) {
     main {
       padding-left: 240px;
@@ -23,12 +28,29 @@ body {
     background-color: #98c1d9 ;
 
   }
+  .abre-font-size{
+    font-size: 30px;
+    font-family: fantasy;
+  }
+  .logo-class{
+    margin-bottom: 1px;
+    padding: 0px 0px 7px 0px;
+    height: 50px;
+    width: 50px;
+
+  }
+
+  .st-badge{
+    font-size: 12px;
+  }
   
   @media (max-width: 576px) {
     .sidebar {
       width: 100%;
     }
   }
+
+ 
   @media (min-width: 360px){
     .navbar-expand-sm {
       flex-wrap: nowrap;
@@ -41,8 +63,10 @@ body {
       position: absolute;
     }
     .navbar-expand-sm .navbar-nav .nav-link {
+      font-size: 12px;
       padding-right: var(--bs-navbar-nav-link-padding-x);
       padding-left: var(--bs-navbar-nav-link-padding-x);
+      padding-bottom: 5px;
     }
     .navbar-expand-sm .navbar-nav-scroll {
       overflow: visible;
@@ -72,7 +96,30 @@ body {
       padding: 0;
       overflow-y: visible;
     }
+    
 
+  }
+  @media (min-width: 360px) and (max-width:640px){
+    .logo-class{
+      height: 36px;
+      width: 39px;
+      margin-bottom: 1px;
+      padding: 4px 0px 0px 5px;
+    }
+    .abre-font-size {
+      font-size: 20px;
+      font-family: blueberry;
+    }
+    .st-badge{
+      font-size: 10px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .logo-class{
+      margin-bottom: 1px;
+      /* padding: 0px 0px 10px 5px; */
+    }
   }
 
   .sidebar .active {
@@ -91,7 +138,7 @@ body {
   }
 
   .main-navbar{
-    background-color: #3d5a80 !important;
+    background-color: #6781a5 !important;
     color:white !important;
     height: 70px;
   }
@@ -114,13 +161,10 @@ body {
   }
 
 .sidebar-color{
-  background-color: #98c1d9;
+  background-color: #a9cde2;
 }
 
-.abre-font-size{
-  font-size: 30px;
-  font-family: fantasy;
-}
+
 
 .orange{
   color: #FF6600;
@@ -153,7 +197,7 @@ table.dataTable thead tr {
   font-size: 12px;
   height: 30px;
 }
-.pointer {cursor: pointer;}
+
 
 .light-blue{
   background: rgba(57, 135, 255, 0.1) !important;

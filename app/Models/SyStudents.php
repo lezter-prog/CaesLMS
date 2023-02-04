@@ -23,7 +23,8 @@ class SyStudents extends Model
         's_code',
         'g_code',
         'sy',
-        'added_by'
+        'added_by',
+        
     ];
 
     public function getAll()
@@ -54,7 +55,8 @@ class SyStudents extends Model
             'email' => '',
             'username'=> $request->username,
             'password'=> $request->password,
-            'role'=> $request->role
+            'role'=> $request->role,
+            "isGeneratedPassword"=>1
         ]);
 
         $hashtable = HashTable::create([
