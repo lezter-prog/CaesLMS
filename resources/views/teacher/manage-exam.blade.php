@@ -186,7 +186,7 @@
                   
                     var eye=' <button  class="btn btn-info btn-sm viewexam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="View the quiz"><i class="fa-regular fa-eye"></i></button>'
                     // var close=' <button  class="btn btn-warning btn-sm close-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Close the Quiz"><i class="fa-regular fa-rectangle-xmark"></i></button>'
-                    var edit=' <button '+disabled+' class="btn btn-success btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Re-Upload Quiz"><i class="fa-solid fa-pen-to-square"></i></button>'
+                    var edit=' <button '+disabled+' class="btn btn-danger btn-sm delete-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Exam"><i class="fa-solid fa-trash"></i></button>'
                     var view=' <button  class="btn btn-primary btn-sm view-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Score Sheet"><i class="fa-solid fa-list-check"></i></button>'
 
                     return eye+edit+view;
@@ -377,6 +377,49 @@
         }
       })
   });
+
+      $('#examTable tbody').on( 'click', '.delete-btn', function () {
+            var data = examTable.row( $(this).closest('tr') ).data();
+
+            swal.fire({
+              title: 'Are you sure you want to delete this Activity?',
+              showCancelButton: true,
+              confirmButtonText: 'Delete',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $.ajax({
+                  url:baseUrl+"/api/assessement/remove/"+data.assesment_id,
+                  type:"POST",
+                  success:(res)=>{
+                    console.log(res);
+                    if(res.result){
+                      swal.fire({
+                      icon:'success',
+                      title: 'Delete Success',
+                      showCancelButton: false,
+                      confirmButtonText: 'Ok',
+                    }).then((result) => {
+                      swal.close();
+                      examTable.ajax.reload();
+                    });
+                  }
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr);
+                    alert(xhr.status);
+                    alert(thrownError);
+                  },
+                  beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", "Bearer "+token);
+                  },
+                })
+              
+              } else {
+                swal.fire('Changes are not saved', '', 'info')
+              }
+            })
+            
+          } );
 
 });
 </script>

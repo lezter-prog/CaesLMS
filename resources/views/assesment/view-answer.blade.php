@@ -9,41 +9,32 @@
       alert(arg1);
     }
 </script> --}}
-@If($role =="R2")
-<div class="row text-center">
-  <h6 style="color: red">TEACHERS VIEW ------- NOT ALLOWED TO SUBMIT</h6>
-</div>
-@endIf
-<div class="row text-center">
-  <h6>Calamba Adventist Elementary School</h6>
-  <h6>Quiz1-Subject</h6>
-  <h6>2022-2023</h6>
-</div>
-<div class="row" style="padding:5px; border:1px solid gray;border-radius:10px">
-  @foreach ($assessmentAnswers as $answers)
-  <div class="col-3 " style="margin-left: 15px;">
-    <h6>{{$answers->answer}}</h6>
-  </div>
-  @endforeach
+<style>
+  .wrong-answer{
+    /* border-color: red; */
+    background: #fd5d5d !important;
+  }
+  .right-answer{
+    border-color: green;
+    background: #0eb93f !important;
+  }
 
+</style>
+<div class="row text-left">
+  <h6>{{$assessmentDesc}}</h6>
+  <h6>List of Answer</h6>
+  <h6>By: {{$name}}</h6>
 </div>
 <form id="identicationAssesment" style="margin-top:10px">
-  <div class="row text-start">
-    <h6> <strong>I. Identify the correct answer from above.</strong></h6>
-  </div>
   @foreach ($assesmentDetails as $ass)
   <div class="row text-start pb-4">
     <h6>{{$ass->number}}. {{$ass->question}}</h6>
     <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-     <input type="text" class="form-control input-sm" autocomplete="off" name="question{{$ass->number}}" value="{{$ass->initialAnswer}}" data-number="{{$ass->number}}" data-test-type="identify">
+     <input type="text" class="form-control input-sm {{ $ass->class }}" autocomplete="off" name="question{{$ass->number}}" value="{{$ass->answers}}" data-number="{{$ass->number}}" data-test-type="identify" readonly>
     </div>
   </div>
   @endforeach
-  <div class="row" style="margin-top:10px">
-    <div class="col-12 text-center">
-      <button class="btn btn-primary btn-sm" @if($role=="R2") disabled @endIf type="submit">Submit</button>
-    </div>
-  </div>
+  
 </form>
 
 @endsection
@@ -86,14 +77,9 @@
 
   $(document).ready(function(){
     var assesmentId ={{ Js::from($assesmentId) }};
-    var role ={{ Js::from($role) }};
     $('input').on('keyup', function(event){
       console.log($(this).val())
       console.log($(this).data('number'))
-
-      if(role=="R2"){
-          return
-      }
       
       $.ajax({
             url:baseUrl+"/api/quiz/save/temp",
@@ -125,9 +111,6 @@
 
     $("#identicationAssesment").submit(function(e){
       e.preventDefault();
-      if(role=="R2"){
-          return
-      }
 
       swal.fire({
         title: 'Are you sure?',

@@ -92,11 +92,12 @@ class AssesmentViewController extends Controller
         ->with("role",$role)
         ->with('assesmentId',$request->assesmentId)
         ->with("sectionCode",$assesmentHeader->section_code)
+        ->with("assessmentDESC",$assesmentHeader->assesment_id)
         ->with("subjCode",$assesmentHeader->subj_code)
         ->with('assesmentDetails',$asessmentArray);
     }
 
-    public function assesmentEnumeration(Request $request){
+    public function assessmentEnumeration(Request $request){
 
         $id =  Auth::id();
         $role =Auth::user()->role;
@@ -323,6 +324,63 @@ class AssesmentViewController extends Controller
         ->with("assessmentAnswers",$answers)
         ->with("multipleChoice",$asessmentMultiple)
         ->with('identification',$asessmentIdentification);
+    }
+    public function view_answer(Request $request){
+        $asessmentArray=[];
+        $assesment =DB::table('assesment_details')
+                    ->where([
+                        ['assesment_id',$request->assesmentId]
+                    ])->get();
+                        
+        $assesmentHeader =DB::table('assesment_header')
+                    ->where('assesment_id',$request->assesmentId)->first();      
+        $studentName = DB::table('sy_students')->select('first_name','last_name')->where('id_number',$request->studentId)->first();
+
+        Log::info("Name:".json_encode($studentName));
+
+        foreach($assesment as $ass){
+           
+            // array_push($answers,$ass->answer);
+            $answers =DB::table('student_assessment_answer')
+                ->select('answer')
+                ->where([
+                    ['student_id','=',$request->studentId],
+                    ['assesment_id','=',$request->assesmentId],
+                    ['number','=',$ass->number]
+                ])->first();
+            $checkAnswers = DB::table('assesment_details')
+                            ->where([
+                                ['assesment_id','=',$request->assesmentId],
+                                ['number','=',$ass->number]
+                            ])->first();
+            
+            $class="";
+            if($checkAnswers!=null){
+                if($checkAnswers->answer == $answers->answer){
+                    $class="right-answer";
+                }else{
+                    $class="wrong-answer";
+                }
+            }else{
+                $class="wrong-answer";
+            }
+
+            $ass->class=$class;
+            $ass->answers="";
+            if($answers !=null){
+                $ass->answers = $answers->answer;
+            }
+            Log::info("assessmentDetail:".json_encode($ass));
+        array_push($asessmentArray,$ass);
+        }
+        
+        return view('assesment/view-answer')
+            ->with('assesmentId',$request->assesmentId)
+            ->with("sectionCode",$assesmentHeader->section_code)
+            ->with("subjCode",$assesmentHeader->subj_code)
+            ->with("name",$studentName->first_name." ".$studentName->last_name)
+            ->with("assessmentDesc", $assesmentHeader->assesment_desc)
+            ->with('assesmentDetails',$asessmentArray);
     }
     
 }

@@ -31,6 +31,7 @@ Route::get('/assesment/multiple', [App\Http\Controllers\AssesmentViewController:
 Route::get('/assesment/identify', [App\Http\Controllers\AssesmentViewController::class, 'assessmentIdentify'])->name('assesment/identify');
 Route::get('/assesment/enumeration', [App\Http\Controllers\AssesmentViewController::class, 'assessmentEnumeration'])->name('assesment/exam');
 Route::get('/assesment/exam', [App\Http\Controllers\AssesmentViewController::class, 'assessment'])->name('assesment/exam');
+Route::get('/assesment/view/answer', [App\Http\Controllers\AssesmentViewController::class, 'view_answer'])->name('assesment/view/answer');
 
 
 Route::get('/teacher/home', [App\Http\Controllers\HomeController::class, 'teacherIndex'])->name('teacher/home');
@@ -42,6 +43,8 @@ Route::get('/teacher/activity', [App\Http\Controllers\TeacherViewController::cla
 Route::get('/teacher/view/assessment', [App\Http\Controllers\TeacherViewController::class, 'view_students_assessment'])->name('teacher/view/assessment');
 Route::get('/teacher/exam', [App\Http\Controllers\TeacherViewController::class, 'manage_exam'])->name('teacher/exam');
 Route::get('/teacher/templates', [App\Http\Controllers\TeacherViewController::class, 'manage_templates'])->name('teacher/templates');
+Route::get('/teacher/student/profile', [App\Http\Controllers\TeacherViewController::class, 'student_profile'])->name('teacher/student/profile');
+
 
 Route::get('/admin/home', [App\Http\Controllers\HomeController::class, 'adminIndex'])->name('admin/home');
 Route::get('/admin/teacher', [App\Http\Controllers\AdminViewController::class, 'manage_teacher'])->name('admin/teacher');

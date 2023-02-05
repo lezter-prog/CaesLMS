@@ -78,25 +78,12 @@
             <!-- Right links -->
             <ul class="navbar-nav ms-auto d-flex flex-row">
                 <!-- Notification dropdown -->
-               
-                {{-- <li class="nav-item">{{ Auth::user() }}</li> --}}
-                {{-- <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge rounded-pill badge-notification bg-danger">1</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li> --}}
-
+        
                 <!-- Icon dropdown -->
                 <li class="nav-item dropdown">
                     
                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                        <i class="fa-solid fa-child"></i> {{ Auth::user()->name }}
+                        <i class="fa-solid fa-user"></i> {{ Auth::user()->name }}
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown">

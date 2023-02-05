@@ -159,6 +159,10 @@
       scoreSheetTable.ajax.reload();
 
     });
+    $('#scoreSheetTable tbody').on('click','.view-btn',function(){
+      var data = scoreSheetTable.row( $(this).closest('tr') ).data();
+      location.href="/assesment/view/answer?assesmentId="+assessmentId+"&&studentId="+data.id_number; 
+    });
 
     $("#quizCloseBtn").on('click',function(){
       swal.fire({

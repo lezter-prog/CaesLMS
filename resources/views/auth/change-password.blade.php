@@ -6,7 +6,7 @@
  
 </div>
 <div class="" style="padding:0px 20px">
-  <div class="col-6 ">
+  <div class="col-lg-6 col-sm-12">
   <form id="passForm">
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Enter Old-Password</label>

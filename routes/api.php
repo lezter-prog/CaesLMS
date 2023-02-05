@@ -115,6 +115,8 @@ Route::middleware('auth:sanctum')->controller(AssessmentController::class)->grou
     Route::get('assessment/get/answer', 'getStudentAnswer');
     Route::get('assessment/get/scores', 'getAllStudentAnswer');
     Route::post('assessment/close', 'closeAssessment');
+    Route::post('assessement/remove/{assessmentId}', 'removeAssessment');
+    
     
     
 });

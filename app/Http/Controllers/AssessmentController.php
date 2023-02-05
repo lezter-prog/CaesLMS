@@ -181,4 +181,55 @@ class AssessmentController extends Controller
             "message"=>"Successful"
         ];
     }
+
+    public function removeAssessment($assessmentId){
+        DB::beginTransaction();
+        $delHeader =DB::table('assesment_header')->where('assesment_id',$assessmentId)->delete();
+
+        if(!$delHeader){
+            DB::rollBack();
+            return [
+                "result"=>false
+            ];
+        }
+        $delDetails =DB::table('assesment_details')->where('assesment_id',$assessmentId)->delete();
+
+        if(!$delDetails){
+            DB::rollBack();
+            return [
+                "result"=>false
+            ];
+        }
+
+        $count1 = DB::table('student_assessment_answer_header')->where('assesment_id',$assessmentId)->count();
+        if($count1 >0){
+            $stHeader =DB::table('student_assessment_answer_header')->where('assesment_id',$assessmentId)->delete();
+
+            if(!$stHeader){
+                DB::rollBack();
+                return [
+                    "result"=>false,
+                    "message"=>"student_assessment_answer_header, failed to remove"
+                ];
+            }
+        }
+
+        $count2 = DB::table('student_assessment_answer')->where('assesment_id',$assessmentId)->count();
+        if($count2 >0){
+            $stHeader =DB::table('student_assessment_answer')->where('assesment_id',$assessmentId)->delete();
+            if(!$stHeader){
+                DB::rollBack();
+                return [
+                    "result"=>false,
+                    "message"=>"student_assessment_answer, failed to remove"
+                ];
+            }
+        }
+
+        DB::commit();
+        return [
+            "result"=>true
+        ];
+       
+    }
 }

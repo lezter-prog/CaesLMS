@@ -143,8 +143,7 @@
             url:baseUrl+"/api/quiz/submit/answer",
             type:"POST",
             data:{
-              "assesmentId":assesmentId,
-              "pointsEach":pointsEach
+              "assesmentId":assesmentId
             },
             success:(res)=>{
               console.log(res);

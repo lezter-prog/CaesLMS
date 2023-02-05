@@ -28,10 +28,7 @@
           <thead>
             <tr>
                 <th>Student Name</th>
-                <th>Status</th>
-                <th>Quizes</th>
-                <th>Activities</th>
-                <th>Exams</th>
+                <th></th>
             </tr>
           </thead>
           <tbody>
@@ -43,8 +40,8 @@
         <table id ="sectionSubjects"  class="table table-striped" style="width:100%">
           <thead>
             <tr>
-                <th>SubjectCode</th>
-                <th>Subject</th>
+                <th>Subject Code</th>
+                <th>Section Desc</th>
                 <th></th>
             </tr>
           </thead>
@@ -279,14 +276,6 @@
             <label for="lesson" class="form-label">Total Points</label>
             <input type="number" class="form-control" id="totalPoints" name="totalPoints" required>
           </div>
-          {{-- <div class="mb-3">
-            <label for="grade" class="form-label">Select Quiz Type</label>
-            <select type="text" class="form-control" id="quizType" name="quizType" >
-              <option value="multiple">Multiple Choice</option>
-              <option value="identify">Identification</option>
-              <option value="enumeration">Enumeration</option>
-            </select>
-          </div> --}}
           
           <div class="mb-3">
             <label for="endDateInput" class="form-label">End Date</label>
@@ -296,9 +285,6 @@
                 <i class="fas fa-calendar"></i>
               </span>
             </div>
-            {{-- <label for="lesson" class="form-label">Select End Date</label>
-            <input type="text" class="form-control" id="endDate" name="subject" readonly> --}}
-            {{-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> --}}
           </div>
         </div>
         <div class="modal-footer">
@@ -315,7 +301,6 @@
 
   $(document).ready(function(){
    var sectionCode={{ Js::from($sectionCode) }};
-   console.log(sectionCode);
    var teacherStudentsTable= $('#teacherStudentsTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -327,7 +312,6 @@
         console.log("ajaxSRC: "+sSource);
           oSettings.jqXHR = 
           $.ajax({
-           
             "dataType": 'json',
             "type": "GET",
             "url": sSource,
@@ -347,13 +331,11 @@
             return row.first_name+" "+row.last_name;
           }
         },
-        { "data":"id_number"},
-        { "data":"id_number" },
-        { "data":"id_number" },
         {
           "data":"status",
+          "className":"text-center",
           "render": function ( data, type, row, meta ) {
-              return '<button class="btn btn-success btn-sm section-subjects" data-bs-toggle="tooltip" data-bs-placement="top" title="Section Subjects"><i class="fa-solid fa-folder"></i></button>';
+              return '<button class="btn btn-success btn-sm view-profile" data-bs-toggle="tooltip" data-bs-placement="top" title="View Student Profile"><i class="fa-solid fa-list"></i></button>';
             }
          }
       ],
@@ -409,6 +391,11 @@
 
         },
     });
+
+    $('#teacherStudentsTable tbody').on('click','.view-profile', function(){
+      var data = teacherStudentsTable.row( $(this).closest('tr') ).data();
+      location.href="/teacher/student/profile?studentId="+data.id_number;
+    })
 
     
     $("#teacher").select2({

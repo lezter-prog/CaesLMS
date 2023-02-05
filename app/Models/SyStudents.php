@@ -44,7 +44,9 @@ class SyStudents extends Model
     }
     public function getStudentsBySection($sectionCode){
         return DB::table('sy_students')
-        ->where('s_code',$sectionCode)->get();
+        ->join('school_sections','school_sections.s_code','=','sy_students.s_code')
+        ->join('school_grades','school_grades.grade_code','=','sy_students.g_code')
+        ->where('sy_students.s_code',$sectionCode)->get();
 
     }
 

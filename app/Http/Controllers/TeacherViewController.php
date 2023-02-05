@@ -200,4 +200,31 @@ class TeacherViewController extends Controller
         ->with('teacherLesson',"");
     }
 
+    public function student_profile(Request $request)
+    {
+       $student =DB::table('sy_students')->where('id_number',$request->studentId)->first();
+       $profile = DB::table('students_profile')->where('student_id',$request->studentId)->first();
+       if($profile==null){
+        $profile = (object)[];
+        $profile->age ="";
+        $profile->birthdate ="";
+        $profile->contact_no ="";
+        $profile->guardian ="";
+        $profile->guardian_contact_no ="";
+        $profile->address ="";
+       }else{
+        $profile->birthdate=date('Y-m-d', strtotime($profile->birthdate));
+       }
+       return view('teacher/student_profile')
+        ->with('teacherDashboard',"active")
+        ->with('student',$student)
+        ->with('profile',$profile)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
+        ->with('teacherLesson',"");
+    }
+
 }
