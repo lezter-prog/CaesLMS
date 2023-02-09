@@ -282,7 +282,7 @@
       var formData = new FormData(form[0]);
 
       swal.fire({
-        title: 'You are uploading new Quiz?',
+        title: 'You are uploading new Activity?',
         showCancelButton: true,
         confirmButtonText: 'Upload',
       }).then((result) => {
@@ -371,7 +371,7 @@
 
           $('#activityTable tbody').on( 'click', '.view-btn', function () {
             var data = activityTable.row( $(this).closest('tr') ).data();
-            location.href="/teacher/view/assessment?assessmentId="+data.assesment_id+"&assessmentType=actitivy";
+            location.href="/teacher/view/assessment?assessmentId="+data.assesment_id+"&assessmentType=activity";
           } );
 
           $('#activityTable tbody').on('click', '.viewact-btn', function(){

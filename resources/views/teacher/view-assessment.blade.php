@@ -17,7 +17,7 @@
     </div> --}}
     <div class="btn-group me-2">
       @if($assessment->status =="CLOSED")
-      <button type="button" id ="downloadScoreSheet" disabled class="btn btn-sm btn-outline-primary">Download Score Sheet</button>
+      <button type="button" id ="reopen" class="btn btn-sm btn-outline-primary">Re-Open Quiz</button>
       @else
       <button type="button" id ="quizCloseBtn" class="btn btn-sm btn-outline-warning">Close This Assessment</button>
       @endif
@@ -31,6 +31,7 @@
 <div class="" style="padding:0px 10px">
   <span><span class="badge bg-success">Section</span> {{$assessment->s_desc}} </span> |
   <span> <span class="badge bg-success">Subject</span> {{$assessment->subj_desc}}</span> |
+  <span> <span class="badge bg-info">{{$assessment->test_type}}</span> </span> |
   <span> <span class="badge bg-{{$assessment->statusColor}}">{{$assessment->status}} </span> </span>
 
   <div class="row ">
@@ -62,6 +63,7 @@
    var sectionCode={{ Js::from($assessment->section_code) }};
    var currentQuarter =$("#quarter").val();
    var assessmentId ={{ Js::from($assessment->assesment_id) }};
+   var totalPoints ={{ Js::from($assessment->total_points) }};
    var scoreSheetTable= $('#scoreSheetTable').DataTable({
       "bPaginate": false,
       "bLengthChange": false,
@@ -101,7 +103,7 @@
           "className":"text-center",
           "render":function(data, type, row, meta ){
                 console.log(row);
-                var score ='<span class="badge bg-primary">'+data+' pts </span>';
+                var score ='<span class="badge bg-primary">'+data+'/'+totalPoints+'</span>';
 
                 if(row.studentStatus ==null){
                     score ='<span class="badge bg-warning"> Not yet taken</span>';
@@ -184,6 +186,60 @@
                 swal.fire({
                   icon:'success',
                   title: 'Closing Quiz Success',
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  location.reload();
+                });
+              }else{
+                swal.fire({
+                  icon:'error',
+                  title: res.message,
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  // location.reload();
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+      });
+
+    });
+    $("#reopen").on('click',function(){
+      swal.fire({
+        title: 'Are you sure you want to re-open this quiz?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.showLoading();
+          $.ajax({
+            url:baseUrl+"/api/assessment/open",
+            type:"POST",
+            data:{
+              "assessmentId":assessmentId
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res.result){  
+                swal.fire({
+                  icon:'success',
+                  title: 'Re-Opening Quiz Success',
                   showCancelButton: false,
                   confirmButtonText: 'Ok',
                 }).then((result) => {

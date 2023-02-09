@@ -112,13 +112,15 @@ class AssessmentController extends Controller
                 ])->get();
 
         foreach($inProgressStudents as $student){
-            $answers =  DB::tables('student_assessment_answer_tmp')
+            Log::info("Im here");
+            $answers =  DB::table('student_assessment_answer_tmp')
                         ->where([
                             ['student_id','=',$student->student_id],
                             ['assesment_id','=',$assessmentId]
                         ])->get();
             $countScore=0;
             foreach($answers as $answer){
+                
                     $exec=DB::table('student_assessment_answer')->insert([
                         'student_id'=>$answer->student_id,
                         'assesment_id'=>$answer->assesment_id,
@@ -132,20 +134,44 @@ class AssessmentController extends Controller
                         return false;
                     }
                     $getCorrectAnswers =DB::table('assesment_details')
-                        ->select('number','answer','points_each')
+                        ->select('number','answer','points_each','json_answer')
                         ->where([
-                            ['assesment_id','=',$answer->assesment_id],
+                            ['assesment_id','=',$assessmentId],
                             ['number','=',$answer->number],
-                            ['test_type','=',$answer->test_type],
-                            ['answer','=',$answer->answer],
-                            ['json_answer','=',$answer->json_answer]
+                            ['test_type','=',$answer->test_type]
                         ])->first();
                     Log::info("answer: ".json_encode($answer));
                     Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));
                     if($getCorrectAnswers!=null){
-                        $countScore=$countScore+$getCorrectAnswers->points_each;
+                        if($answer->test_type == "enumerate"){
+                            $a =json_decode($getCorrectAnswers->json_answer);
+                            $s =json_decode($answer->json_answer);
+                            
+                            $dif =array_diff($a,$s);
+        
+                            if(count($dif)==0){
+                                $countScore=$countScore+$getCorrectAnswers->points_each;
+                            }
+        
+                        }else{
+                            if(strcasecmp($getCorrectAnswers->answer, $answer->answer) == 0){
+                                $countScore=$countScore+$getCorrectAnswers->points_each;
+                            }
+                        }
                     }     
 
+            }
+            $deleteTemp= DB::table('student_assessment_answer_tmp')
+            ->where([
+                ['student_id','=',$student->student_id],
+                ['assesment_id','=',$assessmentId]
+            ])->delete();
+
+            if(!$deleteTemp){
+                DB::rollBack();
+                return [
+                    "message"=>"Updating Students Status Failed"
+                ];
             }
 
             $updateStatus= DB::table('student_assessment_answer_header')
@@ -231,5 +257,83 @@ class AssessmentController extends Controller
             "result"=>true
         ];
        
+    }
+
+    public function reOpenAssessment(Request $request){
+        $assessmentId = $request->assessmentId;
+        DB::beginTransaction();
+
+        $unfinishedStudents = DB::table('student_assessment_answer_header')
+                ->where([
+                    ['assesment_id','=',$assessmentId],
+                    ['status','=','unfinished']
+                ])->get();
+
+        foreach($unfinishedStudents as $student){
+            $answers =  DB::table('student_assessment_answer')
+                        ->where([
+                            ['student_id','=',$student->student_id],
+                            ['assesment_id','=',$assessmentId]
+                        ])->get();
+
+            foreach($answers as $answer){
+                $exec=DB::table('student_assessment_answer_tmp')->insert([
+                    'student_id'=>$answer->student_id,
+                    'assesment_id'=>$answer->assesment_id,
+                    'number'=>$answer->number,
+                    'test_type'=>$answer->test_type,
+                    'answer'=>$answer->answer,
+                    'json_answer'=>$answer->json_answer
+                ]);
+                if(!$exec){
+                    DB::rollBack();
+                    return false;
+                }
+            }
+            
+            $deleteTemp= DB::table('student_assessment_answer')
+            ->where([
+                ['student_id','=',$student->student_id],
+                ['assesment_id','=',$assessmentId]
+            ])->delete();
+
+            if(!$deleteTemp){
+                DB::rollBack();
+                return [
+                    "message"=>"Updating Students Status Failed"
+                ];
+            }
+            $updateStatus= DB::table('student_assessment_answer_header')
+            ->where([
+                ['student_id','=',$student->student_id],
+                ['assesment_id','=',$assessmentId]
+            ])->update([
+                'status'=>'in-progress',
+            ]);
+
+            if(!$updateStatus){
+                DB::rollBack();
+                return [
+                    "message"=>"Updating Students Status Failed"
+                ];
+            }
+        }
+        $updateQuizStatus =DB::table('assesment_header')
+        ->where('assesment_id',$assessmentId)
+        ->update(['status'=>'ACTIVE']);
+        if(!$updateQuizStatus){
+            DB::rollBack();
+                return [
+                    "message"=>"REOPEN Failed"
+                ];
+        }
+
+
+        DB::commit();
+        return [
+            "result"=>true,
+            "message"=>"Successful"
+        ];
+
     }
 }

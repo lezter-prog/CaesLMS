@@ -40,6 +40,7 @@ class SyTeachers extends Model
         $role ="R2";
         $all = DB::table('users')
         ->join('sy_teachers', 'users.id', '=', 'sy_teachers.user_id')
+        ->join('hash_tables','hash_tables.hash_id','=','users.id')
         ->where('users.role', $role)
         ->get();
 
@@ -73,7 +74,8 @@ class SyTeachers extends Model
             'email' => '',
             'username'=> $request->username,
             'password'=> $request->password,
-            'role'=> $request->role
+            'role'=> $request->role,
+            'isGeneratedPassword'=>1
         ]);
 
         $hashtable = HashTable::create([

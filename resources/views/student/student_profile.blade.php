@@ -32,7 +32,7 @@
             <div class="col-4 pe-2">
                 <label for="birthdate" class="form-label">Birth Date</label>
                 <div class="input-group log-event" id="birthdate" data-td-target-input="nearest" data-td-target-toggle="nearest">
-                    <input id="birthdate" name="birthdate" value="{{ date('Y-m-d', strtotime($profile->birthdate))}}" type="text" class="form-control" data-td-target="#birthdate" required>
+                    <input id="birthdate" name="birthdate" value="{{ $profile->birthdate}}" type="text" class="form-control" data-td-target="#birthdate" required>
                     <span class="input-group-text" data-td-target="#birthdate" data-td-toggle="datetimepicker">
                     <i class="fas fa-calendar"></i>
                     </span>

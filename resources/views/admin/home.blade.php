@@ -8,11 +8,11 @@
                 <div class="row g-0">
                   <div class="col-md-5 text-center">
                     <img src="../uploads/logo.png" class="img-fluid rounded-start"  alt="..." style="position: relative; width:80%; height:90%">
-                    <div style="padding-left:10px">
-                        <button id="editLogoBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -20px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" >
-                            <i class="fa-solid fa-pen-to-square fa-lg"></i>
-                        </button>
-                    </div>
+                    <!--<div style="padding-left:10px">-->
+                    <!--    <button id="editLogoBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -20px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" >-->
+                    <!--        <i class="fa-solid fa-pen-to-square fa-lg"></i>-->
+                    <!--    </button>-->
+                    <!--</div>-->
                   </div>
                   <div class="col-md-6">
                     <div class="card-body">
@@ -21,9 +21,9 @@
                       <p class="card-text">School Year {{ $profile->school_year }}</p>
 
                       {{-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> --}}
-                      <div style="padding-left:10px">
-                        <p class="card-text" style="margin-bottom: 0"><small class="text-muted">Last updated 3 mins ago</small></p> 
-                        <button id="editProfileBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -22px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i></button></div>
+                      <!--<div style="padding-left:10px">-->
+                      <!--  <p class="card-text" style="margin-bottom: 0"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+                      <!--  <button id="editProfileBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -22px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i></button></div>-->
                         <hr>
 
                     </div>

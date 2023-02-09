@@ -134,7 +134,7 @@ class UploadController extends Controller
         if ($request->hasFile('exam_file')){
             $file= $request->file("exam_file")->getRealPath();
             Log::info("path:".$file);
-            $excel = Excel::import(new ExamImport($assesmentId), $file);
+            $excel = Excel::import(new ExamImport($assesmentId), $request->file("exam_file"));
             if(!$excel){
                 DB::rollBack();
             }
@@ -151,6 +151,12 @@ class UploadController extends Controller
        $lesson= DB::table('lesson')->where('id',$lessonId)->first();
 
         return Storage::download('public/lessons/'.$lesson->file);
+    }
+
+    public function getAllTemplates(){
+        return [
+            "data"=>DB::table('templates')->get()
+        ];
     }
     
 }

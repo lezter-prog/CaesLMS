@@ -2,16 +2,10 @@
 @section('title', 'Templates')
 @section('content')
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pl-3 pr-3 pt-3 pb-2  mb-3 border-bottom" style="padding-left:20px; padding-right:20px">
-  <h1 class="h2">Templates of Quiz, Activity and Exam</h1>
+  <h1 class="h2">Templates</h1>
   
   <div class="btn-toolbar mb-2 mb-md-0">
-    <div class="btn-group me-2">
-      <select class="form-select js-data-example-ajax" id="quarter" aria-label="Default select example">
-        @foreach ($quarters as $quarter)
-        <option value="{{$quarter->quarter_code}}" @if ($quarter->status === 'ACTIVE') selected @endif >{{$quarter->quarter_desc}}</option>
-        @endforeach
-      </select>
-    </div>
+    
    
     <button type="button" class="btn btn-sm btn-outline-secondary ">
       <b>SY 2022-2023</b>
@@ -38,6 +32,47 @@
   </div>
 </div>
 
+<script>
+  var baseUrl=window.location.origin;
+  var token ={{ Js::from(session('token')) }};
 
+  $(document).ready(function(){
+    var templateTable = $("#templatesTable").DataTable({
+      "bPaginate": false,
+      "bLengthChange": false,
+      "bFilter": true,
+      "bInfo": false,
+      "bAutoWidth": false,
+      "sAjaxSource": baseUrl+"/api/template/get/all",
+      "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+        console.log("ajaxSRC: "+sSource);
+          oSettings.jqXHR = 
+          $.ajax({
+           
+            "dataType": 'json',
+            "type": "GET",
+            "url": sSource,
+            "beforeSend": function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+            "success": fnCallback
+          });
+        },
+        "columns":[
+          {"data":"template_desc"},
+          {"data":"filename"},
+          {"data":"filename",
+          "className":"text-center",
+            "render":function(data,meta,row,table){
+                var download ='<div class="float-end"><button class="btn btn-success btn-sm download-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Lesson"><i class="fa-solid fa-download"></i></button> ';
+                return download;
+              }
+          }
+        ]
+    });
 
+  })
+</script>
 @endsection
+
+

@@ -55,6 +55,8 @@ Route::get('/admin/quarter', [App\Http\Controllers\AdminViewController::class, '
 Route::get('/admin/announcement', [App\Http\Controllers\AdminViewController::class, 'manage_announcement'])->name('admin/announcement');
 Route::get('/admin/handled/sections', [App\Http\Controllers\AdminViewController::class, 'manage_handled_section'])->name('admin/handled/sections');
 Route::get('/admin/icons', [App\Http\Controllers\AdminViewController::class, 'manage_icons'])->name('admin/icons');
+Route::get('/admin/student/profile', [App\Http\Controllers\AdminViewController::class, 'student_profile'])->name('admin/student/profile');
+
 
 
 Route::get('/admin/grades', [App\Http\Controllers\AdminViewController::class, 'manage_grades'])->name('admin/grades');

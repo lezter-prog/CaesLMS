@@ -357,6 +357,7 @@
                   confirmButtonText: 'Ok',
                 }).then((result) => {
                   swal.close();
+                  examTable.ajax.reload();
                 $("#uploadExamModal").modal("hide");
                 });
               }

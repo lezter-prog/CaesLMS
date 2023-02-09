@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SchoolSection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminViewController extends Controller
 {
@@ -172,6 +175,35 @@ class AdminViewController extends Controller
         ->with('adminAnnouncement', "")
         ->with('teacherName', $request->name)   
         ->with('teacherId', $request->teacherId);
+    }
+    
+    public function student_profile(Request $request)
+    {
+       $student =DB::table('sy_students')->where('id_number',$request->studentId)->first();
+       $profile = DB::table('students_profile')->where('student_id',$request->studentId)->first();
+       if($profile==null){
+        $profile = (object)[];
+        $profile->age ="";
+        $profile->birthdate ="";
+        $profile->contact_no ="";
+        $profile->guardian ="";
+        $profile->guardian_contact_no ="";
+        $profile->address ="";
+       }else{
+        $profile->birthdate=date('Y-m-d', strtotime($profile->birthdate));
+       }
+       return view('admin/student_profile')
+        ->with('adminStudent',"active")
+        ->with('student',$student)
+        ->with('profile',$profile)
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminSubjects', "")
+        ->with('adminGrades', "")
+        ->with('adminIcons', "")
+        ->with('adminQuarter', "")
+        ->with('adminAnnouncement', "");
     }
     
 }

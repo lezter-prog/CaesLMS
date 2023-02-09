@@ -458,6 +458,10 @@ class UtilDB extends Controller
                         $quiz->isTaken =false;
                         $quiz->studentStatus =$status->status;
                         $quiz->score =$status->score;
+                    }else{
+                        $quiz->isTaken =false;
+                        $quiz->studentStatus =$status->status;
+                        $quiz->score =$status->score;
                     }
                 }
                 
@@ -636,15 +640,14 @@ class UtilDB extends Controller
 
     public function finalAnswer(Request $request){
 
+        // $assessmentHeader = DB::table('assesment_header')->where('assessment_id',$request->assesmentId);
+        // $testType =$assessmentHeader->test_type;
         $tempAnswer=DB::table('student_assessment_answer_tmp')
             ->where([
                 ['student_id','=',Auth::id()],
                 ['assesment_id','=',$request->assesmentId],
             ])->get();
-        $getCorrectAnswers =DB::table('assesment_details')
-                            ->select('number','answer')
-                            ->where('assesment_id',$request->assesmentId)
-                            ->get();
+     
        DB::beginTransaction();
        $countScore=0;
        foreach($tempAnswer as $answer){
@@ -662,26 +665,41 @@ class UtilDB extends Controller
             }
 
             $getCorrectAnswers =DB::table('assesment_details')
-                ->select('number','answer','points_each')
+                ->select('number','answer','points_each','json_answer')
                 ->where([
                     ['assesment_id','=',$answer->assesment_id],
                     ['number','=',$answer->number],
-                    ['test_type','=',$answer->test_type],
-                    ['answer','=',$answer->answer],
-                    ['json_answer','=',$answer->json_answer]
+                    ['test_type','=',$answer->test_type]
                 ])->first();
             Log::info("answer: ".json_encode($answer));
             Log::info("CorrectAnswer: ".json_encode($getCorrectAnswers));
             if($getCorrectAnswers!=null){
-                $countScore=$countScore+$getCorrectAnswers->points_each;
+                if($answer->test_type == "enumerate"){
+                    $a =json_decode($getCorrectAnswers->json_answer);
+                    $s =json_decode($answer->json_answer);
+                    
+                    $dif =array_diff($a,$s);
+
+                    if(count($dif)==0){
+                        $countScore=$countScore+$getCorrectAnswers->points_each;
+                    }
+
+                }else{
+                    if(strcasecmp($getCorrectAnswers->answer, $answer->answer) == 0){
+                        $countScore=$countScore+$getCorrectAnswers->points_each;
+                    }
+                }
+                
             }     
 
        }
-       Log::info("PointsEach: ".json_encode($request->pointsEach));
        Log::info("CorrectAnswer: ".json_encode($countScore));
 
        $insert=DB::table('student_assessment_answer_header')
-       ->where('assesment_id', $request->assesmentId)
+       ->where([
+           ['assesment_id','=', $request->assesmentId],
+            ['student_id','=', Auth::id()]
+           ])
        ->update([
                 'status'=>'submitted',
                 'score'=> $countScore

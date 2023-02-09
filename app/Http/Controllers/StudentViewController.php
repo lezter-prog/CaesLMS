@@ -61,12 +61,15 @@ class StudentViewController extends Controller
 
        $profile = DB::table('students_profile')->where('student_id',Auth::id())->first();
        if($profile==null){
+        $profile = (object)[];
         $profile->age ="";
         $profile->birthdate ="";
         $profile->contact_no ="";
         $profile->guardian ="";
         $profile->guardian_contact_no ="";
         $profile->address ="";
+       }else{
+        $profile->birthdate=date('Y-m-d', strtotime($profile->birthdate));
        }
         
         return view('student/student_profile')

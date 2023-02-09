@@ -333,7 +333,8 @@ class AssesmentViewController extends Controller
                     ])->get();
                         
         $assesmentHeader =DB::table('assesment_header')
-                    ->where('assesment_id',$request->assesmentId)->first();      
+                    ->where('assesment_id',$request->assesmentId)->first();   
+        $testType =$assesmentHeader->test_type;
         $studentName = DB::table('sy_students')->select('first_name','last_name')->where('id_number',$request->studentId)->first();
 
         Log::info("Name:".json_encode($studentName));
@@ -342,25 +343,37 @@ class AssesmentViewController extends Controller
            
             // array_push($answers,$ass->answer);
             $answers =DB::table('student_assessment_answer')
-                ->select('answer')
+                ->select('answer','json_answer')
                 ->where([
                     ['student_id','=',$request->studentId],
                     ['assesment_id','=',$request->assesmentId],
-                    ['number','=',$ass->number]
+                    ['number','=',$ass->number],
+                    ['test_type','=',$ass->test_type]
                 ])->first();
             $checkAnswers = DB::table('assesment_details')
                             ->where([
                                 ['assesment_id','=',$request->assesmentId],
-                                ['number','=',$ass->number]
+                                ['number','=',$ass->number],
+                                ['test_type','=',$ass->test_type]
                             ])->first();
             
             $class="";
-            if($checkAnswers!=null){
-                if($checkAnswers->answer == $answers->answer){
-                    $class="right-answer";
+            if($checkAnswers!=null && $answers !=null){
+                if($testType == "enumerate"){
+                    Log::info($checkAnswers->json_answer." == ".$answers->json_answer);
+                    if($checkAnswers->json_answer == $answers->json_answer){
+                        $class="right-answer";
+                    }else{
+                        $class="wrong-answer";
+                    }
                 }else{
-                    $class="wrong-answer";
+                    if(strcasecmp($checkAnswers->answer, $answers->answer) == 0){
+                        $class="right-answer";
+                    }else{
+                        $class="wrong-answer";
+                    }
                 }
+                
             }else{
                 $class="wrong-answer";
             }
@@ -369,12 +382,17 @@ class AssesmentViewController extends Controller
             $ass->answers="";
             if($answers !=null){
                 $ass->answers = $answers->answer;
+                $ass->json_answer = $answers->json_answer;
+            }else{
+                $ass->answers = "No Answer";
+                $ass->json_answer = "No Answer";
             }
             Log::info("assessmentDetail:".json_encode($ass));
         array_push($asessmentArray,$ass);
         }
         
         return view('assesment/view-answer')
+            ->with('testType',$testType)
             ->with('assesmentId',$request->assesmentId)
             ->with("sectionCode",$assesmentHeader->section_code)
             ->with("subjCode",$assesmentHeader->subj_code)

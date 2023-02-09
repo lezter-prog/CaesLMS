@@ -8,7 +8,7 @@
     <div class="btn-group me-2">
       <button type="button" id ="importBtn" class="btn btn-sm btn-outline-primary">Import</button>
       <button type="button" id="addStudentBtn" class="btn btn-sm btn-outline-primary">add</button>
-      <button type="button" id="updateStudentBtn" class="btn btn-sm btn-outline-primary">Edit</button>
+      <!--<button type="button" id="updateStudentBtn" class="btn btn-sm btn-outline-primary">Edit</button>-->
       <button type="button" id="removeStudentBtn" class="btn btn-sm btn-outline-primary">Remove</button>
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
@@ -195,7 +195,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <!--<button type="submit" class="btn btn-primary">Save changes</button>-->
         </div>
         </form>
       </div>
@@ -237,7 +237,7 @@ $(document).ready(function(){
                 // console.log(data);
 
                 var generate ='<button class="generate btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Generate New Password" data-id="'+data.user_id+'"><i class="fa-solid fa-rotate"></i></button>';
-                var profile =' <button class="profile btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Student Profile" data-id="'+data.user_id+'"><i class="fa-solid fa-list"></i></button>';
+                var profile =' <button class="view-profile btn btn-info btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Student Profile" data-id="'+data.user_id+'"><i class="fa-solid fa-list"></i></button>';
                 var viewCurrent ='';
                 if(data.isGeneratedPassword){
                   var viewCurrent =' <button class="showpass btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="View Generate Password" data-id="'+data.user_id+'"><i class="fa-solid fa-eye"></i></button>';
@@ -257,7 +257,10 @@ $(document).ready(function(){
 
         },
     });
-
+    $('#studentsTable tbody').on('click','.view-profile', function(){
+          var data = studentsTable.row( $(this).closest('tr') ).data();
+          location.href="/admin/student/profile?studentId="+data.id_number;
+    });
     
 
     // select row
@@ -515,6 +518,7 @@ $(document).ready(function(){
                   confirmButtonText: 'Ok',
                 }).then((result) => {
                   swal.close();
+                  location.reload();
                   $("#updateStudentModal").modal("hide");
                 });
               }else{
