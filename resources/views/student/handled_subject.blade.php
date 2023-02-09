@@ -230,8 +230,7 @@
                   var html ='<div class=""> <i class="fa-solid fa-file"></i> '+data;
                   var lesson ='<div class="float-end"><button class="btn btn-success btn-sm download-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Lesson"><i class="fa-solid fa-download"></i></button> ';
                   
-                  var exam ='<button class="btn btn-info btn-sm exam-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="See Lesson Details"><i class="fa-solid fa-list-check"></i></button> </div>';
-                  return html+lesson+exam+'</div>';
+                  return html+lesson+'</div>';
           }
         }
       ],
@@ -284,6 +283,8 @@
                takingStatus='<span class="badge bg-success st-badge">DONE</span> ';
             }else if(row.studentStatus=='in-progress'){
                takingStatus='<span class="badge bg-info st-badge">In Progress</span> ';
+            }else if(row.studentStatus=='unfinished'){
+              takingStatus='<span class="badge bg-info st-badge">Unfinished</span> ';
             }else{
               takingStatus='<span class="badge bg-warning st-badge">Ready to Take</span> ';
 

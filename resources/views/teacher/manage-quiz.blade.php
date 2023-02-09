@@ -30,7 +30,7 @@
             <th>Quiz Description</th>
             <th>Section</th>
             <th>Subject</th>
-            <th>Total Points</th>
+            <th>Type</th>
             <th>Status</th>
             <th></th>
         
@@ -159,18 +159,23 @@
         },
       "columns":[
         { "data":"assesment_desc",
-            // "render":function(data, type, row, meta ){
-            //   var status ="";
+            "render":function(data, type, row, meta ){
+              var type =' <span class="badge bg-primary">'+row.test_type+'</span> ';
               
-            //     if(row.status == "ACTIVE"){
-            //       status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
-            //     }
-            //     return data+status;
-            //   }
+                // if(row.status == "ACTIVE"){
+                //   status =' <span class="badge text-bg-primary">'+row.status+'</span> ';
+                // }
+
+                return data;
+              }
         }, 
         { "data":"s_desc"},
         { "data":"subj_desc"},
-        { "data":"total_points" },
+        { "data":"test_type",
+            "render":function(data, type, row, meta){
+                return ' <span class="badge bg-primary">'+data+'</span>';
+            }
+        },
         {"data":"status",
              "render":function(data, type, row, meta ){
                   var status ="";
@@ -219,7 +224,7 @@
         },
         {
           "targets":4,
-          "width":"15%",
+          "width":"10%",
           "className":"text-center"
         },
         {

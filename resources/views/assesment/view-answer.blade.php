@@ -30,8 +30,12 @@
   <div class="row text-start pb-4">
     <h6>{{$ass->number}}. {{$ass->question}}</h6>
     <div class="col-6 " style="margin-left: 15px;" id="number{{$ass->number}}">
-     <input type="text" class="form-control input-sm {{ $ass->class }}" autocomplete="off" name="question{{$ass->number}}" value="{{$ass->answers}}" data-number="{{$ass->number}}" data-test-type="identify" readonly>
-    </div>
+      @if($testType != "enumerate")
+        <input type="text" class="form-control input-sm {{ $ass->class }}" autocomplete="off" name="question{{$ass->number}}" value="{{$ass->answers}}" data-number="{{$ass->number}}" data-test-type="identify" readonly>
+      @else
+        <input type="text" class="form-control input-sm {{ $ass->class }}" autocomplete="off" name="question{{$ass->number}}" value="{{$ass->json_answer}}" data-number="{{$ass->number}}" data-test-type="identify" readonly>
+      @endif
+      </div>
   </div>
   @endforeach
   

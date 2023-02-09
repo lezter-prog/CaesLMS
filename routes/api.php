@@ -115,6 +115,7 @@ Route::middleware('auth:sanctum')->controller(AssessmentController::class)->grou
     Route::get('assessment/get/answer', 'getStudentAnswer');
     Route::get('assessment/get/scores', 'getAllStudentAnswer');
     Route::post('assessment/close', 'closeAssessment');
+    Route::post('assessment/open', 'reOpenAssessment');
     Route::post('assessement/remove/{assessmentId}', 'removeAssessment');
     
     
@@ -126,6 +127,7 @@ Route::middleware('auth:sanctum')->controller(UploadController::class)->group(fu
     Route::post('teacher/upload/quiz','uploadQuiz');
     Route::post('teacher/upload/exam','uploadExam');
     Route::get('lesson/download/{lessonIdl}','downloadLesson');
+    Route::get('template/get/all','getAllTemplates');
 });
 
 
