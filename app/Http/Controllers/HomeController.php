@@ -67,12 +67,15 @@ class HomeController extends Controller
         ->with('teacherTemplates',"")
         ->with('teacherActivity',"")
         ->with('teacherExam',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('sections',$sections);
     }
     public function adminIndex()
     {   
         
         $profile =DB::table('caes_profile')->get();
+        $quarter =  DB::table('quarters')->where('status','ACTIVE')->first();
         
         if(count($profile)){
             return view('admin/home')
@@ -83,6 +86,8 @@ class HomeController extends Controller
             ->with('adminSubjects', "")
             ->with('adminQuarter', "")
             ->with('adminAnnouncement', "")
+            ->with('teacherTemplates',"")
+            ->with('quarter',$quarter)
             ->with("profile",$profile[0]);
         }
        

@@ -18,6 +18,8 @@
     <div class="btn-group me-2">
       @if($assessment->status =="CLOSED")
       <button type="button" id ="reopen" class="btn btn-sm btn-outline-primary">Re-Open Quiz</button>
+      @elseif($assessment->status =="CLEARED")
+      <button type="button" id ="" class="btn btn-sm btn-outline-success">CLEARED</button>
       @else
       <button type="button" id ="quizCloseBtn" class="btn btn-sm btn-outline-warning">Close This Assessment</button>
       @endif

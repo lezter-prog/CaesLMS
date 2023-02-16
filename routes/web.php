@@ -44,6 +44,10 @@ Route::get('/teacher/view/assessment', [App\Http\Controllers\TeacherViewControll
 Route::get('/teacher/exam', [App\Http\Controllers\TeacherViewController::class, 'manage_exam'])->name('teacher/exam');
 Route::get('/teacher/templates', [App\Http\Controllers\TeacherViewController::class, 'manage_templates'])->name('teacher/templates');
 Route::get('/teacher/student/profile', [App\Http\Controllers\TeacherViewController::class, 'student_profile'])->name('teacher/student/profile');
+Route::get('/teacher/sections', [App\Http\Controllers\TeacherViewController::class, 'scoreSheetSections'])->name('teacher/sections');
+Route::get('/teacher/subjects', [App\Http\Controllers\TeacherViewController::class, 'view_subjects'])->name('teacher/subjects');
+Route::get('/teacher/scoresheet', [App\Http\Controllers\TeacherViewController::class, 'view_score_sheeet'])->name('teacher/scoresheet');
+Route::get('/teacher/reports', [App\Http\Controllers\TeacherViewController::class, 'view_reports'])->name('teacher/reports');
 
 
 Route::get('/admin/home', [App\Http\Controllers\HomeController::class, 'adminIndex'])->name('admin/home');
@@ -56,6 +60,7 @@ Route::get('/admin/announcement', [App\Http\Controllers\AdminViewController::cla
 Route::get('/admin/handled/sections', [App\Http\Controllers\AdminViewController::class, 'manage_handled_section'])->name('admin/handled/sections');
 Route::get('/admin/icons', [App\Http\Controllers\AdminViewController::class, 'manage_icons'])->name('admin/icons');
 Route::get('/admin/student/profile', [App\Http\Controllers\AdminViewController::class, 'student_profile'])->name('admin/student/profile');
+Route::get('/admin/templates', [App\Http\Controllers\TeacherViewController::class, 'manage_templates'])->name('admin/templates');
 
 
 

@@ -62,10 +62,19 @@
                             <span class ="me-3"><i class="fa-solid fa-lines-leaning fa-fw  icon-bg-color fa-2x"></i></span> 
                                 <span>Quiz</span>
                         </a>
-                        <!--<a href="/teacher/templates" class="{{$teacherTemplates}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">-->
-                        <!--    <span class ="me-3"><i class="fa-solid fa-cubes-stacked fa-fw icon-bg-color fa-2x"></i></span> -->
-                        <!--        <span>Templates</span>-->
-                        <!--</a>-->
+                        <a href="/teacher/sections" class="{{$scoreSheets}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-cubes-stacked fa-fw icon-bg-color fa-2x"></i></span> 
+                               <span>Score Sheets</span>
+                        </a>
+                        <a href="/teacher/templates" class="{{$teacherTemplates}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-regular fa-square fa-fw icon-bg-color fa-2x"></i></span> 
+                               <span>Templates</span>
+                        </a>
+
+                        <a href="/teacher/reports" class="{{$teacherReports}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-regular fa-paste fa-fw icon-bg-color fa-2x"></i></span> 
+                               <span>Reports</span>
+                        </a>
                     @endif
 
                     @if ( Auth::user()->role == "R1")
@@ -126,6 +135,14 @@
                         <a href="/admin/icons" class="list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
                             <span class ="me-3"><i class="fa-solid fa-icons  fa-fw icon-bg-color  fa-2x"></i></span> 
                                 <span>Icons</span>
+                        </a>
+                        <a href="/teacher/templates" class="{{$teacherTemplates}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-cubes-stacked fa-fw icon-bg-color fa-2x"></i></span> 
+                               <span>Templates</span>
+                        </a>
+                        <a href="/teacher/templates" class="{{$teacherTemplates}} list-group-item list-group-item-action py-2 ripple sidebar-color" aria-current="true">
+                            <span class ="me-3"><i class="fa-solid fa-cubes-stacked fa-fw icon-bg-color fa-2x"></i></span> 
+                               <span>Reports</span>
                         </a>
                         
                     @endif

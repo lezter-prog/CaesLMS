@@ -19,13 +19,22 @@
                       <h5 class="card-title"><strong >{{ $profile->school_name }} </strong></h5>
                       <p class="card-text">Located at {{ $profile->school_address }}</p>
                       <p class="card-text">School Year {{ $profile->school_year }}</p>
+                      <p class="card-text">{{ $quarter->quarter_desc }}</p>
 
-                      {{-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> --}}
-                      <!--<div style="padding-left:10px">-->
-                      <!--  <p class="card-text" style="margin-bottom: 0"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-                      <!--  <button id="editProfileBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -22px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i></button></div>-->
-                        <hr>
-
+                      <div style="padding-left:10px">
+                        <p class="card-text" style="margin-bottom: 0"><small class="text-muted"></small></p>
+                        <button id="editProfileBtn" class="btn btn-default btn-sm" style="float: right;margin-top: -22px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i></button>
+                      </div>
+                      
+                      <hr>
+                    </div>
+                    @if($quarter->quarter_code == "Q4")
+                      @if($profile->isPreparing == 1)
+                      <button id="viewPreparation" class="btn btn-info btn-sm" style="margin-left:12px" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i> View Preparation For Next School Year</button>
+                      @else
+                      <button id="prepare" class="btn btn-primary btn-sm" style="margin-left:12px" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><i class="fa-solid fa-pen-to-square fa-lg"></i> Prepare for the next School Year</button>
+                      @endif
+                    @endif
                     </div>
                   </div>
                 </div>
@@ -75,10 +84,6 @@
             <label for="address" class="form-label">School Address</label>
             <input type="text" class="form-control" id="address" value="{{ $profile->school_address}} ">
           </div>
-          <div class="mb-3">
-            <label for="schoolYear" class="form-label">School Year</label>
-            <input type="text" class="form-control" id="schoolYear" value="{{ $profile->school_year}} ">
-          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -89,11 +94,11 @@
     </div>
   </div>
 <script>
-
+  var baseUrl=window.location.origin;
   var token ={{ Js::from(session('token')) }};
-  console.log(token);
 
 $(document).ready(function(){
+  var schoolYear ={{ Js::from($profile->school_year) }};
   $("body").tooltip({ selector: '[data-bs-toggle=tooltip]' });
     $("#editLogoBtn").on('click',function(e){
        console.log($('#uploadLogoModal'));
@@ -129,6 +134,63 @@ $(document).ready(function(){
         });
         
     })
+
+    $("#prepare").on('click', function(){
+    swal.fire({
+        title: 'You are Setting the System to prepare for next School?',
+        showCancelButton: true,
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          swal.showLoading();
+          $.ajax({
+            url:baseUrl+"/api/prepare",
+            type:"POST",
+            data:{
+              "school_year":schoolYear
+            },
+            success:(res)=>{
+              console.log(res);
+              if(res.result){  
+                swal.fire({
+                  icon:'success',
+                  title: "The System is now Preparing for Next School Year",
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  location.reload();
+                });
+              }else{
+                swal.fire({
+                  icon:'error',
+                  title: "error Preparation",
+                  showCancelButton: false,
+                  confirmButtonText: 'Ok',
+                }).then((result) => {
+                  swal.close();
+                  // location.reload();
+                });
+              }
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(xhr);
+              alert(xhr.status);
+              alert(thrownError);
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Authorization", "Bearer "+token);
+            },
+          })
+         
+        
+        } else {
+          swal.fire('Changes are not saved', '', 'info')
+        }
+       
+      });
+  });
     
 })
 
@@ -146,6 +208,8 @@ $(document).ready(function(){
                 boundary: document.body // or document.querySelector('#boundary')
             });
     }
+
+
 
     
 </script>

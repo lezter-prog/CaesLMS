@@ -189,6 +189,7 @@ class UtilDB extends Controller
 
     public function getAssessments(Request $request)
     {
+        $caes =DB::table('caes_profile')->first();
         $quizez = DB::table('assesment_header')
         ->select('assesment_header.*','subjects.subj_desc','school_sections.s_desc')
         ->join('subjects', 'subjects.subj_code', '=', 'assesment_header.subj_code')
@@ -196,7 +197,8 @@ class UtilDB extends Controller
         ->where([
             ['assesment_header.assesment_type','=',$request->type],
             ['assesment_header.quarter_period','=',$request->quarter],
-            ['assesment_header.uploaded_by','=',Auth::id()]
+            ['assesment_header.uploaded_by','=',Auth::id()],
+            ['assesment_header.sy','=',$caes->school_year]
         ])
         ->get();
         return [
@@ -406,6 +408,7 @@ class UtilDB extends Controller
                 "message"=>"The teacher section you are trying to save is already exist"
             ];
         }
+        $caes =DB::table('caes_profile')->first();
         DB::beginTransaction();
         $subjects =json_decode($request->subjects);
         // Log::info("subjects: ".$subjects);
@@ -416,7 +419,8 @@ class UtilDB extends Controller
                     'teacher_id'=>$request->teacherId,
                     'subj_code'=>$subject->subj_code,
                     'section_code'=>$request->section_code,
-                    'status'=>'ACTIVE'
+                    'status'=>'ACTIVE',
+                    'school_year'=>$caes->school_year
                 ]);
 
                 if(!$insert){
@@ -786,6 +790,136 @@ class UtilDB extends Controller
             return $insert;
         }
 
+    }
+
+    public function prepare(Request $request){
+        DB::beginTransaction();
+        $update = DB::table('caes_profile')->where('school_year',$request->school_year)->update(["isPreparing"=>true]);
+
+        if(!$update){
+            DB::rollBack();
+            return [
+                "result"=>false
+            ];
+        }
+
+        $teachers =DB::table('sy_teachers')->where('status','ACTIVE')->get();
+
+        foreach($teachers as $teacher){
+           $insert= DB::table('process_school_year')->insert([
+                'school_year'=> $request->school_year,
+                'teacher_id'=> $teacher->user_id,
+                ]);
+            if(!$insert){
+                DB::rollBack();
+                return [
+                    "result"=>false
+                ];
+            }
+        }
+
+        DB::commit();
+        return [
+            "result"=>true
+        ];
+        
+    }
+
+    public function assessmentEnd(Request $request){
+        
+
+        $assessmentType = $request->testType;
+        $teacherId = Auth::id();
+        
+        $checkAssessment= DB::table('assesment_header')
+                            ->where([
+                            ['assesment_type','=',$assessmentType],
+                            ['uploaded_by','=',$teacherId],
+                            ['status','=','ACTIVE']
+                            ])->count();
+        if($checkAssessment >0){
+            return [
+                "result"=>false,
+                "message"=>"Not Able to Submit, Some Data is not yet Close"
+            ];
+        }
+        $caes =DB::table('caes_profile')->first();
+
+        DB::beginTransaction();
+        $updateToCleared = DB::table('assesment_header')->where([
+                                    ['assesment_type','=',$assessmentType],
+                                    ['uploaded_by','=',$teacherId],
+                                    ['sy','=',$caes->school_year]
+                                    ])->update(["status"=>"CLEARED"]);
+        if(!$updateToCleared){
+            DB::rollBack();
+            return [
+                "result"=>false,
+                "message"=>"Not Able to Submit, Error Updating assessmentHeader"
+            ]; 
+        }
+        if($assessmentType == "quiz"){
+            $updatePreparation = DB::table('process_school_year')->where([
+                ['teacher_id','=',$teacherId],
+                ['school_year','=',$caes->school_year]
+                ])->update([
+                    "quizes_status"=>"DONE"
+                    ]);
+        }else if($assessmentType =="activity"){
+            $updatePreparation = DB::table('process_school_year')->where([
+                ['teacher_id','=',$teacherId],
+                ['school_year','=',$caes->school_year]
+                ])->update([
+                    "activity_status"=>"DONE"
+                    ]);
+        }else{
+            $updatePreparation = DB::table('process_school_year')->where([
+                ['teacher_id','=',$teacherId],
+                ['school_year','=',$caes->school_year]
+                ])->update([
+                    "exams_status"=>"DONE"
+                    ]);
+        }
+        
+        if(!$updatePreparation){
+            DB::rollBack();
+            return [
+                "result"=>false,
+                "message"=>"Not Able to Submit, Error Updating Preperation Table"
+            ]; 
+        }
+        DB::commit();
+        return [
+            "result"=>true
+        ];
+    }
+
+    public function getHandledSectionSubjectBySY(Request $request){
+
+
+        $schoolYear = $request->schoolYear;
+
+        $sections =  DB::table('teachers_subjects_section')
+                        ->select('teachers_subjects_section.section_code','school_sections.s_desc')
+                        ->distinct()
+                        ->join('school_sections','school_sections.s_code','=','teachers_subjects_section.section_code')
+                        ->where([
+                            ['teacher_id','=',Auth::id()],
+                            ['school_year','=',$schoolYear]
+                            ])
+                        ->get();
+        $subjects =  DB::table('teachers_subjects_section')
+                        ->select('teachers_subjects_section.subj_code','subjects.subj_desc')
+                        ->join('subjects','subjects.subj_code','=','teachers_subjects_section.subj_code')
+                        ->where([
+                            ['teacher_id','=',Auth::id()],
+                            ['school_year','=',$schoolYear]
+                            ])
+                        ->get();
+        return[
+            "sections"=>$sections,
+            "subjects"=>$subjects
+        ];
     }
 
 }

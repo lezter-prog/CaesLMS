@@ -17,7 +17,7 @@
       
     </div>
     <button type="button" class="btn btn-sm btn-outline-secondary ">
-      <b>SY 2022-2023</b>
+      <b>SY {{session('school_year')}}</b>
   </div>
   
 </div>
@@ -43,6 +43,13 @@
 
     </table>
   </div>
+  @if($caes->isPreparing)
+  <div class="col-12 text-center">
+    <button type="button" id="submitAll" class="btn btn-sm btn-success " @if($endProcess == "DONE") disabled @endif>
+      <b>Submit as Requirement for Next SY</b>
+    </button>
+  </div>
+  @endif
 </div>
 
 {{-- Modals --}}
@@ -168,12 +175,13 @@
              "render":function(data, type, row, meta ){
                   var status ="";
                   
-                    if(row.status == "ACTIVE"){
+                  if(row.status == "ACTIVE"){
                       status =' <span class="badge bg-primary">'+row.status+'</span> ';
-                    }else{
-                      status =' <span class="badge bg-danger">'+row.status+'</span> ';
-                    }
-                     
+                  }else if(row.status == "CLEARED"){
+                    status =' <span class="badge bg-success">'+row.status+'</span> ';
+                  }else{
+                    status =' <span class="badge bg-danger">'+row.status+'</span> ';
+                  } 
                     return status;
                   }
         },
@@ -421,6 +429,60 @@
             })
             
           } );
+
+          $("#submitAll").on('click',function(){
+            swal.fire({
+              title: 'This Will serve as requirement for next school year?',
+              showCancelButton: true,
+              confirmButtonText: 'Submit',
+            }).then((result) => {
+            
+              if (result.isConfirmed) {
+                $.ajax({
+                  url:baseUrl+"/api/assessment/submit/all",
+                  type:"POST",
+                  data:{
+                    "testType":"exam"
+                  },
+                  success:(res)=>{
+                    console.log(res);
+                    if(res.result){
+                      swal.fire({
+                      icon:'success',
+                      title: 'Submission Success',
+                      showCancelButton: false,
+                      confirmButtonText: 'Ok',
+                    }).then((result) => {
+                      swal.close();
+                      location.reload();
+                    });
+                  }else{
+                    swal.fire({
+                      icon:'error',
+                      title: res.message,
+                      showCancelButton: false,
+                      confirmButtonText: 'Ok',
+                    }).then((result) => {
+                      swal.close();
+                      // location.reload();
+                    });
+                  }
+
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr);
+                    alert(xhr.status);
+                    alert(thrownError);
+                  },
+                  beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", "Bearer "+token);
+                  },
+                })
+              } else {
+                swal.fire('Changes are not saved', '', 'info')
+              }
+        });
+  })
 
 });
 </script>

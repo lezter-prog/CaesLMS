@@ -9,6 +9,7 @@ use App\Imports\QuizMultiple;
 use App\Imports\QuizIdentification;
 use App\Imports\ExamImport;
 use App\Imports\Enumeration;
+use App\Export\GenerateScoreSheet;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -153,10 +154,81 @@ class UploadController extends Controller
         return Storage::download('public/lessons/'.$lesson->file);
     }
 
+    public function downloadTemplate($templateId){
+        $template= DB::table('templates')->where('id',$templateId)->first();
+
+        return Storage::download('public/templates/'.$template->filename);
+    }
+
     public function getAllTemplates(){
         return [
             "data"=>DB::table('templates')->get()
         ];
+    }
+
+    public function uploadTemplate(Request $request){
+        if ($request->hasFile('template_file')){
+            $filenameWithExt = $request->file('template_file')->getClientOriginalName();
+
+            Log::info("FileName:".$filenameWithExt);
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('template_file')->getClientOriginalExtension();
+            $fileNameToStore = $filename.'_'.time().'.'.$extension;
+            $file= $request->file("template_file")->storeAs('public/templates',$fileNameToStore);
+
+            Log::info("file:".$file);
+            // Log::info("Request:".$request->all());
+            $quarter = DB::table('quarters')->where('status','ACTIVE')->first();
+
+            $template =DB::table("templates")->insert([
+                'template_desc'=>$request->templateDesc,
+                'filename'=>$fileNameToStore
+            ]);
+            return [
+                "result"=>true,
+                "message"=>"success"
+            ];
+        }else{
+            return [
+                "result"=>false,
+                "message"=>"No file chosen"
+            ];
+        }
+    }
+
+    public function removeTemplate(Request $request){
+        $remove  =  DB::table('templates')->where('id',$request->id)->delete();
+        Storage::delete('public/templates/'.$request->filename);
+
+        if($remove){
+            return [
+                "result"=>true
+            ];
+        }else{
+            return [
+                "result"=>false
+            ];
+        }
+    }
+
+    public function removeLesson(Request $request){
+        $remove  =  DB::table('lesson')->where('id',$request->id)->delete();
+        Storage::delete('public/lessons/'.$request->filename);
+
+        if($remove){
+            return [
+                "result"=>true
+            ];
+        }else{
+            return [
+                "result"=>false
+            ];
+        }
+    }
+
+    public function generateScoreSheet(Request $request){
+
+        return Excel::download(new GenerateScoreSheet($request->schoolYear,$request->sectionCode,$request->subjectCode), 'invoices.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
     
 }

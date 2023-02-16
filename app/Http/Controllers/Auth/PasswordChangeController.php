@@ -36,6 +36,7 @@ class PasswordChangeController extends Controller
         ->with('oldPass', "oldPass")
         ->with('teacherDashboard',"")
         ->with('sectionCode', "")
+        ->with('scoreSheets',"")
         ->with('teacherAnnouncement',"")
         ->with('teacherLesson',"")
         ->with('teacherQuiz',"")

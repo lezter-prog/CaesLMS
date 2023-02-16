@@ -15,7 +15,7 @@
     </div>
     
     <button type="button" class="btn btn-sm btn-outline-secondary ">
-      <b>SY 2022-2023</b>
+      <b>SY {{session('school_year')}}</b>
   </div>
   
 </div>
@@ -24,12 +24,12 @@
     <table id ="lessonTable"  class="table table-striped" style="width:100%">
       <thead>
         <tr>
-            <th>Lesson Code</th>
             <th>Lesson Description</th>
             <th>Lesson Subject</th>
             <th>Lesson Section</th>
             <th>File Name</th>
             <th>Status</th>
+            <th></th>
         
         </tr>
       </thead>
@@ -76,17 +76,77 @@
           });
         },
       "columns":[
-        { "data":"subj_code"},
+        // { "data":"subj_code"},
         { "data":"lesson"},
         { "data":"subj_desc" }, 
         { "data":"s_desc"},
         { "data":"file" },
-        {"data":"status"}
+        {"data":"status"},
+        {"data":"",
+          "className":"text-center",
+            "render":function(data,meta,row,table){
+              var buttons ="";
+              console.log(role);
+                var download ='<button class="btn btn-success btn-sm download-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Download Template"><i class="fa-solid fa-download"></i></button> ';
+                var remove =' <button class="btn btn-danger btn-sm remove-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Template"><i class="fa-solid fa-trash"></i></button> ';
+                return download+remove;
+              }
+          }
       ],
       "fnDrawCallback": function() {
             $('[data-bs-toggle="tooltip"]').tooltip();
 
         },
+    });
+
+    $('#lessonTable tbody').on('click', '.remove-btn', function(){
+      var data = lessonTable.row($(this).parents('tr')).data();
+              swal.fire({
+                title: 'Do you want to remove selected Lesson?',
+                showCancelButton: true,
+                confirmButtonText: 'Removed',
+              }).then((result) => {
+              
+                if (result.isConfirmed) {
+
+                  $.ajax({
+                    url:baseUrl+"/api/lesson/remove",
+                    type:"POST",
+                    data:{
+                      "file":data.filename,
+                      "id":data.id                
+                    },
+                    success:(res)=>{
+                      console.log(res);
+                      
+                      if(res.result){
+                        swal.fire({
+                            icon:'success',
+                            title: 'Removing Lesson Success',
+                            showCancelButton: false,
+                            confirmButtonText: 'Ok',
+                          }).then((result) => {
+                            swal.close();
+                            lessonTable.ajax.reload();
+                          });
+                       
+                      }
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                      console.log(xhr);
+                      alert(xhr.status);
+                      alert(thrownError);
+                    },
+                    beforeSend: function (request) {
+                      request.setRequestHeader("Authorization", "Bearer "+token);
+                    },
+                  })
+                
+                } else {
+                  swal.fire('Changes are not saved', '', 'info')
+                }
+              })
     });
 
     $('#quarter').on('change', function(){

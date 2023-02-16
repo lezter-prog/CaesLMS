@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -61,10 +62,14 @@ class LoginController extends Controller
         Log::info("Session: ".session('token'));
         if(session('token')==""){
             $user = User::where('id',$id)->first();
+           
             $token=$user->createToken("API TOKEN")->plainTextToken;
             session(['token' =>  $token]);
+            
         }
-        
+        $caes =DB::table('caes_profile')->first();
+        session(['school_year' =>  $caes->school_year]);
+        Log::info("school_year: ".session('school_year'));
 
         return redirect()->intended(RouteServiceProvider::HOME);
         

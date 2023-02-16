@@ -44,7 +44,9 @@ class TeacherViewController extends Controller
         ->with('teacherActivity',"")
         ->with('teacherExam',"")
         ->with('teacherTemplates',"")
+        ->with('scoreSheets',"")
         ->with('teacherQuiz',"")
+        ->with('teacherReports',"")
         ->with('sections', $section);
     }
 
@@ -59,6 +61,8 @@ class TeacherViewController extends Controller
         ->with('teacherQuiz',"")
         ->with('teacherTemplates',"")
         ->with('teacherExam',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('adminSections', "active");
     }
     
@@ -74,6 +78,8 @@ class TeacherViewController extends Controller
         ->with('teacherActivity',"")
         ->with('teacherTemplates',"")
         ->with('teacherExam',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherAnnouncement',"active");
         }
 
@@ -87,7 +93,9 @@ class TeacherViewController extends Controller
         ->with('teacherQuiz',"")
         ->with('teacherExam',"")
         ->with('teacherTemplates',"")
-        ->with('teacherActivity',"")
+        ->with('teacherActivity',""
+        ->with('teacherReports',""))
+        ->with('scoreSheets',"")
         ->with('teacherLesson',"active");
         }
 
@@ -97,16 +105,27 @@ class TeacherViewController extends Controller
         $quarters = DB::table('quarters')->get();
         $id =  Auth::id();
 
+        $casProfile = DB::table('caes_profile')->select('isPreparing','school_year')->first();
+        if($casProfile->isPreparing){
+            $endProcess = DB::table('process_school_year')->where('teacher_id',Auth::id())->first();
+            $endProcess =   $endProcess->quizes_status;
+        }else{
+            $endProcess = null;
+        }
         $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-quiz')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
         ->with('sections',$sections)
+        ->with('caes',$casProfile)
+        ->with('endProcess',$endProcess)
         ->with('teacherAnnouncement',"")
         ->with('teacherExam',"")
         ->with('teacherQuiz',"active")
         ->with('teacherTemplates',"")
         ->with('teacherActivity',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherLesson',"");
     }
 
@@ -132,8 +151,10 @@ class TeacherViewController extends Controller
             ->first();
        if($assessment->status=="ACTIVE"){
             $assessment->statusColor ="primary";
+       }else if($assessment->status=="CLEARED"){
+            $assessment->statusColor ="success";
        }else{
-            $assessment->statusColor ="danger";
+            $assessment->statusColor ="danger";    
        }
 
         return view('teacher/view-assessment')
@@ -146,6 +167,8 @@ class TeacherViewController extends Controller
         ->with('teacherActivity',$activityActive)
         ->with('teacherExam',"")
         ->with('teacherTemplates',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherLesson',"");
     }
 
@@ -155,15 +178,27 @@ class TeacherViewController extends Controller
         $quarters = DB::table('quarters')->get();
         $id =  Auth::id();
 
+        $casProfile = DB::table('caes_profile')->select('isPreparing','school_year')->first();
+        if($casProfile->isPreparing){
+            $endProcess = DB::table('process_school_year')->where('teacher_id',Auth::id())->first();
+            $endProcess =   $endProcess->activity_status;
+        }else{
+            $endProcess = null;
+        }
+
         $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-activity')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
         ->with('sections',$sections)
+        ->with('caes',$casProfile)
+        ->with('endProcess',$endProcess)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"")
         ->with('teacherTemplates',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherActivity',"active")
         ->with('teacherLesson',"");
     }
@@ -173,23 +208,45 @@ class TeacherViewController extends Controller
         $sec = new SchoolSection();
         $quarters = DB::table('quarters')->get();
         $id =  Auth::id();
-
+        
+        $casProfile = DB::table('caes_profile')->select('isPreparing','school_year')->first();
+        if($casProfile->isPreparing){
+            $endProcess = DB::table('process_school_year')->where('teacher_id',Auth::id())->first();
+            $endProcess =   $endProcess->exams_status;
+        }else{
+            $endProcess = null;
+        }
         $sections = $sec->getSectionHandled($id);
         return view('teacher/manage-exam')
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
         ->with('sections',$sections)
+        ->with('caes',$casProfile)
+        ->with('endProcess',$endProcess)
         ->with('teacherAnnouncement',"")
         ->with('teacherQuiz',"")
         ->with('teacherExam',"active")
         ->with('teacherTemplates',"")
         ->with('teacherActivity',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherLesson',"");
     }
     public function manage_templates()
     {
         $quarters = DB::table('quarters')->get();
+
         return view('teacher/manage-templates')
+        ->with('role',Auth::user()->role)
+        ->with('adminHome', "")
+        ->with('adminSections', "")
+        ->with('adminTeacher', "")
+        ->with('adminStudent', "")
+        ->with('adminSubjects', "")
+        ->with('adminQuarter', "")
+        ->with('adminIcons', "")
+        ->with('adminGrades', "")
+        ->with('adminAnnouncement', "")
         ->with('teacherDashboard',"")
         ->with('quarters',$quarters)
         ->with('teacherAnnouncement',"")
@@ -197,6 +254,8 @@ class TeacherViewController extends Controller
         ->with('teacherTemplates',"active")
         ->with('teacherExam',"")
         ->with('teacherActivity',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherLesson',"");
     }
 
@@ -224,7 +283,99 @@ class TeacherViewController extends Controller
         ->with('teacherTemplates',"")
         ->with('teacherExam',"")
         ->with('teacherActivity',"")
+        ->with('scoreSheets',"")
+        ->with('teacherReports',"")
         ->with('teacherLesson',"");
+    }
+
+    public function scoreSheetSections(){
+        $sec = new SchoolSection();
+        $id =  Auth::id();
+
+        $sections = $sec->getSectionHandled($id);
+
+        return view('teacher/scoresheet/sections')
+        ->with('teacherDashboard',"")
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
+        ->with('teacherLesson',"")
+        ->with('scoreSheets',"active")
+        ->with('teacherReports',"")
+        ->with('sections',$sections);
+    }
+
+    public function view_score_sheeet(Request $request){
+        $sectionCode =$request->section_code;
+        $id =  Auth::id();
+        $quarters = DB::table('quarters')->get();
+
+        return view('teacher/scoresheet/score_sheet')
+        ->with('teacherDashboard',"")
+        ->with('quarters',$quarters)
+        ->with('sectionCode',$sectionCode)
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
+        ->with('teacherLesson',"")
+        ->with('teacherReports',"")
+        ->with('scoreSheets',"active");
+    }
+
+    public function view_subjects(Request $request){
+        $sectionCode = $request->s_code;
+        $id =  Auth::id();
+        // Log::info("SectionCode:".json_encode($section->s_code));
+        $subjects = DB::table('teachers_subjects_section')
+                    ->join('subjects','subjects.subj_code','=','teachers_subjects_section.subj_code')
+                    ->join('animal_icons','animal_icons.id','=','subjects.icon')
+                    ->where([
+                        ["teacher_id","=",$id],
+                        ["section_code","=",$sectionCode]
+                    ])->get();
+        Log::info("Subjects:".json_encode($subjects));
+
+        return view('teacher/scoresheet/subjects')
+        ->with('teacherDashboard',"")
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
+        ->with('teacherLesson',"")
+        ->with('scoreSheets',"active")
+        ->with('teacherReports',"")
+        ->with('subjects',$subjects);
+    }
+
+    public function view_reports(){
+
+        $id =  Auth::id();
+        // Log::info("SectionCode:".json_encode($section->s_code));
+        $subjects = DB::table('teachers_subjects_section')
+                    ->join('subjects','subjects.subj_code','=','teachers_subjects_section.subj_code')
+                    ->join('animal_icons','animal_icons.id','=','subjects.icon')
+                    ->where([
+                        ["teacher_id","=",$id]
+                    ])->get();
+        $schoolYear =  DB::table('school_year')->get();
+
+        return view('teacher/report')
+        ->with('schoolYears',$schoolYear)
+        ->with('teacherDashboard',"")
+        ->with('teacherAnnouncement',"")
+        ->with('teacherQuiz',"")
+        ->with('teacherTemplates',"")
+        ->with('teacherExam',"")
+        ->with('teacherActivity',"")
+        ->with('teacherReports',"active")
+        ->with('teacherLesson',"")
+        ->with('scoreSheets',"")
+        ->with('subjects',$subjects);
     }
 
 }

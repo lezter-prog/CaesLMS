@@ -42,6 +42,7 @@ class AdminViewController extends Controller
         ->with('adminIcons', "")
         ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('sections', $section);
     }
 
@@ -56,6 +57,7 @@ class AdminViewController extends Controller
         ->with('adminIcons', "")
         ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('adminSections', "active");
     }
 
@@ -74,6 +76,7 @@ class AdminViewController extends Controller
         ->with('adminGrades', "")
         ->with('adminStudent', "active")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('sections', $section);
     }
 
@@ -92,6 +95,7 @@ class AdminViewController extends Controller
         ->with('adminIcons', "")
         ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('sections', $section);
     }
     public function manage_quarter()
@@ -107,6 +111,7 @@ class AdminViewController extends Controller
         ->with('adminQuarter', "active")
         ->with('adminGrades', "")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('adminStudent', "");
     
     }
@@ -124,6 +129,7 @@ class AdminViewController extends Controller
         ->with('adminGrades', "")
         ->with('adminIcons', "")
         ->with('adminQuarter', "")
+        ->with('teacherTemplates',"")
         ->with('adminAnnouncement', "active");
         }
     public function manage_handled_section(Request $request)
@@ -139,6 +145,7 @@ class AdminViewController extends Controller
         ->with('adminIcons', "")
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "")
+        ->with('teacherTemplates',"")
         ->with('teacherName', $request->name)   
         ->with('teacherId', $request->teacherId);
     }
@@ -157,6 +164,7 @@ class AdminViewController extends Controller
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "")
         ->with('adminIcons', "")
+        ->with('teacherTemplates',"")
         ->with('teacherName', $request->name)   
         ->with('teacherId', $request->teacherId);
     }
@@ -174,6 +182,7 @@ class AdminViewController extends Controller
         ->with('adminQuarter', "")
         ->with('adminAnnouncement', "")
         ->with('teacherName', $request->name)   
+        ->with('teacherTemplates',"")
         ->with('teacherId', $request->teacherId);
     }
     
@@ -203,6 +212,7 @@ class AdminViewController extends Controller
         ->with('adminGrades', "")
         ->with('adminIcons', "")
         ->with('adminQuarter', "")
+        ->with('teacherTemplates',"")
         ->with('adminAnnouncement', "");
     }
     

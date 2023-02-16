@@ -107,6 +107,10 @@ Route::middleware('auth:sanctum')->controller(UtilDB::class)->group(function(){
     Route::post('exam/submit/answer', 'finalAnswer');
     Route::post('generate/password', 'generatePassword');
     Route::post('student/profile', 'updateStudentProfile');
+    Route::post('prepare', 'prepare');
+    Route::post('assessment/submit/all', 'assessmentEnd');
+    Route::get('teacher/handled/section/subject', 'getHandledSectionSubjectBySY');
+    
     
 });
 
@@ -117,6 +121,8 @@ Route::middleware('auth:sanctum')->controller(AssessmentController::class)->grou
     Route::post('assessment/close', 'closeAssessment');
     Route::post('assessment/open', 'reOpenAssessment');
     Route::post('assessement/remove/{assessmentId}', 'removeAssessment');
+    Route::get('assessement/scoresheet', 'scoreSheets');
+    Route::get('assessement/scoresheet/header', 'scoreSheetHeader');
     
     
     
@@ -126,8 +132,13 @@ Route::middleware('auth:sanctum')->controller(UploadController::class)->group(fu
 
     Route::post('teacher/upload/quiz','uploadQuiz');
     Route::post('teacher/upload/exam','uploadExam');
+    Route::post('lesson/remove','removeLesson');
     Route::get('lesson/download/{lessonIdl}','downloadLesson');
     Route::get('template/get/all','getAllTemplates');
+    Route::post('template/upload','uploadTemplate');
+    Route::post('template/remove','removeTemplate');
+    Route::get('template/download/{templateId}','downloadTemplate');
+    Route::post('generate/scoresheet','generateScoreSheet');
 });
 
 

@@ -7,6 +7,8 @@ use App\Repository\TeacherService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\StdClass;
+
 
 class AssessmentController extends Controller
 {
@@ -335,5 +337,101 @@ class AssessmentController extends Controller
             "message"=>"Successful"
         ];
 
+    }
+
+    public function scoreSheets(Request $request){
+        $sectionCode =$request->sectionCode;
+        $quarter =$request->quarter;
+        $assessmentType =$request->assessmentType;
+        if($assessmentType ==  "quiz"){
+            $columnCode ="Q";
+        }else if($assessmentType ==  "activity"){
+            $columnCode ="ACT";
+        }else{
+            $columnCode ="EXM";
+        }
+        $students = DB::table('Sy_Students')->where('s_code',$sectionCode)->get();
+        $assessments = DB::table('assesment_header')
+                        ->where([
+                            ['section_code','=',$sectionCode],
+                            ['quarter_period','=',$quarter],
+                            ['assesment_type','=',$assessmentType],
+                            ['status','=','CLOSED']
+                        ])->get();
+
+        Log::info("Studnts:".json_encode($students));
+        Log::info("assessments:".json_encode($assessments));
+        $arrayData =[];
+        foreach($students as $student){
+            $student->fullname =$student->first_name." ".$student->last_name;
+            $num = 1;
+            foreach($assessments as $assesment){
+                
+                $studentScore =DB::table('student_assessment_answer_header')
+                        ->where([
+                            ['assesment_id','=',$assesment->assesment_id],
+                            ['student_id','=',$student->id_number]
+                        ])->first();
+                if($studentScore !=null){
+                    $student->{$columnCode.strval($num)} = "<span class='badge bg-primary'>".$studentScore->score." / ".$assesment->total_points."</span>";
+                    $num= $num+1;
+                }else{
+                    $student->{$columnCode.strval($num)} = "<span class='badge bg-danger'>0</span>";
+                    $num= $num+1;
+                }
+            }
+
+            array_push($arrayData,$student);
+        }
+
+        Log::info("Array Data:".json_encode($arrayData));
+
+        return [
+            "data"=>$arrayData
+        ];
+    }
+
+    public function scoreSheetHeader(Request $request){
+        
+        $sectionCode =$request->sectionCode;
+        $quarter =$request->quarter;
+        $assessmentType =$request->assessmentType;
+        $columnCode ="";
+        if($assessmentType ==  "quiz"){
+            $columnCode ="Q";
+        }else if($assessmentType ==  "activity"){
+            $columnCode ="ACT";
+        }else{
+            $columnCode ="EXM";
+        }
+
+        $students = DB::table('Sy_Students')->where('s_code',$sectionCode)->get();
+        $assessments = DB::table('assesment_header')
+                        ->where([
+                            ['section_code','=',$sectionCode],
+                            ['quarter_period','=',$quarter],
+                            ['assesment_type','=',$assessmentType],
+                            ['status','=','CLOSED']
+                        ])->get();
+
+        Log::info("Studnts:".json_encode($students));
+        Log::info("assessments:".json_encode($assessments));
+        $arrayData =[];
+        $student = new \stdClass();
+        $student->title ="Student Name";
+        $student->data="fullname";
+        array_push($arrayData,$student);
+        $num =1;
+        foreach($assessments as $assesment){
+            $student = new \stdClass();
+            $student->title =$columnCode.$num;
+            $student->data =$columnCode.$num;
+            $student->className="text-center";
+            $num=$num+1;
+            array_push($arrayData,$student);
+        } 
+        Log::info("Array Data:".json_encode($arrayData));
+
+        return $arrayData;
     }
 }
